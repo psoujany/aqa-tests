@@ -68,8 +68,9 @@ public class JavaTestRunner {
 	private static String krbConfFile;
 	private static String fileUrl;
 
-	private static String jckPolicyFileFullPath; 
-	private static String javatestJarFullPath; 
+	private static String jckPolicyFileFullPath;
+	private static String jtliteJarFullPath; 
+	private static String javatestJarFullPath;
 	private static String classesFullPath; 
 	private static String testProps;
 	private static String testHost1Name;
@@ -223,9 +224,10 @@ public class JavaTestRunner {
 
 		testSuiteFolder = "JCK-" + testSuite.toString().toLowerCase() + "-" + jckVersionNo;
 		jckBase = jckRoot + File.separator + testSuiteFolder; 
-		jckPolicyFileFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "lib" + File.separator + "jck.policy"; 
-		javatestJarFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "lib" + File.separator + "javatest.jar"; 
-		classesFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "classes"; 
+		jckPolicyFileFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "lib" + File.separator + "jck.policy";
+		javatestJarFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "lib" + File.separator + "javatest.jar";
+		jtliteJarFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "lib" + File.separator + "jtlite.jar"; 
+		classesFullPath = jckRoot + File.separator + testSuiteFolder + File.separator + "classes";
 		nativesLoc = jckRoot + File.separator + "natives" + File.separator + platform;
 		jtiFile = testRoot + File.separator + "jck" + File.separator + "jtrunner" + File.separator + CONFIG + File.separator + jckVersion + File.separator + testSuite.toLowerCase() + ".jti"; 
 		fileUrl = "file:///" + testSuiteFolder + "/testsuite.jtt";
@@ -853,10 +855,21 @@ public class JavaTestRunner {
 				chmodRC = chmod.waitFor();
 			}
 
+			//List<String> jckCmd = new ArrayList<>();
+			//jckCmd.add(pathToJava);
+			//jckCmd.add("-jar"); 
+			//jckCmd.add(javatestJarFullPath);
+			//jckCmd.add("-config");
+			//jckCmd.add(jtiFile);
+			//jckCmd.add(" @" + newJtbFileRef);
+			//System.out.println("Running JCK in " + testExecutionType + " way with Agent " + withAgent);
+			//jck = startSubProcess("jck", jckCmd);
+			
 			List<String> jckCmd = new ArrayList<>();
 			jckCmd.add(pathToJava);
 			jckCmd.add("-jar"); 
-			jckCmd.add(javatestJarFullPath);
+			jckCmd.add(jtliteJarFullPath);
+			jckCmd.add("-verbose:max");
 			jckCmd.add("-config");
 			jckCmd.add(jtiFile);
 			jckCmd.add(" @" + newJtbFileRef);
