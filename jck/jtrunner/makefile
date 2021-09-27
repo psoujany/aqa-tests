@@ -277,8 +277,6 @@ ifneq ($(OS),win)
 	$(COPYDIR) $(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)* $(FULLOUTDIR)$(D).
 	cd $(FULLOUTDIR) && $(JAR) uf $(FULLOUTDIR)/archives/MBeanUseNativeLib.jar $(LIBPREF)systemInfo.$(LIBEXT)
 	cd $(FULLOUTDIR) && $(JAR) cf $(FULLOUTDIR)/archives/OnlyLibs.jar $(LIBPREF)jmxlibid.$(LIBEXT)
-	$(warning chmod'ing 777 $(FULLOUTDIR)$(D)*)
-	cd $(FULLOUTDIR) && chmod 777 .$(D)*
 else
 	$(COPYDIR) "$(JMX_DATA_PATH)$(D)." "$(FULLOUTDIR)$(D)"
 	cd "$(FULLOUTDIR)" && $(JAR) uf "$(FULLOUTDIR)$(D)archives$(D)MBeanUseNativeLib.jar" $(LIBPREF)systemInfo.$(LIBEXT)

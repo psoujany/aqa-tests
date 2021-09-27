@@ -855,26 +855,26 @@ public class JavaTestRunner {
 				chmodRC = chmod.waitFor();
 			}
 
-			//List<String> jckCmd = new ArrayList<>();
-			//jckCmd.add(pathToJava);
-			//jckCmd.add("-jar"); 
-			//jckCmd.add(javatestJarFullPath);
-			//jckCmd.add("-config");
-			//jckCmd.add(jtiFile);
-			//jckCmd.add(" @" + newJtbFileRef);
-			//System.out.println("Running JCK in " + testExecutionType + " way with Agent " + withAgent);
-			//jck = startSubProcess("jck", jckCmd);
-			
 			List<String> jckCmd = new ArrayList<>();
 			jckCmd.add(pathToJava);
 			jckCmd.add("-jar"); 
-			jckCmd.add(jtliteJarFullPath);
-			jckCmd.add("-verbose:max");
+			jckCmd.add(javatestJarFullPath);
 			jckCmd.add("-config");
 			jckCmd.add(jtiFile);
 			jckCmd.add(" @" + newJtbFileRef);
 			System.out.println("Running JCK in " + testExecutionType + " way with Agent " + withAgent);
 			jck = startSubProcess("jck", jckCmd);
+			
+			//List<String> jckCmd = new ArrayList<>();
+			//jckCmd.add(pathToJava);
+			//jckCmd.add("-jar"); 
+			//jckCmd.add(jtliteJarFullPath);
+			//jckCmd.add("-verbose:max");
+			//jckCmd.add("-config");
+			//jckCmd.add(jtiFile);
+			//jckCmd.add(" @" + newJtbFileRef);
+			//System.out.println("Running JCK in " + testExecutionType + " way with Agent " + withAgent);
+			//jck = startSubProcess("jck", jckCmd);
 
 			// Block parent for this process to finish
 			endedWithinTimeLimit = jck.waitFor(timeout, TimeUnit.HOURS); 
