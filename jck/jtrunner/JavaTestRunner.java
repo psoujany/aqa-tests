@@ -843,7 +843,7 @@ public class JavaTestRunner {
 			// Use the presence of a '/' to signify that we are running a subset of tests.
 			// If one of the highest level test nodes is being run it is likely to take a long time.
 			if ( tests.contains("/") && !isRiscv ) {
-				timeout = 6;
+				timeout = 4;
 			}
 
 			if (!platform.equals("win")) {
