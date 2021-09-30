@@ -863,6 +863,7 @@ public class JavaTestRunner {
 			jckCmd.add(jtiFile);
 			jckCmd.add(" @" + newJtbFileRef);
 			System.out.println("Running JCK in " + testExecutionType + " way with Agent " + withAgent);
+			System.out.println("Running Process: " + jckCmd);
 			jck = startSubProcess("jck", jckCmd);
 			
 			//List<String> jckCmd = new ArrayList<>();
