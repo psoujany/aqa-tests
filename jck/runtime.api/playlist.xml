@@ -1265,10 +1265,6 @@
 		<disables>
 			<disable>
 				<comment>backlog/issues/600</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>backlog/issues/600</comment>
 				<impl>ibm</impl>
 			</disable>
 			<disable>
