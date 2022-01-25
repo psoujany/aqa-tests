@@ -1281,16 +1281,6 @@
 		<groups>
 			<group>jck</group>
 		</groups>
-		<disables>
-			<disable>
-				<comment>backlog/issues/567</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>backlog/issues/567</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 	</test>
 	<test>
 		<testCaseName>jck-runtime-api-org_omg</testCaseName>
