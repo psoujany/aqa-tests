@@ -605,8 +605,8 @@ def runTest( ) {
 			for (int i = 1; i <= ITERATIONS; i++) {
 				echo "ITERATION: ${i}/${ITERATIONS}"
 				if (env.SPEC.startsWith('aix')) {
-					sh "nohup /usr/bin/X11/X -force -vfb -x abx -x dbe -x GLX :0 &"
-					env.DISPLAY = ":0"
+					sh "nohup /usr/bin/X11/X -force -vfb -x abx -x dbe -x GLX -secIP 000 :0 &"
+					env.DISPLAY = "unix:0"
 					echo "env.DISPLAY is ${env.DISPLAY}"
 					makeTest("${RUNTEST_CMD}")
 				}
@@ -677,11 +677,7 @@ def post(output_name) {
 				tar_cmd_suffix = ""
 			}
 
-			boolean failIfNoResultsValue = true
-			if (params.PARALLEL && params.PARALLEL != "None") {
-				failIfNoResultsValue = false
-			}
-			step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: false, failIfNoResults: failIfNoResultsValue])
+			step([$class: "TapPublisher", testResults: "**/*.tap", outputTapToConsole: false, failIfNoResults: true])
 
 			// only archive children TAP result in parallel mode, the file will be copied into the parent job after parallel runs
 			if (params.UPSTREAM_TEST_JOB_NAME && params.UPSTREAM_TEST_JOB_NUMBER) {
@@ -691,6 +687,7 @@ def post(output_name) {
 			junit allowEmptyResults: true, keepLongStdio: true, testResults: '**/work/**/*.jtr.xml, **/junitreports/**/*.xml, **/external_test_reports/**/*.xml'
 			archiveSHAFile()
 			archiveTestenvFile()
+			archiveAQACertFile()
 
 			if (env.BUILD_LIST.startsWith('jck')) {
 				xunit (
@@ -903,6 +900,17 @@ def archiveSHAFile() {
 	}
 }
 
+def archiveAQACertFile() {
+	def AQACertFile = "aqa-tests/TKG/AQACert.log";
+	if (!params.ARTIFACTORY_SERVER) {
+		echo "ARTIFACTORY_SERVER is not set. Saving AQACert file on jenkins."
+		archiveArtifacts artifacts: AQACertFile, fingerprint: true, allowEmptyArchive: true
+	} else {
+		def pattern = "${env.WORKSPACE}/${AQACertFile}"
+		uploadToArtifactory(pattern)
+	}
+}
+
 def uploadToArtifactory(pattern) {
 	if (params.ARTIFACTORY_SERVER) {
 		def server = Artifactory.server params.ARTIFACTORY_SERVER
@@ -945,10 +953,14 @@ def addGrinderLink() {
 	String url = "${HUDSON_URL}job/Grinder/parambuild/?"
 	int i = 1;
 	def labelValue = ""
-	params.each { key, value ->
+	def urlParams = params.findAll {
+		// Exclude separator and help text parameters from url
+		!(it.key.endsWith('_PARAMS') || it.key.endsWith('_HELP_TEXT'))
+	}
+	urlParams.each { key, value ->
 		value = URLEncoder.encode(value.toString(), "UTF-8")
 		url += "${key}=${value}"
-		if (i != params.size()) {
+		if (i != urlParams.size()) {
 			url += "&amp;"
 		}
 		i++;
@@ -981,7 +993,7 @@ def run_parallel_tests() {
 						timeout(time: 1, unit: 'HOURS') {
 							copyArtifacts (projectName: "${name}", selector: specific("${buildId}"), filter: "**/*.tap", target:"${name}/${buildId}")
 						}
-						step([$class: "TapPublisher", testResults: "${name}/${buildId}/**/*.tap", outputTapToConsole: false, failIfNoResults: false])
+						step([$class: "TapPublisher", testResults: "${name}/${buildId}/**/*.tap", outputTapToConsole: false, failIfNoResults: true])
 					} catch (Exception e) {
 						echo "Cannot copy *.tap from ${name} with buildid ${buildId} . Skipping copyArtifacts..."
 						buildResult = childResult
