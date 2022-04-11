@@ -375,19 +375,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_awt</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2137#issuecomment-760598580</comment>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -412,16 +399,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_beans</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -710,16 +687,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_net</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -812,19 +779,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_security3</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2123#issuecomment-758367994</comment>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -871,11 +825,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_sound</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/73</comment>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -899,11 +848,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_swing</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/49</comment>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -975,16 +919,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_time</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -1008,16 +942,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_management</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -1041,16 +965,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_jmx</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -1097,20 +1011,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_tools</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/3232#issuecomment-1032587426</comment>
-				<platform>x86-64_alpine-linux</platform>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -1271,16 +1171,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_instrument</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -1550,19 +1440,6 @@
 	</test>
 	<test>
 		<testCaseName>jdk_2d</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2137#issuecomment-759938221</comment>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/10757</comment>
-				<impl>ibm</impl>
-			</disable>
-		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
