@@ -328,6 +328,17 @@ public class JavaTestRunner {
 			bw.flush();
 			bw.close();
 		}
+
+		if ( getJckVersionInt(jckVersionNo) >= 18 && (tests.contains("api/java_net") || tests.contains("api/java_util")) ) {
+			// Requires SHA1 enabling for jar signers in jdk-18+
+			secPropsFile = resultDir + File.separator + "security.properties";
+			System.out.println("Custom security properties to be stored in: " + secPropsFile);
+			String secPropsContents = "jdk.jar.disabledAlgorithms=MD2, MD5, RSA keySize < 1024, DSA keySize < 1024";
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(secPropsFile)));
+			bw.write(secPropsContents);
+			bw.flush();
+			bw.close();
+		}
 		
 		if ( tests.contains("api/javax_xml") ) {
 			// Requires SHA1 enabling
@@ -490,8 +501,6 @@ public class JavaTestRunner {
 			} else if (platform.contains("alpine-linux")) {
 				libPath = "LD_LIBRARY_PATH";
 				robotAvailable = "No";
-				// Run only headless tests on Alpine Linux
-				keyword += "&!headful";
 			} else if (platform.contains("linux")) {
 				libPath = "LD_LIBRARY_PATH";
 				robotAvailable = "Yes";
@@ -538,13 +547,15 @@ public class JavaTestRunner {
 					if ( !platform.equals("win") ) {
 						fileContent += "set jck.env.testPlatform.headless No" + ";\n";
 						fileContent += "set jck.env.testPlatform.xWindows Yes" + ";\n";
-						String display = System.getenv("DISPLAY");
-						if ( display == null ) {
-							System.out.println("Error: DISPLAY must be set to run tests " + tests + " on " + platform);
-							return false; 
-						}
-						else {
-							fileContent += "set jck.env.testPlatform.display " + display + ";\n";
+						if ( !platform.equals("osx") ) { 
+							String display = System.getenv("DISPLAY");
+							if ( display == null ) {
+								System.out.println("Error: DISPLAY must be set to run tests " + tests + " on " + platform);
+								return false; 
+							}
+							else {
+								fileContent += "set jck.env.testPlatform.display " + display + ";\n";
+							}
 						}
 					}
 				}
@@ -764,7 +775,7 @@ public class JavaTestRunner {
 				jxcCmd = jxcCmd.replace("/", "\\");
 				genCmd = genCmd.replace("/", "\\");
 				impCmd = impCmd.replace("/", "\\");
-			} else if (platform.equals("linux") || platform.equals("aix")) {
+			} else if (platform.contains("linux") || platform.equals("aix")) {
 				xjcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "linux" + File.separator + "bin" + File.separator + "wsgen.sh";
@@ -1148,7 +1159,7 @@ public class JavaTestRunner {
 	private static String getTestSpecificJvmOptions(String jckVersion, String tests) {
 		String testSpecificJvmOptions = "";
 		
-		if ( tests.contains("api/javax_net") || tests.contains("api/javax_xml")) {
+		if ( tests.contains("api/javax_net") || tests.contains("api/javax_xml") || (getJckVersionInt(jckVersionNo) >= 18 && (tests.contains("api/java_net") || tests.contains("api/java_util"))) ) {
 			// Needs extra security.properties
 			testSpecificJvmOptions += " -Djava.security.properties=" + secPropsFile;
 		}

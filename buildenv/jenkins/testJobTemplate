@@ -19,7 +19,7 @@
  */
 
 def getBaseJDKImpl(JDK_IMPL) {
-	if (JDK_IMPL == "hotspot" || JDK_IMPL == "sap" || JDK_IMPL == "corretto" || JDK_IMPL == "dragonwell" || JDK_IMPL == "bisheng") {
+	if (JDK_IMPL != "openj9" && JDK_IMPL != "ibm" ) {
 		return "hotspot"
 	}
 	return JDK_IMPL
@@ -37,7 +37,7 @@ if (!binding.hasVariable('SUFFIX')) SUFFIX = ""
 if (!binding.hasVariable('JCK_GIT_REPO')) JCK_GIT_REPO = ""
 if (!binding.hasVariable('JCK_GIT_REPO_PREFIX')) JCK_GIT_REPO_PREFIX = ""
 if (!binding.hasVariable('SSH_AGENT_CREDENTIAL')) SSH_AGENT_CREDENTIAL = ""
-if (!binding.hasVariable('KEEP_REPORTDIR')) KEEP_REPORTDIR = "true"
+if (!binding.hasVariable('KEEP_REPORTDIR')) KEEP_REPORTDIR = true
 if (!binding.hasVariable('AUTO_DETECT')) AUTO_DETECT = true
 if (!binding.hasVariable('USE_JRE')) USE_JRE = false
 if (!binding.hasVariable('TEST_JOB_NAME')) TEST_JOB_NAME = ""
@@ -183,7 +183,7 @@ ARCH_OS_LIST.each { ARCH_OS ->
 					}
 				}
 				pipelineJob("$ACTUAL_TEST_JOB_NAME") {
- 					description('<h1>THIS IS AN AUTOMATICALLY GENERATED JOB. PLEASE DO NOT MODIFY, IT WILL BE OVERWRITTEN.</h1><p>This job is defined in testJobTemplate in the https://github.com/adoptium/aqa-tests repo. If you wish to change the job, please modify testJobTemplate script. For more information about job parameters, refer https://github.com/adoptium/aqa-tests/wiki/How-to-Run-a-Grinder-Build-on-Jenkins.</p>')
+ 					description('<h1>THIS IS AN AUTOMATICALLY GENERATED JOB. PLEASE DO NOT MODIFY, IT WILL BE OVERWRITTEN.</h1><br><p>This job is defined in <a href="https://github.com/adoptium/aqa-tests/blob/master/buildenv/jenkins/testJobTemplate" target="_blank">testJobTemplate</a> in the https://github.com/adoptium/aqa-tests repo. If you wish to change the job, please modify testJobTemplate script. </p><p>For more information about job parameters, please refer <a href="https://github.com/adoptium/aqa-tests/wiki/How-to-Run-a-Grinder-Build-on-Jenkins" target="_blank">How to Run a Grinder Build on Jenkins</a></p>wiki:<p><a href="https://github.com/eclipse-openj9/openj9/wiki/AQA-Lightning-Talk-Series" target="_blank">AQA Lightning Talk Series</a></p><p><a href="https://github.com/eclipse-openj9/openj9/wiki/Reproducing-Test-Failures-Locally" target="_blank">Reproducing Test Failures Locally</a></p>')
 
 					properties {
 						pipelineTriggers {
@@ -383,7 +383,11 @@ ARCH_OS_LIST.each { ARCH_OS ->
 							    sectionHeader('Additional test options if you wish to run in various parallel modes')
 							    sectionHeaderStyle(sectionHeaderHelpTextStyleCss)
 							}
-							choiceParam('PARALLEL', PARALLEL_LIST, "Optional. Parallel mode")
+							choiceParam('PARALLEL', PARALLEL_LIST, '''Optional. Parallel mode: <br/>
+							None // run test(s) in serial <br/>
+							Dynamic // dynamically divides tests according to NUM_MACHINES or TEST_TIME and runs them in parallel. Please also provide NUM_MACHINES or TEST_TIME. <br/>
+							NodesByIterations // run the same test(s) in parallel according to NUM_MACHINES. You can also provide ITERATIONS. This is mainly for debugging intermittent issues. <br/>
+							Subdir // run tests in parallel according to subdir. This is mainly for external tests.''')
 							stringParam('NUM_MACHINES', NUM_MACHINES, '''Optional. It has to be used with PARALLEL=Dynamic or PARALLEL=NodesByIterations<br/>
 							Use with PARALLEL=Dynamic, NUM_MACHINES cannot be greater than the number of matched nodes on Jenkins<br/>
 							Use with PARALLEL=NodesByIterations, NUM_MACHINES cannot be greater than 20<br/>''')
@@ -414,7 +418,7 @@ ARCH_OS_LIST.each { ARCH_OS ->
 							    sectionHeaderStyle(sectionHeaderHelpTextStyleCss)
 							}
 							booleanParam('KEEP_WORKSPACE', false, "Keep workspace on the machine")
-							stringParam('KEEP_REPORTDIR', KEEP_REPORTDIR, "Keep the test report dir if the test passes?")
+							booleanParam('KEEP_REPORTDIR', KEEP_REPORTDIR.toBoolean(), "TKG will keep the test report dir if the test passes. Set true for OpenJDK junit results")
 							booleanParam('ARCHIVE_TEST_RESULTS', ARCHIVE_TEST_RESULTS.toBoolean(), "archive the test report dir in Jenkins (or artifactory if artifactory parameters are provided)?")
 							stringParam('ARTIFACTORY_SERVER', ARTIFACTORY_SERVER, "Optional. Default is to upload test output (failed build) onto artifactory only. By unset this value, test output will be archived to Jenkins")
 							stringParam('ARTIFACTORY_REPO', ARTIFACTORY_REPO, "Optional. It should be used with ARTIFACTORY_SERVER")

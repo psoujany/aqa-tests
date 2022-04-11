@@ -81,28 +81,24 @@ print_image_args() {
     local package=$5
     local build=$6
 
-    sdk="openjdk${version}"
+    image_name="eclipse-temurin"
+    tag=""
+    if [[ "${package}" == "jre" ]]; then
+        tag="${version}-jre"
+    else 
+        tag="${version}-jdk"
+    fi
     if [[ "${vm}" == "openj9" ]]; then
-        sdk="${sdk}-openj9"
+        image_name="ibm-semeru-runtimes"
+        tag=open-${tag}
     fi
+    image="${image_name}:${tag}"
 
-    echo -e "ARG SDK=${sdk}" \
-          "\nARG IMAGE_NAME=adoptopenjdk/\$SDK" \
+    echo -e "ARG IMAGE=${image}" \
           "\nARG OS=${os}" \
-          "\nARG IMAGE_VERSION=nightly" >> ${file}
-
-
-    if [[ "${package}" == "jre" && "${build}" == "slim" ]]; then
-        echo -e "ARG TAG=\$OS-jre-\$IMAGE_VERSION-slim\n" >> ${file}
-    elif [[ "${package}" == "jre" && "${build}" == "full" ]]; then
-        echo -e "ARG TAG=\$OS-jre-\$IMAGE_VERSION\n" >> ${file}
-    elif [[ "${build}" == "slim" ]]; then
-        echo -e "ARG TAG=\$OS-\$IMAGE_VERSION-slim\n" >> ${file}
-    else
-        echo -e "ARG TAG=\$OS-\$IMAGE_VERSION\n" >> ${file}
-    fi
-
-    echo -e "FROM \$IMAGE_NAME:\$TAG\n" >> ${file}
+          "\nARG IMAGE_VERSION=nightly" \
+          "\nARG TAG=${tag}" \
+          "\nFROM \$IMAGE\n" >> ${file}
 }
 
 print_test_tag_arg() {
@@ -128,94 +124,19 @@ print_ubuntu_pkg() {
             "\n" >> ${file}
 }
 
-print_debian_pkg() {
-    local file=$1
-    local packages=$2
-
-    print_ubuntu_pkg ${file} "${packages}"
-}
-
-print_debianslim_pkg() {
-    local file=$1
-    local packages=$2
-
-    # Revert back to calling `print_ubuntu_pkg` once https://github.com/debuerreotype/debuerreotype/issues/10 is resolved
-    echo -e "RUN apt-get update \\" \
-            "\n\t&& for i in \$(seq 1 8); do mkdir -p \"/usr/share/man/man\${i}\"; done \\" \
-            "\n\t&& apt-get install -y --no-install-recommends ${packages} \\" \
-            "\n\t&& rm -rf /var/lib/apt/lists/*" \
-            "\n" >> ${file}
-}
-
-# Select the alpine OS packages.
-print_alpine_pkg() {
-    local file=$1
-    local packages=$2
-
-    echo -e "RUN apk add --no-cache ${packages} \\" \
-            "\n\t&& rm -rf /tmp/*.apk /var/cache/apk/*" \
-            "\n" >> ${file}
-}
-
-# Select the ubi OS packages.
-print_ubi_pkg() {
-    local file=$1
-    local packages=$2
-
-    echo -e "RUN dnf install -y ${packages} \\" \
-            "\n\t&& dnf update -y; dnf clean all"  \
-            "\n" >> ${file}
-}
-
-
-# Select the ubi OS packages.
-print_ubi-minimal_pkg() {
-    local file=$1
-    local packages=$2
-
-    echo -e "RUN microdnf install -y ${packages} \\" \
-            "\n\t&& microdnf update -y; microdnf clean all" \
-            "\n" >> ${file}
-}
-
-# Select the CentOS packages.
-print_centos_pkg() {
-    local file=$1
-    local packages=$2
-
-    echo -e "RUN yum install -y ${packages} \\" \
-            "\n\t&& yum update; yum clean all" \
-            "\n" >> ${file}
-}
-
-
-# Select the ClefOS packages.
-print_clefos_pkg() {
-    local file=$1
-    local packages=$2
-    print_centos_pkg ${file} ${packages}
-}
-
-
 # Install Ant
 print_ant_install() {
     local file=$1
     local ant_version=$2
-    local os=$3
 
     echo -e "ARG ANT_VERSION=${ant_version}" \
           "\nENV ANT_VERSION=\$ANT_VERSION" \
           "\nENV ANT_HOME=/opt/ant" \
           "\n\n# Install Ant" \
-          "\nRUN wget --no-check-certificate --no-cookies http://archive.apache.org/dist/ant/binaries/apache-ant-\${ANT_VERSION}-bin.tar.gz \\" \
-          "\n\t&& wget --no-check-certificate --no-cookies http://archive.apache.org/dist/ant/binaries/apache-ant-\${ANT_VERSION}-bin.tar.gz.sha512 \\" >> ${file}
+          "\nRUN wget --no-verbose --no-check-certificate --no-cookies http://archive.apache.org/dist/ant/binaries/apache-ant-\${ANT_VERSION}-bin.tar.gz \\" \
+          "\n\t&& wget --no-verbose --no-check-certificate --no-cookies http://archive.apache.org/dist/ant/binaries/apache-ant-\${ANT_VERSION}-bin.tar.gz.sha512 \\" >> ${file}
 
-    # Alpine sha512sum requires two spaces https://github.com/gliderlabs/docker-alpine/issues/174
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "\t&& echo \"\$(cat apache-ant-\${ANT_VERSION}-bin.tar.gz.sha512)  apache-ant-\${ANT_VERSION}-bin.tar.gz\" | sha512sum -c \\" >> ${file}
-    else
-        echo -e "\t&& echo \"\$(cat apache-ant-\${ANT_VERSION}-bin.tar.gz.sha512) apache-ant-\${ANT_VERSION}-bin.tar.gz\" | sha512sum -c \\" >> ${file}
-    fi
+    echo -e "\t&& echo \"\$(cat apache-ant-\${ANT_VERSION}-bin.tar.gz.sha512) apache-ant-\${ANT_VERSION}-bin.tar.gz\" | sha512sum -c \\" >> ${file}
 
     echo -e "\t&& tar -zvxf apache-ant-\${ANT_VERSION}-bin.tar.gz -C /opt/ \\" \
             "\n\t&& ln -s /opt/apache-ant-\${ANT_VERSION} /opt/ant \\" \
@@ -230,20 +151,14 @@ print_ant_install() {
 print_ant_contrib_install() {
     local file=$1
     local ant_contrib_version=$2
-    local os=$3
 
     echo -e "ARG ANT_CONTRIB_VERSION=${ant_contrib_version}" \
           "\nENV ANT_CONTRIB_VERSION=\$ANT_CONTRIB_VERSION" \
           "\n\n# Install Ant Contrib" \
-          "\nRUN wget --no-check-certificate --no-cookies https://sourceforge.net/projects/ant-contrib/files/ant-contrib/\${ANT_CONTRIB_VERSION}/ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz \\" \
-          "\n\t&& wget --no-check-certificate --no-cookies https://sourceforge.net/projects/ant-contrib/files/ant-contrib/\${ANT_CONTRIB_VERSION}/ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz.md5 \\" >> ${file}
+          "\nRUN wget --no-verbose --no-check-certificate --no-cookies https://sourceforge.net/projects/ant-contrib/files/ant-contrib/\${ANT_CONTRIB_VERSION}/ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz \\" \
+          "\n\t&& wget --no-verbose --no-check-certificate --no-cookies https://sourceforge.net/projects/ant-contrib/files/ant-contrib/\${ANT_CONTRIB_VERSION}/ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz.md5 \\" >> ${file}
 
-    # Alpine md5sum requires two spaces https://github.com/gliderlabs/docker-alpine/issues/174
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "\t&& echo \"\$(cat ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz.md5)  ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz\" | md5sum -c \\" >> ${file}
-    else
-        echo -e "\t&& echo \"\$(cat ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz.md5) ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz\" | md5sum -c \\" >> ${file}
-    fi
+    echo -e "\t&& echo \"\$(cat ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz.md5) ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz\" | md5sum -c \\" >> ${file}
 
     echo -e "\t&& tar -zvxf ant-contrib-\${ANT_CONTRIB_VERSION}-bin.tar.gz -C /tmp/ \\" \
             "\n\t&& mv /tmp/ant-contrib/ant-contrib-\${ANT_CONTRIB_VERSION}.jar \${ANT_HOME}/lib/ant-contrib.jar \\" \
@@ -257,14 +172,13 @@ print_ant_contrib_install() {
 print_sbt_install() {
     local file=$1
     local sbt_version=$2
-    local os=$3
 
     echo -e "ARG SBT_VERSION=${sbt_version}" \
           "\nENV SBT_VERSION=\$SBT_VERSION" \
           "\nENV SBT_HOME=/opt/sbt" \
           "\n\n# Install SBT" \
-          "\nRUN wget --no-check-certificate --no-cookies https://piccolo.link/sbt-\${SBT_VERSION}.tgz \\" \
-          "\n\t&& wget --no-check-certificate --no-cookies https://piccolo.link/sbt-\${SBT_VERSION}.tgz.asc \\" \
+          "\nRUN wget --no-verbose --no-check-certificate --no-cookies https://github.com/sbt/sbt/releases/download/v\${SBT_VERSION}/sbt-\${SBT_VERSION}.tgz \\" \
+          "\n\t&& wget --no-verbose --no-check-certificate --no-cookies https://github.com/sbt/sbt/releases/download/v\${SBT_VERSION}/sbt-\${SBT_VERSION}.tgz.asc \\" \
           "\n\t&& curl \"https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823\" | gpg --import \\" \
           "\n\t&& gpg --verify sbt-\${SBT_VERSION}.tgz.asc sbt-\${SBT_VERSION}.tgz \\" \
           "\n\t&& tar -zvxf sbt-\${SBT_VERSION}.tgz -C /opt/ \\" \
@@ -275,51 +189,18 @@ print_sbt_install() {
           "\n" >> ${file}
 }
 
-# Install Gradle
-print_gradle_install() {
-    local file=$1
-    local gradle_version=$2
-    local os=$3
-
-    echo -e "ARG GRADLE_VERSION=${gradle_version}" \
-          "\nENV GRADLE_VERSION=\$GRADLE_VERSION" \
-          "\nENV GRADLE_HOME /opt/gradle" \
-          "\n\n# Install Gradle" \
-          "\nRUN wget --no-check-certificate --no-cookies https://services.gradle.org/distributions/gradle-\${GRADLE_VERSION}-bin.zip \\" \
-          "\n\t&& wget --no-check-certificate --no-cookies https://services.gradle.org/distributions/gradle-\${GRADLE_VERSION}-bin.zip.sha256 \\" >> ${file}
-
-    # Alpine sha512sum requires two spaces https://github.com/gliderlabs/docker-alpine/issues/174
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "\t&& echo \"\$(cat gradle-\${GRADLE_VERSION}-bin.zip.sha256)  gradle-\${GRADLE_VERSION}-bin.zip\" | sha256sum -c \\" >> ${file}
-    else
-        echo -e "\t&& echo \"\$(cat gradle-\${GRADLE_VERSION}-bin.zip.sha256) gradle-\${GRADLE_VERSION}-bin.zip\" | sha256sum -c \\" >> ${file}
-    fi
-
-    echo -e "\t&& unzip gradle-\${GRADLE_VERSION}-bin.zip -d \${GRADLE_HOME} \\" \
-            "\n\t&& ln -s \"\${GRADLE_HOME}/gradle-\${GRADLE_VERSION}/bin/gradle\" /usr/bin/gradle \\" \
-            "\n\t&& rm -f gradle-\${GRADLE_VERSION}-bin.zip \\" \
-            "\n\t&& rm -f gradle-\${GRADLE_VERSION}-bin.zip.sha256" \
-            "\n" >> ${file}
-}
-
 # Install Ivy
 print_ivy_install() {
     local file=$1
     local ivy_version=$2
-    local os=$3
 
     echo -e "ARG IVY_VERSION=${ivy_version}" \
           "\nENV IVY_VERSION=\$IVY_VERSION" \
           "\n\n# Install Ivy" \
-          "\nRUN wget --no-check-certificate --no-cookies https://archive.apache.org/dist/ant/ivy/\${IVY_VERSION}/apache-ivy-\${IVY_VERSION}-bin.tar.gz \\" \
-          "\n\t&& wget --no-check-certificate --no-cookies https://archive.apache.org/dist/ant/ivy/\${IVY_VERSION}/apache-ivy-\${IVY_VERSION}-bin.tar.gz.sha512 \\" >> ${file}
+          "\nRUN wget --no-verbose --no-check-certificate --no-cookies https://archive.apache.org/dist/ant/ivy/\${IVY_VERSION}/apache-ivy-\${IVY_VERSION}-bin.tar.gz \\" \
+          "\n\t&& wget --no-verbose --no-check-certificate --no-cookies https://archive.apache.org/dist/ant/ivy/\${IVY_VERSION}/apache-ivy-\${IVY_VERSION}-bin.tar.gz.sha512 \\" >> ${file}
 
-    # Alpine sha512sum requires two spaces https://github.com/gliderlabs/docker-alpine/issues/174
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "\t&& echo \"\$(cat apache-ivy-\${IVY_VERSION}-bin.tar.gz.sha512)  apache-ivy-\${IVY_VERSION}-bin.tar.gz\" | sha512sum -c \\" >> ${file}
-    else
-        echo -e "\t&& echo \"\$(cat apache-ivy-\${IVY_VERSION}-bin.tar.gz.sha512) apache-ivy-\${IVY_VERSION}-bin.tar.gz\" | sha512sum -c \\" >> ${file}
-    fi
+    echo -e "\t&& echo \"\$(cat apache-ivy-\${IVY_VERSION}-bin.tar.gz.sha512) apache-ivy-\${IVY_VERSION}-bin.tar.gz\" | sha512sum -c \\" >> ${file}
 
     echo -e "\t&& tar -zvxf apache-ivy-\${IVY_VERSION}-bin.tar.gz apache-ivy-\${IVY_VERSION}/ivy-\${IVY_VERSION}.jar -C \${ANT_HOME}/lib/ \\" \
             "\n\t&& rm -f apache-ivy-\${IVY_VERSION}-bin.tar.gz \\" \
@@ -331,22 +212,15 @@ print_ivy_install() {
 print_openssl_install() {
     local file=$1
     local openssl_version=$2
-    local os=$3
 
     echo -e "ARG OPENSSL_VERSION=${openssl_version}" \
           "\nENV OPENSSL_VERSION=\$OPENSSL_VERSION" \
           "\nENV OPENSSL_HOME /opt/openssl" \
           "\n\n# Install OpenSSL" \
-          "\nRUN  wget --no-check-certificate --no-cookies https://www.openssl.org/source/openssl-\${OPENSSL_VERSION}.tar.gz \\" \
-          "\n\t&& wget --no-check-certificate --no-cookies https://www.openssl.org/source/openssl-\${OPENSSL_VERSION}.tar.gz.sha256 \\" >> ${file}
+          "\nRUN  wget --no-verbose --no-check-certificate --no-cookies https://www.openssl.org/source/openssl-\${OPENSSL_VERSION}.tar.gz \\" \
+          "\n\t&& wget --no-verbose --no-check-certificate --no-cookies https://www.openssl.org/source/openssl-\${OPENSSL_VERSION}.tar.gz.sha256 \\" >> ${file}
 
-    # Alpine sha512sum requires two spaces https://github.com/gliderlabs/docker-alpine/issues/174
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "\t&& echo \"\$(cat openssl-\${OPENSSL_VERSION}.tar.gz.sha256)  openssl-\${OPENSSL_VERSION}.tar.gz\" | sha256sum -c \\" >> ${file}
-    else
-        echo -e "\t&& echo \"\$(cat openssl-\${OPENSSL_VERSION}.tar.gz.sha256) openssl-\${OPENSSL_VERSION}.tar.gz\" | sha256sum -c \\" >> ${file}
-    fi
-
+    echo -e "\t&& echo \"\$(cat openssl-\${OPENSSL_VERSION}.tar.gz.sha256) openssl-\${OPENSSL_VERSION}.tar.gz\" | sha256sum -c \\" >> ${file}
     echo -e "\t&& tar -zvxf openssl-\${OPENSSL_VERSION}.tar.gz -C /opt/ \\" \
             "\n\t&& ln -s /opt/openssl-\${OPENSSL_VERSION} /opt/openssl \\" \
             "\n\t&& rm -f openssl-\${OPENSSL_VERSION}.tar.gz \\" \
@@ -362,21 +236,15 @@ print_openssl_install() {
 print_bazel_install() {
     local file=$1
     local bazel_version=$2
-    local os=$3
 
     echo -e "ARG BAZEL_VERSION=${bazel_version}" \
           "\nENV BAZEL_VERSION=\$BAZEL_VERSION" \
           "\nENV BAZEL_HOME /opt/bazel" \
           "\n\n# Install Bazel" \
-          "\nRUN  wget --no-check-certificate --no-cookies https://github.com/bazelbuild/bazel/releases/download/\${BAZEL_VERSION}/bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh \\" \
-          "\n\t&&  wget --no-check-certificate --no-cookies https://github.com/bazelbuild/bazel/releases/download/\${BAZEL_VERSION}/bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh.sha256 \\" >> ${file}
+          "\nRUN  wget --no-verbose --no-check-certificate --no-cookies https://github.com/bazelbuild/bazel/releases/download/\${BAZEL_VERSION}/bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh \\" \
+          "\n\t&&  wget --no-verbose --no-check-certificate --no-cookies https://github.com/bazelbuild/bazel/releases/download/\${BAZEL_VERSION}/bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh.sha256 \\" >> ${file}
 
-    # Alpine sha512sum requires two spaces https://github.com/gliderlabs/docker-alpine/issues/174
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "\t&& echo \"\$(cat bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh.sha256)\" | sha256sum -c \\" >> ${file}
-    else
-        echo -e "\t&& echo \"\$(cat bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh.sha256)\" | sha256sum -c \\" >> ${file}
-    fi
+    echo -e "\t&& echo \"\$(cat bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh.sha256)\" | sha256sum -c \\" >> ${file}
 
     echo -e "\t&& chmod +x bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh \\" \
             "\n\t&& ./bazel-\${BAZEL_VERSION}-installer-linux-x86_64.sh --prefix=\${BAZEL_HOME} \\" \
@@ -387,6 +255,22 @@ print_bazel_install() {
             "\n" >> ${file}
 }
 
+print_maven_install() {
+    local file=$1
+    local maven_version=$2
+
+    echo -e "ARG MAVEN_VERSION=${maven_version}" \
+          "\nENV MAVEN_VERSION=\$MAVEN_VERSION" \
+          "\nENV MAVEN_HOME /opt/maven" \
+          "\n\n# Install Maven" \
+          "\nRUN  wget --no-verbose --no-check-certificate --no-cookies https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/\${MAVEN_VERSION}/apache-maven-\${MAVEN_VERSION}-bin.tar.gz \\" >> ${file}
+    
+    echo -e "\t&& tar -zvxf apache-maven-\${MAVEN_VERSION}-bin.tar.gz -C /opt/ \\" \
+            "\n\t&& ln -s /opt/apache-maven-\${MAVEN_VERSION} /opt/maven \\" \
+            "\n\t&& rm -f apache-maven-\${MAVEN_VERSION}-bin.tar.gz" \
+            "\nENV PATH \${PATH}:\${MAVEN_HOME}/bin" \
+            "\n" >> ${file}
+}
 # Prints Java Tool Options
 print_java_tool_options() {
     local file=$1
@@ -403,13 +287,11 @@ print_environment_variable() {
 
 print_home_path() {
     local file=$1
-    local test=$2
-    local path=$3
+    local github_url=$2
 
-    # Cause Test name to be capitalized
-    test="$(sanitize_test_names ${test} | tr a-z A-Z)_HOME"
-
-    echo -e "ENV ${test} ${path}\n" >> ${file}
+    # Get Github folder name
+    local folder="$(echo ${github_url} | awk -F'/' '{print $NF}' | sed 's/.git//g')"
+    echo -e "ENV TEST_HOME /${folder}\n" >> ${file}
 }
 
 print_test_results() {
@@ -418,30 +300,37 @@ print_test_results() {
     echo -e "RUN mkdir testResults\n" >> ${file}
 }
 
-print_test_script() {
+print_test_files() {
     local file=$1
     local test=$2
-    local script=$3
+    local localPropertyFile=$3
 
     if [[ ${check_external_custom_test} -eq 1 ]]; then 
         echo -e "# This is the main script to run ${test} tests" \
-                "\nCOPY external_custom/dockerfile/${script} /${script}" \
+                "\nCOPY external_custom/test.sh /test.sh" \
                 "\nCOPY test_base_functions.sh test_base_functions.sh\n" >> ${file}
     else
         echo -e "# This is the main script to run ${test} tests" \
-                "\nCOPY ${test}/dockerfile/${script} /${script}" \
+                "\nCOPY ${test}/test.sh /test.sh" \
                 "\nCOPY test_base_functions.sh test_base_functions.sh\n" >> ${file}
     fi
-    
+    if [[ ! -z ${localPropertyFile} ]]; then
+        echo -e "# This local property file is needed to set up user preferred properties." \
+            "\nCOPY ${test}/${localPropertyFile} \${TEST_HOME}/${localPropertyFile}\n" >> ${file}
+    fi
 }
 
 print_testInfo_env() {
     local test=$1
     local test_tag=$2
     local OS=$3
+    local version=$4
+    local vm=$5
     echo -e "ENV APPLICATION_NAME=${test}" \
             "\nENV APPLICATION_TAG=${test_tag}" \
             "\nENV OS_TAG=${OS}" \
+            "\nENV JDK_VERSION=${version}" \
+            "\nENV JDK_IMPL=${vm}" \
             "\n" >> ${file}
 }
 
@@ -478,21 +367,19 @@ print_external_custom_parameters(){
 
 print_entrypoint() {
     local file=$1
-    local script=$2
-    local os=$3
+    echo -e "ENTRYPOINT [\"/bin/bash\", \"/test.sh\"]" >> ${file}
+}
 
-    if [[ "${os}" = "alpine" ]]; then
-        echo -e "ENTRYPOINT [\"/bin/ash\", \"/${script}\"]" >> ${file}
-    else
-        echo -e "ENTRYPOINT [\"/bin/bash\", \"/${script}\"]" >> ${file}
-    fi
+print_workdir() {
+    local file=$1
+    echo -e "\nWORKDIR \${TEST_HOME}\n" >> ${file}
 }
 
 print_cmd() {
     local file=$1
     local cmd=$2
 
-    echo -e "CMD [\"${cmd}\"]" >> ${file}
+    echo -e "\nCMD [\"${cmd}\"]" >> ${file}
 }
 
 remove_trailing_spaces() {
@@ -516,7 +403,6 @@ generate_dockerfile() {
     package=$6
     build=$7
     check_external_custom_test=$8
-    testtarget=$9
 
     if [[ ${check_external_custom_test} -eq 1 ]]; then
         tag_version=${EXTERNAL_REPO_BRANCH}
@@ -528,7 +414,6 @@ generate_dockerfile() {
         set_test_info ${test} ${check_external_custom_test}
     fi
     packages=$(echo ${os}_packages | sed 's/-/_/')
-
     jhome="/opt/java/openjdk"
 
     mkdir -p `dirname ${file}` 2>/dev/null
@@ -541,62 +426,55 @@ generate_dockerfile() {
     print_${os}_pkg ${file} "${!packages}";
 
     if [[ ! -z ${ant_version} ]]; then
-        print_ant_install ${file} ${ant_version} ${os};
+        print_ant_install ${file} ${ant_version};
     fi
 
     if [[ ! -z ${ant_contrib_version} ]]; then
-        print_ant_contrib_install ${file} ${ant_contrib_version} ${os};
+        print_ant_contrib_install ${file} ${ant_contrib_version};
     fi
 
     if [[ ! -z ${ivy_version} ]]; then
-        print_ivy_install ${file} ${ivy_version} ${os};
+        print_ivy_install ${file} ${ivy_version};
     fi
 
     if [[ ! -z ${sbt_version} ]]; then
-        print_sbt_install ${file} ${sbt_version} ${os};
-    fi
-
-    if [[ ! -z ${gradle_version} ]]; then
-        print_gradle_install ${file} ${gradle_version} ${os};
+        print_sbt_install ${file} ${sbt_version};
     fi
 
     if [[ ! -z ${openssl_version} ]]; then
-        print_openssl_install ${file} ${openssl_version} ${os};
+        print_openssl_install ${file} ${openssl_version};
     fi
 
     if [[ ! -z ${bazel_version} ]]; then
-        print_bazel_install ${file} ${bazel_version} ${os};
+        print_bazel_install ${file} ${bazel_version};
     fi
-
+    
+    if [[ ! -z ${maven_version} ]]; then
+        print_maven_install ${file} ${maven_version};
+    fi
     print_java_tool_options ${file};
 
     if [[ ! -z ${environment_variable} ]]; then
         print_environment_variable ${file} ${environment_variable};
     fi
 
-    if [[ ! -z ${home_path} ]]; then
-        print_home_path ${file} ${test} ${home_path};
-    fi
-
     if [[ ! -z ${test_results} ]]; then
         print_test_results ${file};
     fi
 
-    if [[ ! -z ${script} ]]; then
-        print_test_script ${file} ${test} ${script};
-    fi
-
-    print_testInfo_env ${test} ${tag_version} ${os}
+    print_home_path ${file} ${github_url};
+    print_testInfo_env ${test} ${tag_version} ${os} ${version} ${vm}
     print_clone_project ${file} ${test} ${github_url};
+    print_test_files ${file} ${test} ${localPropertyFile};
 
     if [[ ${check_external_custom_test} -eq 1 ]]; then
         print_external_custom_parameters ${file}
     fi
+    print_workdir ${file};
+    print_entrypoint ${file};
 
-    print_entrypoint ${file} ${script} ${os};
-
-    if [[ ! -z ${testtarget} ]]; then
-        print_cmd ${file} ${testtarget};
+    if [[ ! -z ${test_options} ]]; then
+        print_cmd ${file} "${test_options}";
     fi
 
     remove_trailing_spaces ${file};
