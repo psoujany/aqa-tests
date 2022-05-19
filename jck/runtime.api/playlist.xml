@@ -1216,12 +1216,6 @@
 		<groups>
 			<group>jck</group>
 		</groups>
-		<disables>
-			<disable>
-				<comment>backlog/issues/567</comment>
-				<platform>.*zos.*</platform>
-			</disable>
-		</disables>
 	</test>
 	<test>
 		<testCaseName>jck-runtime-api-org_omg</testCaseName>
