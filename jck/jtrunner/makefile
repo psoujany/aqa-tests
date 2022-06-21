@@ -267,7 +267,7 @@ help:
 	@echo "gmake build SRCDIR=C:\jck\java8b\JCK-runtime-8b OUTDIR=C:\jck\java8b\natives" 
 	@echo "gmake build SRCDIR=/jck/java8b/JCK-runtime-8b OUTDIR=/jck/java8b/natives" 
 
-build:createdir $(OBJS) installjmx
+build:createdir createheader $(OBJS) installjmx
 
 # We need the extra include for 16+
 ifeq ($(OS),win)
