@@ -308,6 +308,13 @@ createdir:
 	$(CLEANDIR) $(FULLOUTDIR)
 	$(MKDIR) $(FULLOUTDIR)
 	
+createheader:
+ifeq ($(OS),zos)
+    $(MKDIR) $(FULLOUTDIR)include
+	echo "$$JCKJNI_MD_HEADER" > $(FULLOUTDIR)include$(D)jckjni_md.h
+	$(COPYFILE) $(SRCDIR)$(D)src$(D)share$(D)lib$(D)jni$(D)include$(D)linux$(D)jckjlong_md.h $(FULLOUTDIR)include$(D)jckjlong_md.h
+endif
+	
 installjmx:
 ifneq ($(OS),win)
 	$(COPYDIR) $(SRCDIR)$(D)tests$(D)api$(D)javax_management$(D)loading$(D)data$(D)* $(FULLOUTDIR)$(D).
