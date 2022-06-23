@@ -131,6 +131,27 @@ else
 	VAR=$@
 endif
 
+##################################################
+# Define Zos JCK header jckjni_md.h
+##################################################
+
+# The JCK solaris jckjni_md.h is not compatible
+# with ZOS, we solve this by creating one for ZOS on the fly.
+#
+# Make variables are treated as commands by shell
+# when echo'ed therefore we export JCKJNI_MD_HEADER
+# and call it as shell variable in the createheader target
+
+define JCKJNI_MD_HEADER
+typedef int jint;
+typedef long jint;
+typedef long long jlong;
+typedef signed char jbyte;
+
+/*#define JCK_JNI_VA_LIST_DECL    lst */
+endef
+export JCKJNI_MD_HEADER
+
 MKDIR=mkdir -p
 CLEANDIR=rm -rf
 CLEANFILE=rm -rf
