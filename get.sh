@@ -358,7 +358,7 @@ getBinaryOpenjdk()
 				echo "Uncompressing file: $jar_name ..."
 				if [[ $jar_name == *zip ]] || [[ $jar_name == *jar ]]; then
 					unzip -q $jar_name -d ./tmp
-				elif [[ $jar_name == *.pax* ] || [ $jar_name == *.Z ]]; then
+				elif [[ $jar_name == *.pax* ]] || [[ $jar_name == *.Z ]]; then
 					cd ./tmp
 					pax -p xam -rzf ../$jar_name
 				else
