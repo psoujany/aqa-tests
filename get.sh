@@ -362,7 +362,7 @@ getBinaryOpenjdk()
 					cd ./tmp
 					pax -p xam -rzf ../$jar_name
 				else
-					cd tmp && tar xof -
+					cd tmp && tar xzf -
 				fi
 
 				cd $SDKDIR/openjdkbinary/tmp
