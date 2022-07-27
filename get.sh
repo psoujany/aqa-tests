@@ -344,9 +344,9 @@ getBinaryOpenjdk()
 				else
 					# some debug-image tar has parent folder ... strip it
 					if tar --version 2>&1 | grep GNU 2>&1; then
-						tar xof - -C $extract_dir --strip 1
+						gzip -cd $jar_name | tar xof - -C $extract_dir --strip 1
 					else
-						mkdir dir.$$ && cd dir.$$ | tar xof - && cd * && tar cf - . | (cd ../../$extract_dir && tar xpf -) && cd ../.. && rm -rf dir.$$
+						mkdir dir.$$ && cd dir.$$ && gzip -cd ../$jar_name | tar xof - && cd * && tar cf - . | (cd ../../$extract_dir && tar xpf -) && cd ../.. && rm -rf dir.$$
 					fi
 				fi
 			else
@@ -362,7 +362,7 @@ getBinaryOpenjdk()
 					cd ./tmp
 					pax -p xam -rzf ../$jar_name
 				else
-					gzip -cd $jar_name | (cd tmp && tar xof -)
+					cd tmp && tar xof -
 				fi
 
 				cd $SDKDIR/openjdkbinary/tmp
