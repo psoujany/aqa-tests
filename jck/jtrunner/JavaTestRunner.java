@@ -354,6 +354,8 @@ public class JavaTestRunner {
 			bw.close();
 		}
 		
+		
+		
 		if ( tests.contains("api/javax_xml") ) {
 			// Requires SHA1 enabling
 			secPropsFile = resultDir + File.separator + "security.properties";
@@ -374,6 +376,23 @@ public class JavaTestRunner {
 			secPropsContents += "minKeySize EC 224,\\" + "\n";
 			secPropsContents += "noDuplicateIds,\\" + "\n";
 			secPropsContents += "noRetrievalMethodLoops";
+			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(secPropsFile))); 
+			bw.write(secPropsContents); 
+			bw.flush();
+			bw.close();
+		}
+		
+		if ( getJckVersionInt(jckVersionNo)==8 && tests.contains("api/org_ietf") && isIbmJvm() ) {
+			// Use com.ibm.security.auth.module.Krb5LoginModule
+			DirectoryRef secPropsLocation = test.env().getResultsDir().childDirectory("SecProps");
+			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
+			FileRef secPropsFileRef = secPropsLocation.childFile("security.properties");
+			String secPropsContents = "SampleClient {\\" + "\n";
+			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required useDefaultCcache=true credsType=initiator;\\" +\n";
+			secPropsContents += "};\\" + "\n";
+			secPropsContents += "SampleServer {\\" + "\n";
+			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required credsType=both;\\" + "\n";
+			secPropsContents += "};\\" + "\n";
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(secPropsFile))); 
 			bw.write(secPropsContents); 
 			bw.flush();
@@ -1184,7 +1203,7 @@ public class JavaTestRunner {
 	private static String getTestSpecificJvmOptions(String jckVersion, String tests) {
 		String testSpecificJvmOptions = "";
 		
-		if ( tests.contains("api/javax_net") || tests.contains("api/javax_xml") || (getJckVersionInt(jckVersionNo) >= 18 && (tests.contains("api/java_net") || tests.contains("api/java_util"))) ) {
+		if ( tests.contains("api/javax_net") || tests.contains("api/javax_xml") || (getJckVersionInt(jckVersionNo) >= 18 && (tests.contains("api/java_net") || tests.contains("api/java_util"))) || (getJckVersionInt(jckVersionNo)==8 && tests.contains("api/org_ietf") && isIbmJvm())) {
 			// Needs extra security.properties
 			testSpecificJvmOptions += " -Djava.security.properties=" + secPropsFile;
 		}
