@@ -388,7 +388,7 @@ public class JavaTestRunner {
 			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
 			FileRef secPropsFileRef = secPropsLocation.childFile("security.properties");
 			String secPropsContents = "SampleClient {\\" + "\n";
-			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required useDefaultCcache=true credsType=initiator;\\" +\n";
+			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required useDefaultCcache=true credsType=initiator;\\" + "\n";
 			secPropsContents += "};\\" + "\n";
 			secPropsContents += "SampleServer {\\" + "\n";
 			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required credsType=both;\\" + "\n";
