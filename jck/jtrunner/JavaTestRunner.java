@@ -386,12 +386,12 @@ public class JavaTestRunner {
 			// Use com.ibm.security.auth.module.Krb5LoginModule
 			secPropsFile = resultDir + File.separator + "security.properties";
 			System.out.println("Custom security properties to be stored in: " + secPropsFile);
-			String secPropsContents = "SampleClient {\\" + "\n";
-			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required useDefaultCcache=true credsType=initiator;\\" + "\n";
-			secPropsContents += "};\\" + "\n";
-			secPropsContents += "SampleServer {\\" + "\n";
-			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required credsType=both;\\" + "\n";
-			secPropsContents += "};\\" + "\n";
+			String secPropsContents = "SampleClient {" + "\n";
+			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required useDefaultCcache=true credsType=initiator;" + "\n";
+			secPropsContents += "};" + "\n";
+			secPropsContents += "SampleServer {" + "\n";
+			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required credsType=both;" + "\n";
+			secPropsContents += "};" + "\n";
 			BufferedWriter bw = new BufferedWriter(new FileWriter(new File(secPropsFile))); 
 			bw.write(secPropsContents); 
 			bw.flush();
