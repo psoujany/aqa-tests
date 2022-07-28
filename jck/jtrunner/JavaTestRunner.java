@@ -384,9 +384,8 @@ public class JavaTestRunner {
 		
 		if ( getJckVersionInt(jckVersionNo)==8 && tests.contains("api/org_ietf") && isIbmJvm() ) {
 			// Use com.ibm.security.auth.module.Krb5LoginModule
-			DirectoryRef secPropsLocation = test.env().getResultsDir().childDirectory("SecProps");
-			test.doMkdir("Creating dir to store the custom security properties", secPropsLocation);
-			FileRef secPropsFileRef = secPropsLocation.childFile("security.properties");
+			secPropsFile = resultDir + File.separator + "security.properties";
+			System.out.println("Custom security properties to be stored in: " + secPropsFile);
 			String secPropsContents = "SampleClient {\\" + "\n";
 			secPropsContents += "com.ibm.security.auth.module.Krb5LoginModule required useDefaultCcache=true credsType=initiator;\\" + "\n";
 			secPropsContents += "};\\" + "\n";
