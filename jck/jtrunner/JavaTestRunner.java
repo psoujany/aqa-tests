@@ -717,7 +717,7 @@ public class JavaTestRunner {
 			if ( tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") || tests.equals("api") ) {
 				fileContent += "set jck.env.runtime.jplis.jplisLivePhase Yes;\n";
 			}
-			if ( test.equals("vm/jdwp")) {
+			if ( tests.equals("vm/jdwp")) {
 				fileContent += "set jck.env.runtime.jdwp.VMSuspended No" + ";\n";
 				fileContent += "set jck.env.runtime.jdwp.jdwpOpts -agentlib\\:jdwp\\=server\\=y,transport\\=dt_socket,address\\=localhost\\:35000,suspend\\=n" + ";\n";	
 			}
