@@ -29,8 +29,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/constantpool testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/constantpool testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/constantpool testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -44,9 +45,10 @@
 			<variation>NoOptions</variation>
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/jdwp testsuite=RUNTIME concurrency=1; \
-		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/jdwp testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(EXEC_RUNTIME_TEST_WITH_AGENT); \
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/jdwp testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -61,8 +63,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/jvmti testsuite=RUNTIME concurrency=1; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/jvmti testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/jvmti testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -97,8 +100,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/overview testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/overview testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/overview testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -113,8 +117,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/classfmt testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/classfmt testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/classfmt testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -129,8 +134,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/module testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/module testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/module testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -148,8 +154,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/verifier/abstractAndNative testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/verifier/abstractAndNative testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/verifier/abstractAndNative testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -167,8 +174,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP1) testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP1) testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP1) testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -186,8 +194,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP2) testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP2) testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP2) testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -205,8 +214,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP3) testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP3) testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP3) testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -224,8 +234,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP4) testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP4) testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=$(VERIFIER_INSTRUCTIONS_TESTS_GROUP4) testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -243,8 +254,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/verifier/protectedCheck  testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/verifier/protectedCheck testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/verifier/protectedCheck testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -262,8 +274,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/verifier/subclassFinal testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/verifier/subclassFinal testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/verifier/subclassFinal testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -281,8 +294,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/instr testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/instr testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/instr testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>sanity</level>
 		</levels>
@@ -297,8 +311,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/cldc testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/cldc testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/cldc testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -313,8 +328,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/concepts testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/concepts testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/concepts testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -329,8 +345,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/fp testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/fp testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/fp testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -345,8 +362,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/jni testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/jni testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/jni testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>extended</level>
 		</levels>
@@ -361,8 +379,9 @@
 		</variations>
 		<command>$(GEN_JTB_GENERIC) tests=vm/typechecker testsuite=RUNTIME; \
 		$(EXEC_RUNTIME_TEST); \
-		$(GEN_SUMMARY_GENERIC) tests=vm/typechecker testsuite=RUNTIME; \
-	$(TEST_STATUS)</command>
+		$(TEST_STATUS) ; \
+		$(GEN_SUMMARY_GENERIC) tests=vm/typechecker testsuite=RUNTIME
+		</command>
 		<levels>
 			<level>extended</level>
 		</levels>
