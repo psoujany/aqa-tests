@@ -165,12 +165,12 @@ getBinaryOpenjdk()
 {
 	echo "get jdk binary..."
 	cd $SDKDIR
-	mkdir -p openjdkbinary
-	cd openjdkbinary
+	mkdir -p jdkhome
+	cd jdkhome
 
 	if [ "$SDK_RESOURCE" != "upstream" ]; then
-		if [ "$(ls -A $SDKDIR/openjdkbinary)" ]; then
-			echo "$SDKDIR/openjdkbinary is not an empty directory, please empty it or specify a different SDK directory."
+		if [ "$(ls -A $SDKDIR/jdkhome)" ]; then
+			echo "$SDKDIR/jdkhome is not an empty directory, please empty it or specify a different SDK directory."
 			echo "This directory is used to download SDK resources into it and the script will not overwrite its contents."
 			exit 1
 		fi
@@ -327,7 +327,7 @@ getBinaryOpenjdk()
 
 	# if $jar_file_array contains debug-image, move debug-image element to the end of the array
 	# debug image jar needs to be extracted after jdk as debug image jar extraction location depends on jdk structure
-	# debug image jar extracts into j2sdk-image/jre dir if it exists. Otherwise, extracts into j2sdk-image dir
+	# debug image jar extracts into testsdk/jre dir if it exists. Otherwise, extracts into testsdk dir
 	for i in "${!jar_file_array[@]}"; do
 		if [[ "${jar_file_array[$i]}" =~ "debug-image" ]] || [[ "${jar_file_array[$i]}" =~ "debugimage" ]]; then
 			if [ "$i" -ne "$last_index" ]; then
@@ -345,12 +345,12 @@ getBinaryOpenjdk()
 
 	for jar_name in "${jar_file_array[@]}"
 		do
-			# if jar_name contains debug-image, extract into j2sdk-image/jre or j2sdk-image dir
+			# if jar_name contains debug-image, extract into testsdk/jre or testsdk dir
 			# Otherwise, files will be extracted under ./tmp
 			if [[ "$jar_name" =~ "debug-image" ]] || [[ "$jar_name" =~ "debugimage" ]]; then
-				extract_dir="./j2sdk-image"
-				if [ -d "$SDKDIR/openjdkbinary/j2sdk-image/jre" ]; then
-					extract_dir="./j2sdk-image/jre"
+				extract_dir="./testsdk"
+				if [ -d "$SDKDIR/jdkhome/testsdk/jre" ]; then
+					extract_dir="./testsdk/jre"
 				fi
 				echo "Uncompressing $jar_name over $extract_dir..."
 				if [[ $jar_name == *zip ]] || [[ $jar_name == *jar ]]; then
@@ -364,10 +364,10 @@ getBinaryOpenjdk()
 					fi
 				fi
 			else
-				if [ -d "$SDKDIR/openjdkbinary/tmp" ]; then
-					rm -rf $SDKDIR/openjdkbinary/tmp/*
+				if [ -d "$SDKDIR/jdkhome/tmp" ]; then
+					rm -rf $SDKDIR/jdkhome/tmp/*
 				else
-					mkdir $SDKDIR/openjdkbinary/tmp
+					mkdir $SDKDIR/jdkhome/tmp
 				fi
 				echo "Uncompressing file: $jar_name ..."
 				if [[ $jar_name == *zip ]] || [[ $jar_name == *jar ]]; then
@@ -379,7 +379,7 @@ getBinaryOpenjdk()
 					gzip -cd $jar_name | (cd tmp && tar xof -)
 				fi
 
-				cd $SDKDIR/openjdkbinary/tmp
+				cd $SDKDIR/jdkhome/tmp
 				jar_dirs=`ls -d */`
 				jar_dir_array=(${jar_dirs//\\n/ })
 				len=${#jar_dir_array[@]}
@@ -389,10 +389,10 @@ getBinaryOpenjdk()
 						mv $jar_dir_name ../openjdk-test-image
 					elif [[ "$jar_dir_name" =~ jre* ]] && [ "$jar_dir_name" != "j2re-image" ]; then
 						mv $jar_dir_name ../j2re-image
-					elif [[ "$jar_dir_name" =~ jdk* ]] && [ "$jar_dir_name" != "j2sdk-image" ]; then
+					elif [[ "$jar_dir_name" =~ jdk* ]] && [ "$jar_dir_name" != "testsdk" ]; then
 						# If test sdk has already been expanded, this one must be the additional sdk 
 						isAdditional=0
-						if [ -f "./j2sdk-image/release" ]; then 
+						if [ -f "./testsdk/release" ]; then 
 							isAdditional=1
 						else 
 							if [ "$ADDITIONAL_ARTIFACTS_REQUIRED" == "RI_JDK" ]; then 
@@ -420,21 +420,21 @@ getBinaryOpenjdk()
 							echo "RI JDK version:"
 							$SDKDIR/additionaljdkbinary/bin/java -version
 						else 
-							mv $jar_dir_name ../j2sdk-image
+							mv $jar_dir_name ../testsdk
 						fi
 					# The following only needed if openj9 has a different image name convention
-					elif [ "$jar_dir_name" != "j2sdk-image" ]; then
-						mv $jar_dir_name ../j2sdk-image
+					elif [ "$jar_dir_name" != "testsdk" ]; then
+						mv $jar_dir_name ../testsdk
 					fi
 				elif [ "$len" -gt 1 ]; then
-					mv ../tmp ../j2sdk-image
+					mv ../tmp ../testsdk
 				fi
-				cd $SDKDIR/openjdkbinary
+				cd $SDKDIR/jdkhome
 			fi
 		done
 
 	if [ "$PLATFORM" = "s390x_zos" ]; then
-		chmod -R 755 j2sdk-image
+		chmod -R 755 testsdk
 	fi
 }
 
@@ -660,7 +660,7 @@ testJavaVersion()
 {
 	# use environment variable TEST_JDK_HOME to run java -version
 	if [ "$TEST_JDK_HOME" = "" ]; then
-		TEST_JDK_HOME=$SDKDIR/openjdkbinary/j2sdk-image
+		TEST_JDK_HOME=$SDKDIR/jdkhome/testsdk
 	fi
 	_java=${TEST_JDK_HOME}/bin/java
 	_release=${TEST_JDK_HOME}/release
