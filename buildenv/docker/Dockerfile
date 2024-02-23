@@ -77,7 +77,7 @@ ENV JAVA_HOME=/opt/ibm/java/jre \
 USER 1001
 
 # Install Docker module to run test framework
-RUN echo yes | cpan install JSON Text::CSV
+#RUN echo yes | cpan install JSON Text::CSV
 
 # These two folders are used testing purpose.
 # In the `docker run` command, user also need mount <JDK_ROOT>
