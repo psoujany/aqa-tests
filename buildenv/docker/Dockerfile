@@ -22,7 +22,7 @@
 FROM registry.access.redhat.com/ubi8/ubi:latest
 
 
-RUN yum install -y wget openssl ca-certificates gzip tar git perl make vsftpd \
+RUN yum install -y wget openssl ca-certificates gzip tar git perl make \
     && yum update; yum clean all
 
 LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
