@@ -493,6 +493,7 @@ getTestKitGen()
 
 	echo "git checkout -q -f $tkg_sha"
     if [[ "$PLATFORM" == *"zos"* ]]; then
+	    echo "i'm in zos condition"
 		git checkout -q -f $tkg_sha
 		git rm --cached -r -q .
 		git reset --hard
