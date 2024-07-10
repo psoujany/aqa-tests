@@ -492,7 +492,13 @@ getTestKitGen()
 	fi
 
 	echo "git checkout -q -f $tkg_sha"
-	git checkout -q -f $tkg_sha
+    if [[ "$PLATFORM" == *"zos"* ]]; then
+		git checkout -q -f $tkg_sha
+		git rm --cached -r -q .
+		git reset --hard
+	else
+		git checkout -q -f $tkg_sha
+	fi
 
 	checkTestRepoSHAs
 }
