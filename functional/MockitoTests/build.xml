@@ -41,11 +41,12 @@ limitations under the License.
 		<echo>===executable:                   ${compiler.javac}</echo>
 		<echo>===debug:                        on</echo>
 		<echo>===destdir:                      ${DEST}</echo>
-		<javac srcdir="${src}" destdir="${build}" debug="true" fork="true" executable="${compiler.javac}" includeAntRuntime="false" encoding="ISO-8859-1">
+		<javac srcdir="${src}" destdir="${build}" debug="true" fork="true" executable="${compiler.javac}" includeAntRuntime="false" >
 			<src path="${src}" />
 			<classpath>
 				<pathelement location="${LIB_DIR}/mockito-core.jar"/>
 			</classpath>
+			<compilerarg value="-J-Dfile.encoding=IBM-1047" />
 		</javac>
 	</target>
 		
