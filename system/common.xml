@@ -157,7 +157,7 @@
 			<arg value="checkout"/>
 			<arg value="-q"/>
 			<arg value="-f"/>
-			<arg value="${openjdk_systemtest_sha}"/>
+			<arg value="${openjdk_systemtest_branch}"/>
 		</exec>
 
 		<if>
@@ -227,7 +227,7 @@
 			<arg value="checkout"/>
 			<arg value="-q"/>
 			<arg value="-f"/>
-			<arg value="${openj9_systemtest_sha}"/>
+			<arg value="${openj9_systemtest_branch}"/>
 		</exec>
 
 		<if>
