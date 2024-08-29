@@ -89,7 +89,7 @@
 			<arg value="checkout"/>
 			<arg value="-q"/>
 			<arg value="-f"/>
-			<arg value="${stf_sha}"/>
+			<arg value="${stf_branch}"/>
 		</exec>
 		<if>
 			<isset property="isZOS" />
