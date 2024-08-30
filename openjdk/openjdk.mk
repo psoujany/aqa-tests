@@ -96,7 +96,7 @@ ifeq ($(JTREG_CONC), 0)
 endif
 EXTRA_JTREG_OPTIONS += -concurrency:$(JTREG_CONC)
 
-JTREG_BASIC_OPTIONS += -agentvm
+JTREG_BASIC_OPTIONS += -othervm
 # Only run automatic tests
 JTREG_BASIC_OPTIONS += -a
 # Always turn on assertions
