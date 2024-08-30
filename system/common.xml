@@ -159,28 +159,6 @@
 			<arg value="-f"/>
 			<arg value="${openjdk_systemtest_branch}"/>
 		</exec>
-
-		<if>
-			<isset property="isZOS" />
-			<then>
-				<delete includeemptydirs="true" failonerror="false">
-				   <fileset dir="${SYSTEMTEST_ROOT}/aqa-systemtest/.git/info" includes="**/*"/>
-				</delete>
-				<mkdir dir="${SYSTEMTEST_ROOT}/aqa-systemtest/.git/info" />
-				<move file="${SYSTEMTEST_ROOT}/aqa-systemtest/.gitattributes.zos" tofile="${SYSTEMTEST_ROOT}/aqa-systemtest/.git/info/attributes" />
-				<exec executable="git" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" failonerror="false">
-					<arg value="rm" />
-					<arg value="--cached" />
-					<arg value="-r" />
-					<arg value="-q" />
-					<arg value="." />
-				</exec>
-				<exec executable="git" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" failonerror="false">
-					<arg value="reset" />
-					<arg value="--hard" />
-				</exec>
-			</then>
-		</if>
 		<checkGitRepoSha repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" />
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" repoName="AQA_SYSTEMTEST" />
 	</target>
@@ -229,28 +207,6 @@
 			<arg value="-f"/>
 			<arg value="${openj9_systemtest_branch}"/>
 		</exec>
-
-		<if>
-			<isset property="isZOS" />
-			<then>
-				<delete includeemptydirs="true" failonerror="false">
-				   <fileset dir="${SYSTEMTEST_ROOT}/openj9-systemtest/.git/info" includes="**/*"/>
-				</delete>
-				<mkdir dir="${SYSTEMTEST_ROOT}/openj9-systemtest/.git/info" />
-				<move file="${SYSTEMTEST_ROOT}/openj9-systemtest/.gitattributes.zos" tofile="${SYSTEMTEST_ROOT}/openj9-systemtest/.git/info/attributes" />
-				<exec executable="git" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" failonerror="false">
-					<arg value="rm" />
-					<arg value="--cached" />
-					<arg value="-r" />
-					<arg value="-q" />
-					<arg value="." />
-				</exec>
-				<exec executable="git" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" failonerror="false">
-					<arg value="reset" />
-					<arg value="--hard" />
-				</exec>
-			</then>
-		</if>
 		<checkGitRepoSha repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" />
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" repoName="OPENJ9_SYSTEMTEST"/>
 	</target>
