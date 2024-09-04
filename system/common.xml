@@ -316,7 +316,7 @@
 	</target>
 
 	<target name="common_dist" description="generate the distribution">
-		<copy todir="${SYSTEMTEST_DEST}/STF">
+		<copy todir="${SYSTEMTEST_DEST}/STF" outputencoding="IBM-1047">
 			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
 		</copy>
 		<copy todir="${SYSTEMTEST_DEST}/aqa-systemtest" failonerror="false">
