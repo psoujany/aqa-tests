@@ -316,8 +316,17 @@
 	</target>
 
 	<target name="common_dist" description="generate the distribution">
-		<copy todir="${SYSTEMTEST_DEST}/STF" outputencoding="IBM-1047">
-			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
+		<copy todir="${SYSTEMTEST_DEST}/STF" >
+			<fileset dir="${SYSTEMTEST_ROOT}/STF" >
+				<exclude name="**/*.pl" />
+				<exclude name="**/*.pm" />
+			</fileset>
+		</copy>
+		<copy todir="${SYSTEMTEST_DEST}/STF" >
+			<fileset dir="${SYSTEMTEST_ROOT}/STF" outputencoding="IBM-1047">
+				<include name="**/*.pm" />
+				<include name="**/*.pl" />
+			</fileset>
 		</copy>
 		<copy todir="${SYSTEMTEST_DEST}/aqa-systemtest" failonerror="false">
 			<fileset dir="${SYSTEMTEST_ROOT}/aqa-systemtest" includes="**" />
