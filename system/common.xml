@@ -322,8 +322,8 @@
 				<exclude name="**/*.pm" />
 			</fileset>
 		</copy>
-		<copy todir="${SYSTEMTEST_DEST}/STF" >
-			<fileset dir="${SYSTEMTEST_ROOT}/STF" outputencoding="IBM-1047">
+		<copy todir="${SYSTEMTEST_DEST}/STF"  outputencoding="IBM-1047">
+			<fileset dir="${SYSTEMTEST_ROOT}/STF">
 				<include name="**/*.pm" />
 				<include name="**/*.pl" />
 			</fileset>
