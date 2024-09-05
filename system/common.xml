@@ -326,6 +326,7 @@
 			<fileset dir="${SYSTEMTEST_ROOT}/STF">
 				<include name="**/*.pm" />
 				<include name="**/*.pl" />
+				<include name="**/*.properties" />
 			</fileset>
 		</copy>
 		<copy todir="${SYSTEMTEST_DEST}/aqa-systemtest" failonerror="false">
