@@ -320,6 +320,7 @@
 			<fileset dir="${SYSTEMTEST_ROOT}/STF" >
 				<exclude name="**/*.pl" />
 				<exclude name="**/*.pm" />
+				<exclude name="**/*.properties" />
 			</fileset>
 		</copy>
 		<copy todir="${SYSTEMTEST_DEST}/STF"  outputencoding="IBM-1047">
