@@ -244,6 +244,11 @@ def setupParallelEnv() {
 					echo "Regenerate parallel list with NUM_MACHINES=${MAX_NUM_MACHINES}."
 					PARALLEL_OPTIONS = PARALLEL_OPTIONS_TEMP + " NUM_MACHINES=${MAX_NUM_MACHINES} TEST_TIME="
 					NUM_LIST = genParallelList(PARALLEL_OPTIONS)
+				} else if (NUM_LIST < 6 && env.JDK_IMPL == "openj9" && (TARGET == "extended.jck" || TARGET == "special.system")) {
+					echo "NUM_LIST value ${NUM_LIST} may not be calculated based on the actual execution time."
+					echo "Regenerate parallel list with NUM_MACHINES=6 for TARGET ${TARGET}."
+					PARALLEL_OPTIONS = PARALLEL_OPTIONS_TEMP + " NUM_MACHINES=6 TEST_TIME="
+					NUM_LIST = genParallelList(PARALLEL_OPTIONS)
 				}
 			} else {
 				PARALLEL_OPTIONS += " TEST_TIME= NUM_MACHINES="
@@ -899,6 +904,7 @@ def post(output_name) {
 				def pattern = "${env.WORKSPACE}/*_output.*"
 				uploadToArtifactory(pattern)
 			}
+			archiveFile("jvmtest/perf/**/leftoverResults/", false)
 		} else if ((currentBuild.result == 'UNSTABLE' || currentBuild.result == 'FAILURE' || currentBuild.result == 'ABORTED') || params.ARCHIVE_TEST_RESULTS) {
 			def test_output_tar_name = "${output_name}_test_output${suffix}"
 			if (tar_cmd.startsWith('tar')) {
@@ -1070,7 +1076,10 @@ def getCustomUrl() {
 	def jenkinsDomain = getJenkinsDomain()
 	if (jenkinsDomain.contains("hyc-runtimes")) {
 		jenkinsDomain = "openj9-jenkins.osuosl.org"
-	}
+	} else if (jenkinsDomain.contains("temurin-compliance")) {
+                jenkinsDomain = "ci.adoptium.net"
+        }
+
 	def customUrl = "https://${jenkinsDomain}/job/test.getDependency/lastSuccessfulBuild/artifact/"
 	echo "Custom URL: ${customUrl}"
 	return customUrl
@@ -1253,15 +1262,25 @@ def addFailedTestsGrinderLink(paths=""){
 								failedTestCasesInfo = failedTestCasesInfo.substring(0, failedTestCasesInfo.indexOf('Test results:'))
 								failedTestCasesInfo = failedTestCasesInfo.split("\\n").join(" ").replaceAll("TEST: ", "")
 								if (failedtest.startsWith("jdk_")) {
-									jdkFailedTestCaseList += "${failedTestCasesInfo} "
+									if (!jdkFailedTestCaseList.contains(failedTestCasesInfo)) {
+										jdkFailedTestCaseList += "${failedTestCasesInfo} "
+									}									
 								} else if (failedtest.startsWith("jck-runtime") || failedtest.startsWith("jckruntime")) {
-									jckRuntimeFailedTestCaseList += "${failedTestCasesInfo} "
+									if (!jckRuntimeFailedTestCaseList.contains(failedTestCasesInfo)) {
+										jckRuntimeFailedTestCaseList += "${failedTestCasesInfo} "
+									}
 								} else if (failedtest.startsWith("jck-compiler") || failedtest.startsWith("jckcompiler")) {
-									jckCompilerFailedTestCaseList += "${failedTestCasesInfo} "
+									if (!jckCompilerFailedTestCaseList.contains(failedTestCasesInfo)) {
+										jckCompilerFailedTestCaseList += "${failedTestCasesInfo} "
+									}
 								} else if (failedtest.startsWith("jck-devtools") || failedtest.startsWith("jckdevtools")) {
-									jckDevtoolsFailedTestCaseList += "${failedTestCasesInfo} "
+									if (!jckDevtoolsFailedTestCaseList.contains(failedTestCasesInfo)) {
+										jckDevtoolsFailedTestCaseList += "${failedTestCasesInfo} "
+									}
 								} else {
-									hotspotFailedTestCaseList += "${failedTestCasesInfo} "
+									if (!hotspotFailedTestCaseList.contains(failedTestCasesInfo)) {
+										hotspotFailedTestCaseList += "${failedTestCasesInfo} "
+									}
 								}
 							}
 						}

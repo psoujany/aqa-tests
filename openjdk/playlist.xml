@@ -89,15 +89,15 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
-		<impls>
-			<impl>openj9</impl>
-			<impl>ibm</impl>
-		</impls>
 		<features>
 			<feature>FIPS140_2:nonapplicable</feature>
 			<feature>FIPS140_3_OpenJCEPlusFIPS:nonapplicable</feature>
 			<feature>FIPS140_3_OpenJCEPlusFIPS.FIPS140-3:nonapplicable</feature>
 		</features>
+		<impls>
+			<impl>openj9</impl>
+			<impl>ibm</impl>
+		</impls>
 	</test>
 	<test>
 		<testCaseName>hotspot_custom</testCaseName>
@@ -335,7 +335,7 @@
 			<version>11+</version>
 		</versions>
 		<levels>
-			<level>dev</level>
+			<level>extended</level>
 		</levels>
 		<groups>
 			<group>openjdk</group>
@@ -361,7 +361,7 @@
 			<version>11+</version>
 		</versions>
 		<levels>
-			<level>dev</level>
+			<level>extended</level>
 		</levels>
 		<groups>
 			<group>openjdk</group>
@@ -387,7 +387,7 @@
 			<version>11+</version>
 		</versions>
 		<levels>
-			<level>dev</level>
+			<level>extended</level>
 		</levels>
 		<groups>
 			<group>openjdk</group>
@@ -2173,6 +2173,11 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
+		<features>
+			<feature>FIPS140_2:nonapplicable</feature>
+			<feature>FIPS140_3_OpenJCEPlusFIPS:nonapplicable</feature>
+			<feature>FIPS140_3_OpenJCEPlusFIPS.FIPS140-3:nonapplicable</feature>
+		</features>
 	</test>
 	<test>
 		<testCaseName>jdk_2d</testCaseName>
@@ -2363,6 +2368,11 @@
 		<groups>
 			<group>openjdk</group>
 		</groups>
+		<features>
+			<feature>FIPS140_2:nonapplicable</feature>
+			<feature>FIPS140_3_OpenJCEPlusFIPS:nonapplicable</feature>
+			<feature>FIPS140_3_OpenJCEPlusFIPS.FIPS140-3:nonapplicable</feature>
+		</features>
 	</test>
 	<test>
 		<testCaseName>jdk_vector</testCaseName>
@@ -2958,7 +2968,7 @@
 	$(Q)$(JTREG_LANGTOOLS_TEST_DIR)$(Q); \
 	$(TEST_STATUS)</command>
 		<levels>
-			<level>dev</level>
+			<level>sanity</level>
 		</levels>
 		<groups>
 			<group>openjdk</group>

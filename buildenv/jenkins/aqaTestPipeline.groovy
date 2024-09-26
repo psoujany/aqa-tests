@@ -4,22 +4,23 @@ def JDK_VERSIONS = params.JDK_VERSIONS.trim().split("\\s*,\\s*")
 def PLATFORMS = params.PLATFORMS.trim().split("\\s*,\\s*")
 def TARGETS = params.TARGETS ?: "Grinder"
 TARGETS = TARGETS.trim().split("\\s*,\\s*")
+def TEST_FLAG = (params.TEST_FLAG) ?: ""
 
-def PARALLEL = params.PARALLEL ? params.PARALLEL : "Dynamic"
+PARALLEL = params.PARALLEL ? params.PARALLEL : "Dynamic"
 
-def NUM_MACHINES = ""
+NUM_MACHINES = ""
 if (params.NUM_MACHINES) {
     NUM_MACHINES = params.NUM_MACHINES
 } else if (!params.TEST_TIME && PARALLEL == "Dynamic") {
     // set default NUM_MACHINES to 3 if params.NUM_MACHINES and params.TEST_TIME are not set and PARALLEL is Dynamic 
     NUM_MACHINES = 3
 }
-def SDK_RESOURCE = params.SDK_RESOURCE ? params.SDK_RESOURCE : "releases"
-def TIME_LIMIT = params.TIME_LIMIT ? params.TIME_LIMIT : 10
-def AUTO_AQA_GEN = params.AUTO_AQA_GEN ? params.AUTO_AQA_GEN.toBoolean() : false
-def TRSS_URL = params.TRSS_URL ? params.TRSS_URL : "https://trss.adoptium.net/"
-def TEST_FLAG = (params.TEST_FLAG) ?: ""
-def LIGHT_WEIGHT_CHECKOUT = params.LIGHT_WEIGHT_CHECKOUT ?: false
+
+SDK_RESOURCE = params.SDK_RESOURCE ? params.SDK_RESOURCE : "releases"
+TIME_LIMIT = params.TIME_LIMIT ? params.TIME_LIMIT : 10
+AUTO_AQA_GEN = params.AUTO_AQA_GEN ? params.AUTO_AQA_GEN.toBoolean() : false
+TRSS_URL = params.TRSS_URL ? params.TRSS_URL : "https://trss.adoptium.net/"
+LIGHT_WEIGHT_CHECKOUT = params.LIGHT_WEIGHT_CHECKOUT ?: false
 
 // Use BUILD_USER_ID if set and jdk-JDK_VERSIONS
 def DEFAULT_SUFFIX = (env.BUILD_USER_ID) ? "${env.BUILD_USER_ID} - jdk-${params.JDK_VERSIONS}" : "jdk-${params.JDK_VERSIONS}"
@@ -28,24 +29,33 @@ def PIPELINE_DISPLAY_NAME = (params.PIPELINE_DISPLAY_NAME) ? "#${currentBuild.nu
 // Set the AQA_TEST_PIPELINE Jenkins job displayName
 currentBuild.setDisplayName(PIPELINE_DISPLAY_NAME)
 
-def defaultTestTargets = "sanity.functional,extended.functional,special.functional,sanity.openjdk,extended.openjdk,sanity.system,extended.system,sanity.perf,extended.perf"
+def defaultTestTargets = "sanity.functional,extended.functional,special.functional,sanity.openjdk,extended.openjdk,special.openjdk,sanity.system,extended.system,special.system,sanity.perf,extended.perf,sanity.jck,extended.jck,special.jck"
 def defaultFipsTestTargets = "extended.functional,sanity.openjdk,extended.openjdk,sanity.jck,extended.jck,special.jck"
+if (params.BUILD_TYPE == "nightly") {
+    defaultTestTargets = "sanity.functional,extended.functional,sanity.openjdk,extended.openjdk,sanity.perf,sanity.jck,sanity.system,special.system"
+}
 
 JOBS = [:]
 fail = false
 
 JDK_VERSIONS.each { JDK_VERSION ->
-    if (params.PLATFORMS == "release") {
+    if (params.BUILD_TYPE == "release" || params.BUILD_TYPE == "nightly" || params.BUILD_TYPE == "weekly") {
         def configJson = []
-        node("worker || (ci.role.test&&hw.arch.x86&&sw.os.linux)") {
-            checkout scm
-            dir (env.WORKSPACE) {
-                def filePath = "./aqa-tests/buildenv/jenkins/config/${params.VARIANT}/"
-                filePath = filePath + "default.json"
-                if (fileExists(filePath + "jdk${JDK_VERSION}.json")) {
-                    filePath = filePath + "jdk${JDK_VERSION}.json"
+        if (params.CONFIG_JSON) {
+            echo "Read JSON from CONFIG_JSON parameter..."
+            configJson = readJSON text: "${params.CONFIG_JSON}"
+        } else {
+            node("worker || (ci.role.test&&hw.arch.x86&&sw.os.linux)") {
+                checkout scm
+                dir (env.WORKSPACE) {
+                    def filePath = "./aqa-tests/buildenv/jenkins/config/${params.VARIANT}/${params.BUILD_TYPE}/"
+                    filePath = filePath + "default.json"
+                    if (fileExists(filePath + "jdk${JDK_VERSION}.json")) {
+                        filePath = filePath + "jdk${JDK_VERSION}.json"
+                    }
+                    echo "Read JSON from file ${filePath}..."
+                    configJson = readJSON(file: filePath)
                 }
-                configJson = readJSON(file: filePath)
             }
         }
 
@@ -77,6 +87,7 @@ if (fail) {
 }
 
 def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets) {
+    echo "jobJdkVersion: ${jobJdkVersion}, jobTestFlag: ${jobTestFlag}, jobPlatforms: ${jobPlatforms}, jobTargets: ${jobTargets}"
     if (jobTestFlag == "NONE") {
         jobTestFlag = ""
     }
@@ -105,8 +116,12 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets) {
 
         if (SDK_RESOURCE == "customized" ) {
             if (params.TOP_LEVEL_SDK_URL) {
+                def url = params.TOP_LEVEL_SDK_URL
+                if (!url.endsWith("/")) {
+                    url = "${params.TOP_LEVEL_SDK_URL}/"
+                }
                 // example: <jenkins_url>/job/build-scripts/job/openjdk11-pipeline/123/artifact/target/linux/aarch64/openj9/*_aarch64_linux_*.tar.gz/*zip*/openj9.zip
-                download_url = params.TOP_LEVEL_SDK_URL + "artifact/target/${os}/${arch}/${params.VARIANT}/${filter}/*zip*/${params.VARIANT}.zip"
+                download_url = "${url}artifact/target/${os}/${arch}/${params.VARIANT}/${filter}/*zip*/${params.VARIANT}.zip"
             }
         } else if (SDK_RESOURCE == "releases") {
             if (params.VARIANT == "openj9") {
@@ -190,7 +205,7 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets) {
             }
             echo "AUTO_AQA_GEN: ${AUTO_AQA_GEN}"
             // Grinder job has special settings and should be regenerated specifically, not via aqaTestPipeline
-            if (AUTO_AQA_GEN && !TEST_JOB_NAME.contains("Grinder")) {
+            if (AUTO_AQA_GEN.toBoolean() && !TEST_JOB_NAME.contains("Grinder")) {
                 String[] targetTokens = TARGET.split("\\.")
                 def level = targetTokens[0];
                 def group = targetTokens[1];
@@ -226,10 +241,6 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets) {
                         childParams << booleanParam(name: param.key, value: LIGHT_WEIGHT_CHECKOUT.toBoolean())
                     } else if (param.key == "TIME_LIMIT") {
                         childParams << string(name: param.key, value: TIME_LIMIT.toString())
-                    } else if (param.key == "TEST_FLAG") {
-                        childParams << string(name: param.key, value: jobTestFlag)
-                    } else if (param.key == "KEEP_REPORTDIR") {
-                        childParams << booleanParam(name: param.key, value: keep_reportdir.toBoolean())
                     } else {
                         def value = param.value.toString()
                         if (value == "true" || value == "false") {
@@ -241,10 +252,12 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets) {
                 }
                 childParams << booleanParam(name: "DYNAMIC_COMPILE", value: DYNAMIC_COMPILE.toBoolean())
                 childParams << booleanParam(name: "GENERATE_JOBS", value: AUTO_AQA_GEN.toBoolean())
+                childParams << booleanParam(name: "KEEP_REPORTDIR", value: keep_reportdir.toBoolean())
                 childParams << string(name: "JDK_IMPL", value: jdk_impl)
                 childParams << string(name: "JDK_VERSION", value: jobJdkVersion)
                 childParams << string(name: "PLATFORM", value: PLATFORM)
                 childParams << string(name: "RERUN_ITERATIONS", value: rerunIterations.toString())
+                childParams << string(name: "TEST_FLAG", value: jobTestFlag)
                 childParams << string(name: "VENDOR_TEST_BRANCHES", value: VENDOR_TEST_BRANCHES)
                 childParams << string(name: "VENDOR_TEST_DIRS", value: VENDOR_TEST_DIRS)
                 childParams << string(name: "VENDOR_TEST_REPOS", value: VENDOR_TEST_REPOS)
