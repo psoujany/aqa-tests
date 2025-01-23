@@ -92,3 +92,5 @@ ifneq ($(JDK_VERSION),8)
 else
   ADD_OPENS_CMD=
 endif
+
+JAVA_HOME:=$(JAVA_HOME)/../j2sdk-image-71

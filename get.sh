@@ -501,7 +501,14 @@ getBinaryOpenjdk()
 						fi
 					# The following only needed if openj9 has a different image name convention
 					elif [ "$jar_dir_name" != "j2sdk-image" ]; then
-						moveDirectorySafely $jar_dir_name ../j2sdk-image
+						echo "jar_dir_name is $jar_dir_name"
+						if [[ "$file_name" =~ "7.1" ]]; then
+							echo "it is 727 build"
+							moveDirectorySafely $jar_dir_name ../j2sdk-image-71
+						elif [[ "$file_name" =~ "8.0"* ]]; then
+							echo "It is 80 build"
+							moveDirectorySafely $jar_dir_name ../j2sdk-image
+						fi
 					fi
 				elif [ "$len" -gt 1 ]; then
 					moveDirectorySafely ../tmp ../j2sdk-image
@@ -570,7 +577,6 @@ getTestKitGen()
 	echo "git checkout -q -f $tkg_sha"
 	git checkout -q -f $tkg_sha
 
-	checkTestRepoSHAs
 }
 
 getCustomJtreg()
@@ -660,8 +666,11 @@ getFunctionalTestMaterial()
 	else
 		mv openj9/test/functional functional
 	fi
-
-	rm -rf openj9
+   	
+	cd openj9
+	git rm -rqf .
+	git clean -fxd
+	cd $TESTDIR
 }
 
 getVendorTestMaterial() {
@@ -746,7 +755,11 @@ getVendorTestMaterial() {
 		fi
 
 		# clean up
-		rm -rf $dest
+		cd $dest
+		git rm -rqf .
+		git clean -fxd
+		cd $TESTDIR
+
 	done
 }
 
@@ -808,28 +821,10 @@ testJavaVersion()
 
 checkRepoSHA()
 {
-	sha_file="$TESTDIR/TKG/SHA.txt"
 	testenv_file="$TESTDIR/testenv/testenv.properties"
-
-	echo "$TESTDIR/TKG/scripts/getSHA.sh --repo_dir $1 --output_file $sha_file"
-	$TESTDIR/TKG/scripts/getSHA.sh --repo_dir $1 --output_file $sha_file
 
 	echo "$TESTDIR/TKG/scripts/getTestenvProperties.sh --repo_dir $1 --output_file $testenv_file --repo_name $2"
 	$TESTDIR/TKG/scripts/getTestenvProperties.sh --repo_dir $1 --output_file $testenv_file --repo_name $2
-}
-
-checkTestRepoSHAs()
-{
-	echo "check adoptium repo and TKG repo SHA"
-
-	output_file="$TESTDIR/TKG/SHA.txt"
-	if [ -e ${output_file} ]; then
-		echo "rm $output_file"
-		rm ${output_file}
-	fi
-
-	checkRepoSHA "$TESTDIR" "ADOPTOPENJDK"
-	checkRepoSHA "$TESTDIR/TKG" "TKG"
 }
 
 checkOpenJ9RepoSHA()
