@@ -94,3 +94,4 @@ else
 endif
 
 JAVA_HOME:=$(JAVA_HOME)/../j2sdk-image-71
+$(shell $(JAVA_HOME)$(D)bin$(D)java -version)
