@@ -16,7 +16,7 @@
 		<isset property="isZOS"/>
 	</condition>
 
-	<condition property="openjdk_systemtest_repo" value="${env.ADOPTOPENJDK_SYSTEMTEST_REPO}" else="${git-prefix}://github.com/psoujany/aqa-systemtest.git">
+	<condition property="openjdk_systemtest_repo" value="${env.ADOPTOPENJDK_SYSTEMTEST_REPO}" else="${git-prefix}://github.com/adoptium/aqa-systemtest.git">
 		<isset property="env.ADOPTOPENJDK_SYSTEMTEST_REPO"/>
 	</condition>
 	<condition property="openjdk_systemtest_branch" value="${env.ADOPTOPENJDK_SYSTEMTEST_BRANCH}" else="master">
@@ -84,12 +84,13 @@
 					override="true"/>
 			</then>
 		</if>
+		<input property="stf_sha_value" value="{stf_sha}" encoding="IBM-1047" />
 		<echo message="git checkout -q -f ${stf_sha} "/>
 		<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/STF" >
 			<arg value="checkout"/>
 			<arg value="-q"/>
 			<arg value="-f"/>
-			<arg value="${stf_branch}"/>
+			<arg value="${stf_sha_value}"/>
 		</exec>
 		<if>
 			<isset property="isZOS" />
@@ -112,7 +113,6 @@
 				</exec>
 			</then>
 		</if>
-		<checkGitRepoSha repoDir="${SYSTEMTEST_ROOT}/STF" />
 		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/STF" repoName="STF"/>
 	</target>
 	<target name="clone_systemtest">
@@ -157,8 +157,9 @@
 			<arg value="checkout"/>
 			<arg value="-q"/>
 			<arg value="-f"/>
-			<arg value="${openjdk_systemtest_branch}"/>
+			<arg value="${openjdk_systemtest_sha}"/>
 		</exec>
+
 		<if>
 			<isset property="isZOS" />
 			<then>
@@ -180,7 +181,6 @@
 				</exec>
 			</then>
 		</if>
-		<checkGitRepoSha repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" />
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" repoName="AQA_SYSTEMTEST" />
 	</target>
 
@@ -226,8 +226,9 @@
 			<arg value="checkout"/>
 			<arg value="-q"/>
 			<arg value="-f"/>
-			<arg value="${openj9_systemtest_branch}"/>
+			<arg value="${openj9_systemtest_sha}"/>
 		</exec>
+
 		<if>
 			<isset property="isZOS" />
 			<then>
@@ -249,7 +250,6 @@
 				</exec>
 			</then>
 		</if>
-		<checkGitRepoSha repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" />
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" repoName="OPENJ9_SYSTEMTEST"/>
 	</target>
 
@@ -316,19 +316,8 @@
 	</target>
 
 	<target name="common_dist" description="generate the distribution">
-		<copy todir="${SYSTEMTEST_DEST}/STF" >
-			<fileset dir="${SYSTEMTEST_ROOT}/STF" >
-				<exclude name="**/*.pl" />
-				<exclude name="**/*.pm" />
-				<exclude name="**/*.properties" />
-			</fileset>
-		</copy>
-		<copy todir="${SYSTEMTEST_DEST}/STF"  outputencoding="IBM-1047">
-			<fileset dir="${SYSTEMTEST_ROOT}/STF">
-				<include name="**/*.pm" />
-				<include name="**/*.pl" />
-				<include name="**/*.properties" />
-			</fileset>
+		<copy todir="${SYSTEMTEST_DEST}/STF">
+			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
 		</copy>
 		<copy todir="${SYSTEMTEST_DEST}/aqa-systemtest" failonerror="false">
 			<fileset dir="${SYSTEMTEST_ROOT}/aqa-systemtest" includes="**" />
