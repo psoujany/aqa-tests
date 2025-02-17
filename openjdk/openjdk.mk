@@ -112,14 +112,16 @@ JTREG_BASIC_OPTIONS += $(JTREG_IGNORE_OPTION)
 # riscv64 machines aren't very fast (yet!!)
 ifeq ($(ARCH), riscv64)
 	JTREG_TIMEOUT_OPTION = -timeoutFactor:16
-else
+# aarch64 linux requires extra time, set timeoutFactor to 12
+else ifneq ($(filter linux_aarch64, $(SPEC)),)
+	JTREG_TIMEOUT_OPTION =  -timeoutFactor:12
 # Multiple by 8 the timeout numbers, except on zOS use 2
-ifneq ($(OS),OS/390)
-	JTREG_TIMEOUT_OPTION =  -timeoutFactor:8
-else
+else ifeq ($(OS),OS/390)
 	JTREG_TIMEOUT_OPTION =  -timeoutFactor:2
+else
+	JTREG_TIMEOUT_OPTION =  -timeoutFactor:8
 endif
-endif
+
 JTREG_BASIC_OPTIONS += $(JTREG_TIMEOUT_OPTION)
 # Create junit xml
 JTREG_XML_OPTION = -xml:verify
@@ -177,6 +179,7 @@ LANGTOOLS_CUSTOM_TARGET ?= tools/javac/4241573/T4241573.java
 FULLPATH_JDK_CUSTOM_TARGET = $(foreach target,$(JDK_CUSTOM_TARGET),$(JTREG_JDK_TEST_DIR)$(D)$(target))
 FULLPATH_HOTSPOT_CUSTOM_TARGET = $(foreach target,$(HOTSPOT_CUSTOM_TARGET),$(JTREG_HOTSPOT_TEST_DIR)$(D)$(target))
 FULLPATH_HOTSPOT_CUSTOM_J9_TARGET = $(foreach target,$(HOTSPOT_CUSTOM_J9_TARGET),$(JTREG_HOTSPOT_TEST_DIR)$(D)$(target))
+FULLPATH_LANGTOOLS_CUSTOM_TARGET = $(foreach target,$(LANGTOOLS_CUSTOM_TARGET),$(JTREG_LANGTOOLS_TEST_DIR)$(D)$(target))
 
 JDK_NATIVE_OPTIONS :=
 JVM_NATIVE_OPTIONS :=

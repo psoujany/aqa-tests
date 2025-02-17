@@ -11,7 +11,7 @@ jobs:
     if: startsWith(github.event.comment.body, 'auto exclude test')
     steps:
       - name: Set up Python 3.8
-        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: 3.8
       - name: check python version
@@ -41,7 +41,7 @@ jobs:
         run: |
           curl -u github-actions:${{ secrets.GITHUB_TOKEN }} -d '{ "body":  "The specified test cannot be excluded. Action run: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}" }' -X POST ${{ github.event.issue.comments_url }}
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7.0.5
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
         with:
           path: 'tests'
           title: '${{ github.event.comment.body }}'

@@ -212,6 +212,9 @@ getBinaryOpenjdk()
 	fi
 
 	if [ "$SDK_RESOURCE" == "nightly" ] && [ "$CUSTOMIZED_SDK_URL" != "" ]; then
+		if [[ ! "${CUSTOMIZED_SDK_URL}" =~ /$ ]]; then
+    			CUSTOMIZED_SDK_URL="${CUSTOMIZED_SDK_URL}/"
+		fi
 		result=$(curl -k ${curl_options} ${CUSTOMIZED_SDK_URL} | grep ">[0-9]*\/<" | sed -e 's/[^0-9/ ]//g' | sed 's/\/.*$//')
 		IFS=' ' read -r -a array <<< "$result"
 		arr=(${result/ / })
@@ -295,7 +298,7 @@ getBinaryOpenjdk()
 						if [ "$TEST_IMAGES_REQUIRED" == "true" ]; then
 							download_url+=" ${download_url_base}${n}"
 						fi
-					else
+					elif [[ $n != *"install"* ]]; then
 						download_url+=" ${download_url_base}${n}"
 					fi
 				done
@@ -570,7 +573,6 @@ getTestKitGen()
 	echo "git checkout -q -f $tkg_sha"
 	git checkout -q -f $tkg_sha
 
-	checkTestRepoSHAs
 }
 
 getCustomJtreg()
@@ -660,8 +662,11 @@ getFunctionalTestMaterial()
 	else
 		mv openj9/test/functional functional
 	fi
-
-	rm -rf openj9
+   	
+	cd openj9
+	git rm -rqf .
+	git clean -fxd
+	cd $TESTDIR
 }
 
 getVendorTestMaterial() {
@@ -746,7 +751,11 @@ getVendorTestMaterial() {
 		fi
 
 		# clean up
-		rm -rf $dest
+		cd $dest
+		git rm -rqf .
+		git clean -fxd
+		cd $TESTDIR
+
 	done
 }
 
@@ -808,28 +817,10 @@ testJavaVersion()
 
 checkRepoSHA()
 {
-	sha_file="$TESTDIR/TKG/SHA.txt"
 	testenv_file="$TESTDIR/testenv/testenv.properties"
-
-	echo "$TESTDIR/TKG/scripts/getSHA.sh --repo_dir $1 --output_file $sha_file"
-	$TESTDIR/TKG/scripts/getSHA.sh --repo_dir $1 --output_file $sha_file
 
 	echo "$TESTDIR/TKG/scripts/getTestenvProperties.sh --repo_dir $1 --output_file $testenv_file --repo_name $2"
 	$TESTDIR/TKG/scripts/getTestenvProperties.sh --repo_dir $1 --output_file $testenv_file --repo_name $2
-}
-
-checkTestRepoSHAs()
-{
-	echo "check adoptium repo and TKG repo SHA"
-
-	output_file="$TESTDIR/TKG/SHA.txt"
-	if [ -e ${output_file} ]; then
-		echo "rm $output_file"
-		rm ${output_file}
-	fi
-
-	checkRepoSHA "$TESTDIR" "ADOPTOPENJDK"
-	checkRepoSHA "$TESTDIR/TKG" "TKG"
 }
 
 checkOpenJ9RepoSHA()
