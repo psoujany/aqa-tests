@@ -84,7 +84,7 @@
 					override="true"/>
 			</then>
 		</if>
-		<input property="stf_sha_value" value="{stf_sha}" encoding="IBM-1047" />
+		<input addproperty="stf_sha_value" value="{stf_sha}" encoding="IBM-1047" />
 		<echo message="git checkout -q -f ${stf_sha} "/>
 		<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/STF" >
 			<arg value="checkout"/>
