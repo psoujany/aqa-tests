@@ -43,16 +43,6 @@
 			<matches pattern="^(21)$" string="${JDK_VERSION}"/>
 		</and>
 	</condition>
-	<if>
-		<isset property="set_env" />
-		<then>
-			<exec executable="sh">
-				<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
-				<arg value="-c" />
-				<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />
-			</exec>
-		</then>
-	</if>
 
 	<target name="common_init">
 		<if>
@@ -64,7 +54,9 @@
 			</then>
 		</if>
 	</target>
+
 	<target name="clone_stf">
+		<antcall target="setEnvOptions" inheritall="true" />
 		<getFileWithRetry file="STF" command="git clone -q ${stf_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${stf_branch} "/>
 		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/STF" outputproperty="stf_sha1" resultproperty="code">
@@ -130,8 +122,10 @@
 			</then>
 		</if>
 		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/STF" repoName="STF"/>
+		<antcall target="unsetEnvOption" inheritall="true" />
 	</target>
 	<target name="clone_systemtest">
+		<antcall target="setEnvOptions" inheritall="true" />
 		<getFileWithRetry file="aqa-systemtest" command="git clone -q ${openjdk_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openjdk_systemtest_branch} "/>
 		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" outputproperty="openjdk_systemtest_sha1" resultproperty="code">
@@ -198,10 +192,11 @@
 			</then>
 		</if>
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" repoName="AQA_SYSTEMTEST" />
+		<antcall target="unsetEnvOption" inheritall="true" />
 	</target>
 
-
 	<target name="clone_openj9-systemtest">
+		<antcall target="setEnvOptions" inheritall="true" />
 		<getFileWithRetry file="openj9-systemtest" command="git clone -q ${openj9_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openj9_systemtest_branch} "/>
 		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" outputproperty="openj9_systemtest_sha1" resultproperty="code">
@@ -268,17 +263,8 @@
 			</then>
 		</if>
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" repoName="OPENJ9_SYSTEMTEST"/>
+		<antcall target="unsetEnvOption" inheritall="true" />
 	</target>
-
-	<if>
-		<isset property="set_env" />
-		<then>
-			<exec executable="sh">
-				<arg value="-c" />
-				<arg value="unset IBM_JAVA_OPTIONS; echo IBM_JAVA_OPTIONS been unset ${IBM_JAVA_OPTIONS}" />
-			</exec>
-		</then>
-	</if>
 
 	<target name="check_systemtest" depends="common_init">
 		<if>
@@ -430,4 +416,30 @@
 		</if>
 		<ant antfile="${SYSTEMTEST_ROOT}/STF/stf.build/build.xml" dir="${SYSTEMTEST_ROOT}/STF/stf.build" inheritAll="false" target="clean"/>
 	</target>
+
+	<target name="setEnvOptions">
+		<if>
+			<isset property="set_env" />
+			<then>
+				<exec executable="sh">
+					<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
+					<arg value="-c" />
+					<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />
+				</exec>
+			</then>
+		</if>
+	</target>
+
+	<target name="unsetEnvOptions">
+		<if>
+			<isset property="set_env" />
+			<then>
+				<exec executable="sh">
+					<arg value="-c" />
+					<arg value="unset IBM_JAVA_OPTIONS; echo IBM_JAVA_OPTIONS been unset ${IBM_JAVA_OPTIONS}" />
+				</exec>
+			</then>
+		</if>
+	</target>
+
 </project>
