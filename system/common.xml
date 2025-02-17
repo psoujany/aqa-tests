@@ -46,11 +46,12 @@
 	<if>
 		<isset property="set_env" />
 		<then>
-		<exec executable="sh">
-			<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
-			<arg value="-c" />
-			<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />"
-		</exec>
+			<exec executable="sh">
+				<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
+				<arg value="-c" />
+				<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />"
+			</exec>
+		</then>
 	</if>
 
 	<target name="common_init">
@@ -272,10 +273,11 @@
 	<if>
 		<isset property="set_env" />
 		<then>
-		<exec executable="sh">
-			<arg value="-c" />
-			<arg value="unset IBM_JAVA_OPTIONS; echo IBM_JAVA_OPTIONS been unset ${IBM_JAVA_OPTIONS}" />
-		</exec>
+			<exec executable="sh">
+				<arg value="-c" />
+				<arg value="unset IBM_JAVA_OPTIONS; echo IBM_JAVA_OPTIONS been unset ${IBM_JAVA_OPTIONS}" />
+			</exec>
+		</then>
 	</if>
 
 	<target name="check_systemtest" depends="common_init">
