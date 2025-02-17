@@ -49,7 +49,7 @@
 			<exec executable="sh">
 				<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
 				<arg value="-c" />
-				<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />"
+				<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />
 			</exec>
 		</then>
 	</if>
