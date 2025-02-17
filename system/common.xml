@@ -37,6 +37,22 @@
 		<isset property="env.STF_BRANCH"/>
 	</condition>
 
+	<condition property="set_env">
+		<and>
+			<contains string="${SPEC}" substring="zos"/>
+			<matches pattern="^(21)$" string="${JDK_VERSION}"/>
+		</and>
+	</condition>
+	<if>
+		<isset property="set_env" />
+		<then>
+		<exec executable="sh">
+			<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
+			<arg value="-c" />
+			<arg value="echo IBM_JAVA_OPTIONS=${IBM_JAVA_OPTIONS}" />"
+		</exec>
+	</if>
+
 	<target name="common_init">
 		<if>
 			<not>
@@ -84,7 +100,6 @@
 					override="true"/>
 			</then>
 		</if>
-		<input addproperty="stf_sha_value" value="{stf_sha}" encoding="IBM-1047" />
 		<echo message="git checkout -q -f ${stf_sha} "/>
 		<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/STF" >
 			<arg value="checkout"/>
@@ -184,6 +199,7 @@
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" repoName="AQA_SYSTEMTEST" />
 	</target>
 
+
 	<target name="clone_openj9-systemtest">
 		<getFileWithRetry file="openj9-systemtest" command="git clone -q ${openj9_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openj9_systemtest_branch} "/>
@@ -252,6 +268,15 @@
 		</if>
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" repoName="OPENJ9_SYSTEMTEST"/>
 	</target>
+
+	<if>
+		<isset property="set_env" />
+		<then>
+		<exec executable="sh">
+			<arg value="-c" />
+			<arg value="unset IBM_JAVA_OPTIONS; echo IBM_JAVA_OPTIONS been unset ${IBM_JAVA_OPTIONS}" />
+		</exec>
+	</if>
 
 	<target name="check_systemtest" depends="common_init">
 		<if>
