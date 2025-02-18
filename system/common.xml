@@ -44,14 +44,7 @@
 		</and>
 	</condition>
 
-	<if>
-		<isset property="set_env" />
-		<then>
-			<antcall target="setEnvOptions" inheritall="true" />
-		</then>
-	</if>
-
-	<target name="common_init">
+	<target name="common_init" depends="setEnvOptions">
 		<if>
 			<not>
 				<available file="${SYSTEMTEST_DEST}" type="dir" />
@@ -268,13 +261,6 @@
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" repoName="OPENJ9_SYSTEMTEST"/>
 	</target>
 
-	<if>
-		<isset property="set_env" />
-		<then>
-			<antcall target="unsetEnvOptions" inheritall="true" />
-		</then>
-	</if>
-
 	<target name="check_systemtest" depends="common_init">
 		<if>
 			<not>
@@ -337,7 +323,7 @@
 		</if>
 	</target>
 
-	<target name="common_dist" description="generate the distribution">
+	<target name="common_dist" description="generate the distribution" depends="unsetEnvOptions">
 		<copy todir="${SYSTEMTEST_DEST}/STF">
 			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
 		</copy>
