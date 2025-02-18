@@ -59,7 +59,7 @@
 		<antcall target="setEnvOptions" inheritall="true" />
 		<getFileWithRetry file="STF" command="git clone -q ${stf_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${stf_branch} "/>
-		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/STF" outputproperty="stf_sha1" resultproperty="code">
+		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/STF" output="stf_sha1.txt" resultproperty="code">
 			<arg value="rev-parse"/>
 			<arg value="${stf_branch}"/>
 		</exec>
@@ -67,11 +67,11 @@
 			<equals arg1="${code}" arg2="128"/>
 			<then>
 				<echo message="git rev-parse origin/${stf_branch}"/>
-				<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/STF" outputproperty="stf_sha2" resultproperty="code2">
+				<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/STF" output="stf_sha2.txt" resultproperty="code2">
 					<arg value="rev-parse"/>
 					<arg value="origin/${stf_branch}"/>
 				</exec>
-				<property name="stf_sha" value="${stf_sha2}"/>
+				<loadfile property="stf_sha" srcFile="stf_sha2.txt" />
 			</then>
 		</if>
 		<if>
@@ -79,7 +79,7 @@
 				<isset property="stf_sha"/>
 			</not>
 			<then>
-				<property name="stf_sha" value="${stf_sha1}"/>
+				<loadfile property="stf_sha" srcFile="stf_sha1.txt" />
 			</then>
 		</if>
 		<if>
@@ -128,7 +128,7 @@
 		<antcall target="setEnvOptions" inheritall="true" />
 		<getFileWithRetry file="aqa-systemtest" command="git clone -q ${openjdk_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openjdk_systemtest_branch} "/>
-		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" outputproperty="openjdk_systemtest_sha1" resultproperty="code">
+		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" output="openjdk_systemtest_sha1.txt" resultproperty="code">
 			<arg value="rev-parse"/>
 			<arg value="${openjdk_systemtest_branch}"/>
 		</exec>
@@ -136,11 +136,11 @@
  			<equals arg1="${code}" arg2="128"/>
 			<then>
 				<echo message="git rev-parse origin/${openjdk_systemtest_branch}"/>
-				<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" outputproperty="openjdk_systemtest_sha2">
+				<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" output="openjdk_systemtest_sha2.txt">
 					<arg value="rev-parse"/>
 					<arg value="origin/${openjdk_systemtest_branch}"/>
 				</exec>
-				<property name="openjdk_systemtest_sha" value="${openjdk_systemtest_sha2}"/>
+				<loadfile property="openjdk_systemtest_sha" srcFile="openjdk_systemtest_sha2.txt" />
 			</then>
 		</if>
 		<if>
@@ -148,7 +148,7 @@
 				<isset property="openjdk_systemtest_sha"/>
 			</not>
 			<then>
-				<property name="openjdk_systemtest_sha" value="${openjdk_systemtest_sha1}"/>
+				<loadfile property="openjdk_systemtest_sha" srcFile="openjdk_systemtest_sha1.txt" />
 			</then>
 		</if>
 		<if>
@@ -199,7 +199,7 @@
 		<antcall target="setEnvOptions" inheritall="true" />
 		<getFileWithRetry file="openj9-systemtest" command="git clone -q ${openj9_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openj9_systemtest_branch} "/>
-		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" outputproperty="openj9_systemtest_sha1" resultproperty="code">
+		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" output="openj9_systemtest_sha1.txt" resultproperty="code">
 			<arg value="rev-parse"/>
 			<arg value="${openj9_systemtest_branch}"/>
 		</exec>
@@ -207,11 +207,11 @@
 			<equals arg1="${code}" arg2="128"/>
 			<then>
 				<echo message="git rev-parse origin/${openj9_systemtest_branch}"/>
-				<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" outputproperty="openj9_systemtest_sha2">
+				<exec executable="git" failonerror="true" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" output="openj9_systemtest_sha2.txt">
 					<arg value="rev-parse"/>
 					<arg value="origin/${openj9_systemtest_branch}"/>
 				</exec>
-				<property name="openj9_systemtest_sha" value="${openj9_systemtest_sha2}"/>
+				<loadfile property="openj9_systemtest_sha" srcFile="openj9_systemtest_sha2.txt" />
 			</then>
 		</if>
 		<if>
@@ -219,7 +219,7 @@
 				<isset property="openj9_systemtest_sha"/>
 			</not>
 			<then>
-				<property name="openj9_systemtest_sha" value="${openj9_systemtest_sha1}"/>
+				<loadfile property="openj9_systemtest_sha" srcFile="openj9_systemtest_sha1.txt" />
 			</then>
 		</if>
 		<if>
