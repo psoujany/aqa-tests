@@ -44,6 +44,13 @@
 		</and>
 	</condition>
 
+	<if>
+		<isset property="set_env" />
+		<then>
+			<antcall target="setEnvOptions" inheritall="true" />
+		</then>
+	</if>
+
 	<target name="common_init">
 		<if>
 			<not>
@@ -56,7 +63,6 @@
 	</target>
 
 	<target name="clone_stf">
-		<antcall target="setEnvOptions" inheritall="true" if="set_env" />
 		<getFileWithRetry file="STF" command="git clone -q ${stf_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${stf_branch} "/>
 		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/STF" output="stf_sha1.txt" resultproperty="code">
@@ -122,10 +128,9 @@
 			</then>
 		</if>
 		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/STF" repoName="STF"/>
-		<antcall target="unsetEnvOptions" inheritall="true" if="set_env" />
+	
 	</target>
 	<target name="clone_systemtest">
-		<antcall target="setEnvOptions" inheritall="true" if="set_env"/>
 		<getFileWithRetry file="aqa-systemtest" command="git clone -q ${openjdk_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openjdk_systemtest_branch} "/>
 		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/aqa-systemtest" output="openjdk_systemtest_sha1.txt" resultproperty="code">
@@ -192,11 +197,9 @@
 			</then>
 		</if>
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/aqa-systemtest" repoName="AQA_SYSTEMTEST" />
-		<antcall target="unsetEnvOptions" inheritall="true" if="set_env" />
 	</target>
 
 	<target name="clone_openj9-systemtest">
-		<antcall target="setEnvOptions" inheritall="true" if="set_env" />
 		<getFileWithRetry file="openj9-systemtest" command="git clone -q ${openj9_systemtest_repo}" dest="${SYSTEMTEST_ROOT}"/>
 		<echo message="git rev-parse ${openj9_systemtest_branch} "/>
 		<exec executable="git" failonerror="false" dir="${SYSTEMTEST_ROOT}/openj9-systemtest" output="openj9_systemtest_sha1.txt" resultproperty="code">
@@ -263,8 +266,14 @@
 			</then>
 		</if>
  		<addTestenvProperties repoDir="${SYSTEMTEST_ROOT}/openj9-systemtest" repoName="OPENJ9_SYSTEMTEST"/>
-		<antcall target="unsetEnvOptions" inheritall="true" if="set_env" />
 	</target>
+
+	<if>
+		<isset property="set_env" />
+		<then>
+			<antcall target="unsetEnvOptions" inheritall="true" />
+		</then>
+	</if>
 
 	<target name="check_systemtest" depends="common_init">
 		<if>
