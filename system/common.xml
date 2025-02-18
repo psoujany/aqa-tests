@@ -308,7 +308,7 @@
 		</if>
 	</target>
 
-	<target name="configure_systemtest" depends="check_systemtest">
+	<target name="configure_systemtest" depends="check_systemtest,unsetEnvOptions">
 		<if>
 			<or>
 				<contains string="${JVM_VERSION}" substring="openj9"/>
@@ -323,7 +323,7 @@
 		</if>
 	</target>
 
-	<target name="common_dist" description="generate the distribution" depends="unsetEnvOptions">
+	<target name="common_dist" description="generate the distribution">
 		<copy todir="${SYSTEMTEST_DEST}/STF">
 			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
 		</copy>
