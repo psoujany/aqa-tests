@@ -427,6 +427,7 @@ public class JavatestUtil {
 		String pathToLib = testJdk + File.separator + "jre" + File.separator + "lib";
 		String pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
 		String pathToToolsJar = testJdk + File.separator + "lib" + File.separator + "tools.jar";
+		String agentJar = jckBase + File.separator + "lib" + File.separator + "agent1.jar";
 		int concurrency;
 		String keyword = "";
 		String libPath = "";
@@ -441,6 +442,7 @@ public class JavatestUtil {
 			pathToLib = pathToLib.replace("/", "\\");
 			pathToJavac = pathToJavac.replace("/", "\\") + ".exe";
 			pathToToolsJar = pathToToolsJar.replace("/", "\\");
+			agentJar = agentJar.replace("/", "\\");
 		}
 
 		InetAddress addr = InetAddress.getLocalHost();
@@ -579,7 +581,7 @@ public class JavatestUtil {
 			// tools.jar was incorporated into modules from Java 9
 			if ( jckVersion.contains("jck8") ) {
 				if ( tests.startsWith("vm/jvmti") || tests.equals("vm") || tests.equals("api") || tests.equals("api/java_lang") || tests.contains("api/java_lang/instrument") ) {
-					fileContent += "set jck.env.runtime.testExecute.additionalClasspathRemote \"" + pathToToolsJar + "\"" + ";\n";
+					fileContent += "set jck.env.runtime.testExecute.additionalClasspathRemote \"" + pathToToolsJar + ":" + agentJar + "\"" + ";\n";
 				}
 			}
 			
@@ -813,12 +815,18 @@ public class JavatestUtil {
 				jxcCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsgen.sh";
 				impCmd = jckBase + File.separator + "macos" + File.separator + "bin" + File.separator + "wsimport.sh";
-			} else if (spec.contains("zos") || spec.contains("sunos")) {
+			} else if ((spec.contains("zos") || spec.contains("sunos")) && !isIbmJvm()) {
 				pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
 				xjcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "xjc.sh";
 				jxcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "schemagen.sh";
 				genCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "wsgen.sh";
 				impCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "wsimport.sh";
+			} else if (spec.contains("zos") && isIbmJvm() && jckVersion.contains("jck8")) {
+				pathToJavac = testJdk + File.separator + "bin" + File.separator + "javac";
+				xjcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "ibm_xjc.sh";
+				jxcCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "ibm_schemagen.sh";
+				genCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "ibm_wsgen.sh";
+				impCmd = jckBase + File.separator + "solaris" + File.separator + "bin" + File.separator + "ibm_wsimport.sh";
 			} else {
 				System.out.println("Unknown spec: " + spec);
 				return false; 
@@ -1089,7 +1097,7 @@ public class JavatestUtil {
 			testSpecificJvmOptions += " -Djava.security.properties=" + secPropsFile;
 		}
 
-		if (jckVersionInt < 9) {
+		if (jckVersionInt < 9 && !isIbmJvm()) {
 			return testSpecificJvmOptions;
 		}
 
