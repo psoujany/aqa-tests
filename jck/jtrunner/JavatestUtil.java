@@ -468,7 +468,7 @@ public class JavatestUtil {
 		}
 		
 		if (spec.contains("zos")) {
-			extraJvmOptions += " -Dfile.encoding=IBM-1047";
+			extraJvmOptions += " -Dfile.encoding=US-ASCII";
 		}
 		
 		// testExecutionType of multiJVM_group on Windows and AIX causes memory exhaustion, so limit to non-group multiJVM
@@ -1119,6 +1119,9 @@ public class JavatestUtil {
 		}
 
 		testSpecificJvmOptions += " -Djdk.attach.allowAttachSelf=true";
+		if (spec.contains("zos")) {
+			testSpecificJvmOptions += " -Dcom.ibm.tools.attach.enable=yes";
+		}
 
 		return testSpecificJvmOptions;
 	}  
