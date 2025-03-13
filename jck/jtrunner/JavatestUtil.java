@@ -1111,10 +1111,10 @@ public class JavatestUtil {
 				testSpecificJvmOptions += ",java.activation,java.corba,java.xml.ws.annotation,java.se.ee,java.transaction,java.xml.bind,java.xml.ws";
 			}
 		}
-		if (tests.contains("api/javax_crypto") ) {
+		if (tests.contains("api/javax_crypto") && !(jckVersion.contains("jck8"))) {
 			testSpecificJvmOptions = " --add-modules java.xml.crypto";
 		}
-		if (tests.contains("api/javax_sql") ) {
+		if (tests.contains("api/javax_sql") && !(jckVersion.contains("jck8"))) {
 			testSpecificJvmOptions = " --add-modules java.sql";
 		}
 
