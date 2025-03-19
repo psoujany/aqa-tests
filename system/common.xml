@@ -348,7 +348,8 @@
  						<include name="**/*.pm" />
  						<include name="**/*.pl" />
  						<include name="**/*.properties" />
- 				</fileset>
+ 					</fileset>
+				</copy>
 			</then>
 			<else>
 				<copy todir="${SYSTEMTEST_DEST}/STF">
