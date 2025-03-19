@@ -37,7 +37,7 @@
 		<isset property="env.STF_BRANCH"/>
 	</condition>
 
-	<condition property="set_env">
+	<condition property="j21OnZ">
 		<and>
 			<contains string="${SPEC}" substring="zos"/>
 			<matches pattern="^(21)$" string="${JDK_VERSION}"/>
@@ -310,7 +310,7 @@
 
 	<target name="configure_systemtest" depends="check_systemtest">
 		<if>
-			<isset property="set_env" />
+			<isset property="j21OnZ" />
 			<then>
 				<exec executable="sh">
 					<arg value="-c" />
@@ -333,12 +333,29 @@
 	</target>
 
 	<target name="common_dist" description="generate the distribution">
-		<condition property="copy-encoding" value="IBM-1047" else="UTF-8">
-			<isset property="isZOS"/>
-	    </condition>
-		<copy todir="${SYSTEMTEST_DEST}/STF" outputencoding="${copy-encoding}">
-			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
-		</copy>
+		<if>
+			<isset property="j21OnZ"/>
+			<then>
+				<copy todir="${SYSTEMTEST_DEST}/STF" >
+					<fileset dir="${SYSTEMTEST_ROOT}/STF" >
+ 						<exclude name="**/*.pl" />
+ 						<exclude name="**/*.pm" />
+						<exclude name="**/*.properties" />
+					</fileset>
+				</copy>
+ 				<copy todir="${SYSTEMTEST_DEST}/STF"  outputencoding="IBM-1047">
+ 					<fileset dir="${SYSTEMTEST_ROOT}/STF">
+ 						<include name="**/*.pm" />
+ 						<include name="**/*.pl" />
+ 						<include name="**/*.properties" />
+ 				</fileset>
+			</then>
+			<else>
+				<copy todir="${SYSTEMTEST_DEST}/STF">
+					<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
+				</copy>
+			</else>
+		</if>
 		<copy todir="${SYSTEMTEST_DEST}/aqa-systemtest" failonerror="false">
 			<fileset dir="${SYSTEMTEST_ROOT}/aqa-systemtest" includes="**" />
 		</copy>
@@ -426,7 +443,7 @@
 
 	<target name="setEnvOptions">
 		<if>
-			<isset property="set_env" />
+			<isset property="j21OnZ" />
 			<then>
 				<exec executable="sh">
 					<env key="IBM_JAVA_OPTIONS" value="-Dfile.encoding=IBM-1047" />
