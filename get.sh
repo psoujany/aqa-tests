@@ -489,68 +489,69 @@ getBinaryOpenjdk()
 				else
 					echo "Dont compress jtreg"
 				fi
-
-				cd $SDKDIR/jdkbinary/tmp
-				echo "List files in jdkbinary folder..."
-				ls -l $SDKDIR/jdkbinary
-				echo "List files in jdkbinary/tmp folder..."
-				ls -l
-				jar_dirs=`ls -d */`
-				jar_dir_array=(${jar_dirs//\\n/ })
-				len=${#jar_dir_array[@]}
-				if [ "$len" == 1 ]; then
-					jar_dir_name=${jar_dir_array[0]}
-					if [[ "$jar_dir_name" =~ "test-image" ]] || [[ "$jar_dir_name" =~ "tests-" ]]; then
-						if [ "$jar_dir_name" != "openjdk-test-image" ]; then
-							moveDirectorySafely $jar_dir_name ../openjdk-test-image
-						fi
-					elif [[ "$jar_dir_name" =~ "static-libs" ]]; then
-						moveDirectorySafely $jar_dir_name ../static-libs
-                                        elif [[ "$jar_dir_name" =~ jdk.*-src/ ]]; then
-                                                moveDirectorySafely $jar_dir_name ../source-image
-					elif [[ "$jar_dir_name" =~ jre* ]] && [ "$jar_dir_name" != "j2re-image" ]; then
-						moveDirectorySafely $jar_dir_name ../j2re-image
-					elif [[ "$jar_dir_name" =~ jdk* ]] && [ "$jar_dir_name" != "j2sdk-image" ]; then
-						# If test sdk has already been expanded, this one must be the additional sdk
-						isAdditional=0
-						if [ -f "./j2sdk-image/release" ]; then
-							isAdditional=1
-						else
-							if [ "$ADDITIONAL_ARTIFACTS_REQUIRED" == "RI_JDK" ]; then
-								# Check release info
-								if [ -d "./$jar_dir_name/Contents" ]; then # Mac
-									release_info=$( cat ./$jar_dir_name/Contents/Home/release )
-									UNZIPPED_ADDITIONAL_SDK="./$jar_dir_name/Contents/Home/"
-								else
-									release_info=$( cat ./$jar_dir_name/release )
-									UNZIPPED_ADDITIONAL_SDK="./$jar_dir_name/"
-								fi
-								if [[ "$release_info" == *"Oracle"* ]]; then
-									isAdditional=1
-								fi
+				if [[ ! "$file_name" =~ "jtreg" ]]; then
+					cd $SDKDIR/jdkbinary/tmp
+					echo "List files in jdkbinary folder..."
+					ls -l $SDKDIR/jdkbinary
+					echo "List files in jdkbinary/tmp folder..."
+					ls -l
+					jar_dirs=`ls -d */`
+					jar_dir_array=(${jar_dirs//\\n/ })
+					len=${#jar_dir_array[@]}
+					if [ "$len" == 1 ]; then
+						jar_dir_name=${jar_dir_array[0]}
+						if [[ "$jar_dir_name" =~ "test-image" ]] || [[ "$jar_dir_name" =~ "tests-" ]]; then
+							if [ "$jar_dir_name" != "openjdk-test-image" ]; then
+								moveDirectorySafely $jar_dir_name ../openjdk-test-image
 							fi
-						fi
-						if [ $isAdditional == 1 ]; then
-							if [ -d "$SDKDIR/additionaljdkbinary" ]; then
-								rm -rf $SDKDIR/additionaljdkbinary
+						elif [[ "$jar_dir_name" =~ "static-libs" ]]; then
+							moveDirectorySafely $jar_dir_name ../static-libs
+											elif [[ "$jar_dir_name" =~ jdk.*-src/ ]]; then
+													moveDirectorySafely $jar_dir_name ../source-image
+						elif [[ "$jar_dir_name" =~ jre* ]] && [ "$jar_dir_name" != "j2re-image" ]; then
+							moveDirectorySafely $jar_dir_name ../j2re-image
+						elif [[ "$jar_dir_name" =~ jdk* ]] && [ "$jar_dir_name" != "j2sdk-image" ]; then
+							# If test sdk has already been expanded, this one must be the additional sdk
+							isAdditional=0
+							if [ -f "./j2sdk-image/release" ]; then
+								isAdditional=1
 							else
-								mkdir $SDKDIR/additionaljdkbinary
+								if [ "$ADDITIONAL_ARTIFACTS_REQUIRED" == "RI_JDK" ]; then
+									# Check release info
+									if [ -d "./$jar_dir_name/Contents" ]; then # Mac
+										release_info=$( cat ./$jar_dir_name/Contents/Home/release )
+										UNZIPPED_ADDITIONAL_SDK="./$jar_dir_name/Contents/Home/"
+									else
+										release_info=$( cat ./$jar_dir_name/release )
+										UNZIPPED_ADDITIONAL_SDK="./$jar_dir_name/"
+									fi
+									if [[ "$release_info" == *"Oracle"* ]]; then
+										isAdditional=1
+									fi
+								fi
 							fi
-							mv $UNZIPPED_ADDITIONAL_SDK/* $SDKDIR/additionaljdkbinary
-							echo "RI JDK available at $SDKDIR/additionaljdkbinary/"
-							echo "RI JDK version:"
-							$SDKDIR/additionaljdkbinary/bin/java -version
-						else
+							if [ $isAdditional == 1 ]; then
+								if [ -d "$SDKDIR/additionaljdkbinary" ]; then
+									rm -rf $SDKDIR/additionaljdkbinary
+								else
+									mkdir $SDKDIR/additionaljdkbinary
+								fi
+								mv $UNZIPPED_ADDITIONAL_SDK/* $SDKDIR/additionaljdkbinary
+								echo "RI JDK available at $SDKDIR/additionaljdkbinary/"
+								echo "RI JDK version:"
+								$SDKDIR/additionaljdkbinary/bin/java -version
+							else
+								moveDirectorySafely $jar_dir_name ../j2sdk-image
+							fi
+						# The following only needed if openj9 has a different image name convention
+						elif [ "$jar_dir_name" != "j2sdk-image" ]; then
 							moveDirectorySafely $jar_dir_name ../j2sdk-image
 						fi
-					# The following only needed if openj9 has a different image name convention
-					elif [ "$jar_dir_name" != "j2sdk-image" ]; then
-						moveDirectorySafely $jar_dir_name ../j2sdk-image
+					elif [ "$len" -gt 1 ]; then
+						moveDirectorySafely ../tmp ../j2sdk-image
 					fi
-				elif [ "$len" -gt 1 ]; then
-					moveDirectorySafely ../tmp ../j2sdk-image
+					cd $SDKDIR/jdkbinary
 				fi
-				cd $SDKDIR/jdkbinary
 			fi
 		fi
 	done
