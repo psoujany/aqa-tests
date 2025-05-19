@@ -468,6 +468,8 @@ getBinaryOpenjdk()
 
 				# Copy to extract_dir
 				cp -R * "../${extract_dir}" && cd .. && rm -rf dir.$$
+			elif [[ "$filename" =~ "jtreg" ]]; then
+				cp -R "$filename" ../../../testDependency/lib/
 			else
 				if [ -d "$SDKDIR/jdkbinary/tmp" ]; then
 					rm -rf $SDKDIR/jdkbinary/tmp/*
