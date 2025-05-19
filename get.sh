@@ -476,7 +476,7 @@ getBinaryOpenjdk()
 				fi
 				if [[ "$file_name" =~ "jtreg" ]]; then
 					echo "Move jtreg to testDependency"
-					mv "$filename" ../../../testDependency/lib/
+					mv "$file_name" ../../../testDependency/lib/
 				fi
 				echo "Uncompressing file: $file_name ..."
 				if [[ $file_name == *zip ]] || [[ $file_name == *jar ]]; then
