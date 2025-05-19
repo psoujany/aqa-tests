@@ -484,7 +484,7 @@ getBinaryOpenjdk()
 				elif [[ $file_name == *.pax* ]]; then
 					cd ./tmp
 					pax -p xam -rzf ../$file_name
-				elif [[ $file_name !~ "jtreg" ]]; then
+				elif [[ ! "$file_name" =~ "jtreg" ]]; then
 					$DECOMPRESS_TOOL -cd $file_name | (cd tmp && tar xof -)
 				else
 					echo "Dont compress jtreg"
