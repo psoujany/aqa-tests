@@ -468,13 +468,15 @@ getBinaryOpenjdk()
 
 				# Copy to extract_dir
 				cp -R * "../${extract_dir}" && cd .. && rm -rf dir.$$
-			elif [[ "$filename" =~ "jtreg" ]]; then
-				mv -R "$filename" ../../../testDependency/lib/
 			else
 				if [ -d "$SDKDIR/jdkbinary/tmp" ]; then
 					rm -rf $SDKDIR/jdkbinary/tmp/*
 				else
 					mkdir $SDKDIR/jdkbinary/tmp
+				fi
+				if [[ "$file_name" =~ "jtreg" ]]; then
+					echo "Move jtreg to testDependency"
+					mv -R "$filename" ../../../testDependency/lib/
 				fi
 				echo "Uncompressing file: $file_name ..."
 				if [[ $file_name == *zip ]] || [[ $file_name == *jar ]]; then
