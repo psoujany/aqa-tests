@@ -27,9 +27,9 @@
 	</target>
 
 	<target name="build" depends="dist,common_build">
-		<property name="common_build.executed" value="true" />
+		<!--property name="common_build.executed" value="true" />-->
 		<subant target="" inheritall="true">
-			<fileset dir="." includes="*/build.xml" />
+			<fileset dir="." includes="SVT/build.xml" />
 		</subant>
 	</target>
 	

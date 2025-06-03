@@ -299,7 +299,7 @@
 		</if>
 	</target>
 
-	<target name="configure_systemtest" depends="check_systemtest">
+	<target name="configure_systemtest" >
 		<if>
 			<or>
 				<contains string="${JVM_VERSION}" substring="openj9"/>
@@ -366,25 +366,12 @@
 	<!-- target to build all projects in the repository.  -->
 	<!-- dir must be set on the ant task otherwise the basedir property is not set to a new value in the subant task. -->
 	<!-- Also make sure stf is built -->
-	<target name="build-dependencies" depends="configure_systemtest">
-		<if>
-			<or>
-				<contains string="${JVM_VERSION}" substring="openj9"/>
-				<contains string="${JVM_VERSION}" substring="ibm"/>
-			</or>
-
-			<then>
-				<ant antfile="${SYSTEMTEST_ROOT}/openj9-systemtest/openj9.build/build.xml" dir="${SYSTEMTEST_ROOT}/openj9-systemtest/openj9.build" inheritAll="false"/>
-			</then>
-			<else>
-				<ant antfile="${SYSTEMTEST_ROOT}/aqa-systemtest/openjdk.build/build.xml" dir="${SYSTEMTEST_ROOT}/aqa-systemtest/openjdk.build" inheritAll="false"/>
-			</else>
-		</if>
+	<target name="build-dependencies">
 		<antcall target="common_dist" inheritall="false" />
 	</target>
 
 	<!-- To make sure common_build target only excute once, the common_build target runs only if common_build.executed value is not set -->
-	<target name="common_build" unless="common_build.executed">
+	<target name="common_build">
 		<echo message="target common_build is called....." />
 		<antcall target="build-dependencies" inheritall="true" />
 	</target>
