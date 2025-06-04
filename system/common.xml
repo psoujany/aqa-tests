@@ -315,6 +315,7 @@
 	</target>
 
 	<target name="common_dist" description="generate the distribution">
+		<!--
 		<copy todir="${SYSTEMTEST_DEST}/STF">
 			<fileset dir="${SYSTEMTEST_ROOT}/STF" includes="**" />
 		</copy>
@@ -333,6 +334,7 @@
 					<chmod file="${SYSTEMTEST_DEST}/openj9-systemtest/openj9.test.sharedClasses.jvmti/bin/native/**" perm="755"/>
 				</then>
 		</if>
+		-->
 		<condition property="system_lib_dir_not_set" value="true" else="false">
 			<not>
 				<isset property="env.SYSTEM_LIB_DIR"/>
