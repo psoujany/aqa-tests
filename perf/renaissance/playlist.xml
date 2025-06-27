@@ -16,11 +16,6 @@
 	<include>../perf.mk</include>
 	<test>
 		<testCaseName>renaissance-akka-uct</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/1994#issuecomment-705633262</comment>
-			</disable>
-		</disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)renaissance.jar$(Q) --json $(Q)$(REPORTDIR)$(D)akka-uct.json$(Q) akka-uct; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -82,16 +77,6 @@
 	</test>
 	<test>
 		<testCaseName>renaissance-db-shootout</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2500#issuecomment-818965455</comment>
-				<version>16+</version>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/2159#issuecomment-759570887</comment>
-				<platform>^((?!(x86-64_linux|x86-64_mac|x86-64_windows)).)*$</platform>
-			</disable>
-		</disables>
 		<command>$(JAVA_COMMAND) $(ADD_OPENS_CMD) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)renaissance.jar$(Q) --json $(Q)$(REPORTDIR)$(D)db-shootout.json$(Q) db-shootout; \
 		$(TEST_STATUS)</command>
 		<!-- Issue https://github.com/renaissance-benchmarks/renaissance/issues/210 -->
@@ -271,11 +256,6 @@
 	</test>
 	<test>
 		<testCaseName>renaissance-naive-bayes</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/1932#issuecomment-708781359</comment>
-			</disable>
-		</disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)renaissance.jar$(Q) --json $(Q)$(REPORTDIR)$(D)naive-bayes.json$(Q) naive-bayes; \
 		$(TEST_STATUS)</command>
 		<levels>

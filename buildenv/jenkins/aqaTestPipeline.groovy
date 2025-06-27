@@ -3,7 +3,7 @@
 import groovy.transform.Field
 
 def JDK_VERSIONS = params.JDK_VERSIONS.trim().split("\\s*,\\s*")
-def PLATFORMS = params.PLATFORMS.trim().split("\\s*,\\s*")
+def PLATFORMS = params.PLATFORMS ? params.PLATFORMS.trim().split("\\s*,\\s*") : ""
 def TARGETS = params.TARGETS ?: "Grinder"
 TARGETS = TARGETS.trim().split("\\s*,\\s*")
 def TEST_FLAG = (params.TEST_FLAG) ?: ""
@@ -216,7 +216,7 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParall
                     }
                 }
 
-                if (jobTestFlag.contains("FIPS") || (TARGET.contains("dev"))) {
+                if (jobTestFlag.contains("FIPS") || jobTestFlag.contains("OpenJCEPlus") || (TARGET.contains("dev"))) {
                     rerunIterations = 0
                 }
             } else if (params.VARIANT == "temurin") {
