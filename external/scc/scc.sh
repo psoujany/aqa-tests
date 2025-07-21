@@ -14,11 +14,9 @@
 
 set -e
 
-pingPerfZipPath=""
-ubiRepoFilePath="" # Temporarily This file is only for plinux ubi8
 testJDKPath=""
 jdkVersion=""
-restoreImage="ol-instanton-test-pingperf-restore"
+restoreImage="daytrader-test-restore"
 docker_image_source_job_name=""
 build_number=$BUILD_NUMBER
 docker_registry_dir=""
@@ -27,26 +25,21 @@ docker_os_version="8"
 node_label_current_os=""
 node_label_micro_architecture=""
 restore_docker_image_name_list=()
+restore_jmeter_image_name=${DOCKER_REGISTRY_URL}/jmeter/jmeter_dt8-${PLATFORM}:3.3
 
-getCriuseccompproFile() {
-    if [[ ! -f "criuseccompprofile.json" ]]; then
-        curl -OLJSks https://github.com/eclipse-openj9/openj9/files/8774222/criuseccompprofile.json.txt
-        mv criuseccompprofile.json.txt criuseccompprofile.json
-    fi
-}
 
 getSemeruDockerfile() {
     if [[ ! -f "Dockerfile.open.releases.full" ]]; then
         if [[ $jdkVersion ]]; then
             jdkVersionDir=$jdkVersion
-            if [[ $jdkVersion -gt 21 ]]; then
-                jdkVersionDir=21
-            fi
             semeruDockerfile="Dockerfile.open.releases.full"
             semeruDockerfileUrlBase="https://raw.githubusercontent.com/ibmruntimes/semeru-containers/ibm/$jdkVersionDir/jdk/${docker_os}"
             if [[ $docker_os == "ubi" ]]; then
                 echo "curl -OLJSks ${semeruDockerfileUrlBase}/${docker_os}${docker_os_version}/${semeruDockerfile}"
                 curl -OLJSks ${semeruDockerfileUrlBase}/${docker_os}${docker_os_version}/${semeruDockerfile}
+                if [[ ${PLATFORM} == *"ppc"*  &&  $docker_os_version == "8" ]]; then
+                    findCommandAndReplace 'FROM registry.access.redhat.com/ubi8/ubi:latest' 'FROM registry.access.redhat.com/ubi8/ubi:latest \n COPY ubi.repo /etc/yum.repos.d/ \n ' $semeruDockerfile true ";"
+                fi
                 findCommandAndReplace '\-H \"\${CRIU_AUTH_HEADER}\"' '--user \"\${DOCKER_REGISTRY_CREDENTIALS_USR}:\${DOCKER_REGISTRY_CREDENTIALS_PSW}\"' $semeruDockerfile true ";"
                 findCommandAndReplace 'RUN --mount.*' 'ARG DOCKER_REGISTRY_CREDENTIALS_USR \n ARG DOCKER_REGISTRY_CREDENTIALS_PSW \n RUN set -eux; \\' $semeruDockerfile true
                 # in 21-ea, /opt/java/openjdk/legal/java.base/LICENSE does not exist. No need to replace
@@ -74,26 +67,7 @@ getSemeruDockerfile() {
 
 prepare() {
     echo "prepare at $(pwd)..."
-    if [ -f "$pingPerfZipPath" ]; then
-        rm -f PingperfFiles.zip
-        cp "$pingPerfZipPath" .
-        unzip PingperfFiles.zip
-    else
-        echo "${pingPerfZipPath} does not exist."
-        exit 1
-    fi
 
-    if [[ ${PLATFORM} == *"ppc"* && $docker_os == "ubi" && $docker_os_version == "8" ]]; then
-        if [ -f "$ubiRepoFilePath" ]; then
-            rm -f ubi.repo
-            cp "$ubiRepoFilePath" .
-        else
-            echo "${ubiRepoFilePath} does not exist."
-            exit 1
-        fi
-    fi
-
-    getCriuseccompproFile
     getSemeruDockerfile
 
     git clone https://github.com/OpenLiberty/ci.docker.git
@@ -115,6 +89,29 @@ prepare() {
             libertyDockerfilePath="releases/latest/beta/Dockerfile.${docker_os}.openjdk${jdkVersion}"
             findCommandAndReplace "FROM ibm-semeru-runtimes:open-${jdkVersion}-jre-jammy" "FROM local-ibm-semeru-runtimes:latest" $libertyDockerfilePath true '/'
         fi
+    )
+
+    git clone https://github.com/OpenLiberty/sample.daytrader8.git
+    (
+        cd sample.daytrader8 || exit
+        daytrader8Folder=`pwd`
+        findCommandAndReplace "#RUN configure.sh" "RUN configure.sh" Dockerfile true
+
+        mkdir target
+        cd target
+        echo "curl -OLJSks https://github.com/OpenLiberty/sample.daytrader8/releases/download/v1.2/io.openliberty.sample.daytrader8.war"
+        curl -OLJSks https://github.com/OpenLiberty/sample.daytrader8/releases/download/v1.2/io.openliberty.sample.daytrader8.war
+
+        mkdir -p liberty/wlp/usr/shared/resources
+        cd liberty/wlp/usr/shared/resources
+        mkdir DerbyLibs data
+        # setup derby
+        echo "curl -OLJSks https://archive.apache.org/dist/db/derby/db-derby-10.14.2.0/db-derby-10.14.2.0-lib.tar.gz"
+        curl -OLJSks https://archive.apache.org/dist/db/derby/db-derby-10.14.2.0/db-derby-10.14.2.0-lib.tar.gz
+        tar -xzvf db-derby-10.14.2.0-lib.tar.gz
+        mv db-derby-10.14.2.0-lib/lib/derby.jar DerbyLibs/derby-10.14.2.0.jar
+        # setup data for Openliberty
+        cp -r ${daytrader8Folder}/resources/data/tradedb/* ./data/
     )
 }
 
@@ -147,61 +144,57 @@ findCommandAndReplace() {
 buildImage() {
     echo "build image at $(pwd)..."
     sudo podman build -t local-ibm-semeru-runtimes:latest -f Dockerfile.open.releases.full . --build-arg DOCKER_REGISTRY_CREDENTIALS_USR=$DOCKER_REGISTRY_CREDENTIALS_USR --build-arg DOCKER_REGISTRY_CREDENTIALS_PSW=$DOCKER_REGISTRY_CREDENTIALS_PSW 2>&1 | tee build_semeru_image.log 
-    # Temporarily OpenLiberty ubi dockerfile only supports openjdk 17, not 11, need to add jdkVersion for ubuntu support later
-    sudo podman build -t icr.io/appcafe/open-liberty:beta-instanton -f ci.docker/releases/latest/beta/Dockerfile.${docker_os}.openjdk21 ci.docker/releases/latest/beta
-    sudo podman build -t ol-instanton-test-pingperf:latest -f Dockerfile.pingperf .
+    sudo podman build -t open-liberty:full -f ci.docker/releases/latest/beta/Dockerfile.${docker_os}.openjdk21 ci.docker/releases/latest/beta
+    sudo podman build -t ${restoreImage}:latest  -f sample.daytrader8/Dockerfile sample.daytrader8
 }
 
-createRestoreImage() {
-    echo "create restore image $restoreImage ..."
-    sudo podman run --name ol-instanton-test-checkpoint-container --privileged --env WLP_CHECKPOINT=afterAppStart ol-instanton-test-pingperf:latest
-    sudo podman commit ol-instanton-test-checkpoint-container $restoreImage
-    sudo podman rm ol-instanton-test-checkpoint-container
-}
-
-unprivilegedRestore() {
-    echo "unprivileged restore $restoreImage ..."
-    echo -ne "CONTAINER_ID=" > containerId.log
-    echo "sudo podman run --rm --detach -p 9080:9080 --cap-add=CHECKPOINT_RESTORE --cap-add=SETPCAP $restoreImage"
-    sudo podman run \
-        --rm \
-        --detach \
-        -p 9080:9080 \
-        --cap-add=CHECKPOINT_RESTORE \
-        --cap-add=SETPCAP \
-        $restoreImage >> containerId.log
-}
 
 privilegedRestore() {
     echo "privileged restore $restoreImage ..."
-    echo -ne "CONTAINER_ID=" > containerId.log
+   
+    echo "Start running daytrader on the background ..."
+    echo -ne "DaytraderCONTAINER_ID=" > daytraderContainerId.log
     sudo podman run \
         --rm \
         --detach \
         --privileged \
         -p 9080:9080 \
-        $restoreImage >> containerId.log
-}
+        $restoreImage >> daytraderContainerId.log
 
-response() {
-    echo "response ..."
-    bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' http://127.0.0.1:9080/pingperf/ping/greeting)" != "200" ]]; do sleep .00001; done'
+    echo "Start jMeter ..."
+    echo "sudo podman run --net=host --privileged $restore_jmeter_image_name jmeter -n -t daytrader8.jmx -j /output/daytrader.stats 
+    -JHOST=localhost -JPORT=9080 -JSTOCKS=9999 -JBOTUID=0 -JTOPUID=14999 -JTHREADS=15 -JDURATION=60 -JRAMP=0 -JMAXTHINKTIME=0 > jMeterOutput.txt"
+
+    sudo podman run \
+    --net=host \
+    --privileged \
+    $restore_jmeter_image_name \
+    jmeter -n -t daytrader8.jmx -j /output/daytrader.stats -JHOST=localhost -JPORT=9080 -JSTOCKS=9999 -JBOTUID=0 \
+    -JTOPUID=14999 -JTHREADS=15 -JDURATION=60 -JRAMP=0 -JMAXTHINKTIME=0 > jMeterOutput.txt
+    echo "Completed JMeter testing ..."
 }
 
 checkLog() {
     echo "check log ..."
-    if [ -f ./containerId.log ]; then
-        cat ./containerId.log
+    if [ -f ./jMeterOutput.txt ]; then
+        if [ -f ./daytraderContainerId.log ]; then
+            cat ./daytraderContainerId.log
+            sleep 1
+            source ./daytraderContainerId.log
+            echo "podman logs --tail 20 ${DaytraderCONTAINER_ID} > daytraderLogs.log" 
+            sudo podman logs --tail 20 "${DaytraderCONTAINER_ID}" > daytraderLogs.log
+        else
+            echo "./daytraderContainerId.log does not exist."
+            exit 1
+        fi
+        echo "displaying jMeterOutput.txt"
+        cat ./jMeterOutput.txt
+        # ToDo: need more success information here
+        cat ./jMeterOutput.txt | grep "Success"
     else
-        echo "./containerId.log does not exist."
+        echo "./jMeterOutput.txt does not exist."
         exit 1
     fi
-    sleep 1
-    source ./containerId.log
-    echo "podman logs --tail 10 ${CONTAINER_ID}"
-    sudo podman logs --tail 10 "${CONTAINER_ID}"
-    echo "find response ..."
-    sudo podman logs --tail 10 "${CONTAINER_ID}" | grep "FR "
 }
 
 clean() {
@@ -214,7 +207,6 @@ testCreateRestoreImageOnly() {
     clean
     prepare
     buildImage
-    createRestoreImage
 }
 
 dockerRegistryLogin() {
@@ -240,7 +232,7 @@ pushImage() {
     dockerRegistryLogin
     echo "Pushing docker image..."
 
-    restore_ready_checkpoint_image_folder="${DOCKER_REGISTRY_URL}/${docker_image_source_job_name}/pingperf_${JDK_VERSION}-${JDK_IMPL}-${docker_os}-${docker_os_version}-${PLATFORM}-${node_label_current_os}-${node_label_micro_architecture}"
+    restore_ready_checkpoint_image_folder="${DOCKER_REGISTRY_URL}/${docker_image_source_job_name}/daytrader_${JDK_VERSION}-${JDK_IMPL}-${docker_os}-${docker_os_version}-${PLATFORM}-${node_label_current_os}-${node_label_micro_architecture}"
     tagged_restore_ready_checkpoint_image_num="${restore_ready_checkpoint_image_folder}:${build_number}"
 
     # Push a docker image with build_num for records
@@ -262,7 +254,7 @@ getImageNameList() {
         # - is shell metacharacter. In PLATFORM value, replace - with _
         echo "PLATFORM: ${PLATFORM}"
         platValue=$(echo $PLATFORM | sed "s/-/_/")
-        comboList=CRIU_COMBO_LIST_$platValue
+        comboList=PORTABLE_SCC_COMBO_LIST_$platValue
         if [[ "$PLATFORM" =~ "linux_390-64" ]]; then
             micro_architecture=$(echo $node_label_micro_architecture | sed "s/hw.arch.s390x.//")
             comboList="${comboList}_${micro_architecture}"
@@ -276,7 +268,7 @@ getImageNameList() {
         echo "image_os_combo_list: ${image_os_combo_list}"
         for image_os_combo in ${image_os_combo_list[@]}
         do
-            restore_docker_image_name_list+=("${DOCKER_REGISTRY_URL}/${docker_image_source_job_name}/pingperf_${JDK_VERSION}-${JDK_IMPL}-${docker_os}-${docker_os_version}-${PLATFORM}-${image_os_combo}:${build_number}")
+            restore_docker_image_name_list+=("${DOCKER_REGISTRY_URL}/${docker_image_source_job_name}/daytrader_${JDK_VERSION}-${JDK_IMPL}-${docker_os}-${docker_os_version}-${PLATFORM}-${image_os_combo}:${build_number}")
         done
         if [[ -z "$restore_docker_image_name_list" ]]; then
             echo "Error: restore_docker_image_name_list is empty."
@@ -287,34 +279,18 @@ getImageNameList() {
     fi
 }
 
-pullImageUnprivilegedRestore() {
+pullImageTest() {
     dockerRegistryLogin
     getImageNameList
     echo "The host machine micro-architecture is ${node_label_micro_architecture}"
+
+    echo "Pulling JMeter docker image"
+    sudo podman pull $restore_jmeter_image_name
+
     for restore_docker_image_name in ${restore_docker_image_name_list[@]}
     do
         echo "Pulling image $restore_docker_image_name"
         sudo podman pull $restore_docker_image_name
-        getCriuseccompproFile
-
-        # restore
-        restoreImage=$restore_docker_image_name
-        testUnprivilegedRestoreOnly
-        clean
-    done
-
-    dockerRegistryLogout
-}
-
-pullImagePrivilegedRestore() {
-    dockerRegistryLogin
-    getImageNameList
-    echo "The host machine micro-architecture is ${node_label_micro_architecture}"
-    for restore_docker_image_name in ${restore_docker_image_name_list[@]}
-    do
-        echo "Pulling image $restore_docker_image_name"
-        sudo podman pull $restore_docker_image_name
-
         # restore
         restoreImage=$restore_docker_image_name
         testPrivilegedRestoreOnly
@@ -324,26 +300,9 @@ pullImagePrivilegedRestore() {
     dockerRegistryLogout
 }
 
-testUnprivilegedRestoreOnly() {
-    unprivilegedRestore
-    response
-    checkLog
-}
-
 testPrivilegedRestoreOnly() {
     privilegedRestore
-    response
     checkLog
-}
-
-testCreateImageAndUnprivilegedRestore() {
-    testCreateRestoreImageOnly
-    testUnprivilegedRestoreOnly
-}
-
-testCreateImageAndPrivilegedRestore() {
-    testCreateRestoreImageOnly
-    testPrivilegedRestoreOnly
 }
 
 setup() {
@@ -381,76 +340,45 @@ setup() {
 }
 
 if [ "$1" == "prepare" ]; then
-    pingPerfZipPath=$2
-    ubiRepoFilePath=$3
-    testJDKPath=$4
-    jdkVersion=$5
+    testJDKPath=$2
+    jdkVersion=$3
     prepare
 elif [ "$1" == "buildImage" ]; then
     buildImage
 elif [ "$1" == "createRestoreImage" ]; then
     createRestoreImage
-elif [ "$1" == "unprivilegedRestore" ]; then
-    unprivilegedRestore
 elif [ "$1" == "privilegedRestore" ]; then
     privilegedRestore
-elif [ "$1" == "response" ]; then
-    response
+    clean
 elif [ "$1" == "checkLog" ]; then
     checkLog
 elif [ "$1" == "clean" ]; then
     clean
 elif [ "$1" == "testCreateRestoreImageOnly" ]; then
-    pingPerfZipPath=$2
-    ubiRepoFilePath=$3
-    testJDKPath=$4
-    jdkVersion=$5
-    docker_os=$6
-    docker_os_version=$7
+    testJDKPath=$2
+    jdkVersion=$3
+    docker_os=$4
+    docker_os_version=$5
     testCreateRestoreImageOnly
-elif [ "$1" == "testUnprivilegedRestoreOnly" ]; then
-    testUnprivilegedRestoreOnly
+    clean
 elif [ "$1" == "testPrivilegedRestoreOnly" ]; then
     testPrivilegedRestoreOnly
-elif [ "$1" == "pullImageUnprivilegedRestore" ]; then
+    clean
+elif [ "$1" == "pullImageTest" ]; then
     docker_os=$2
     docker_os_version=$3
     docker_registry_dir=$4 #docker_registry_dir can be empty
     setup
-    pullImageUnprivilegedRestore
-elif [ "$1" == "pullImagePrivilegedRestore" ]; then
-    docker_os=$2
-    docker_os_version=$3
-    docker_registry_dir=$4 #docker_registry_dir can be empty
-    setup
-    pullImagePrivilegedRestore
-elif [ "$1" == "testCreateRestoreImageAndPushToRegistry" ]; then
-    pingPerfZipPath=$2
-    ubiRepoFilePath=$3
-    testJDKPath=$4
-    jdkVersion=$5
-    docker_os=$6
-    docker_os_version=$7
-    docker_registry_dir=$8
+    pullImageTest
+elif [ "$1" == "testCreateImageAndPushToRegistry" ]; then
+    testJDKPath=$2
+    jdkVersion=$3
+    docker_os=$4
+    docker_os_version=$5
+    docker_registry_dir=$6
     setup
     testCreateRestoreImageOnly
     pushImage
-elif [ "$1" == "testCreateImageAndUnprivilegedRestore" ]; then
-    pingPerfZipPath=$2
-    ubiRepoFilePath=$3
-    testJDKPath=$4
-    jdkVersion=$5
-    docker_os=$6
-    docker_os_version=$7
-    testCreateImageAndUnprivilegedRestore
-elif [ "$1" == "testCreateImageAndPrivilegedRestore" ]; then
-    pingPerfZipPath=$2
-    ubiRepoFilePath=$3
-    testJDKPath=$4
-    jdkVersion=$5
-    docker_os=$6
-    docker_os_version=$7
-    testCreateImageAndPrivilegedRestore
 else
     echo "unknown command"
 fi

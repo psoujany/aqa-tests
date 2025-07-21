@@ -280,8 +280,8 @@ java/nio/channels/Channels/Basic2.java https://github.ibm.com/runtimes/backlog/i
 java/nio/channels/Channels/TransferTo.java https://github.com/eclipse-openj9/openj9/issues/15040 linux-all
 java/nio/channels/DatagramChannel/AdaptorBasic.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/AdaptorMulticasting.java https://github.ibm.com/runtimes/backlog/issues/655 linux-s390x,windows-all,macosx-all
-java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1594 aix-all
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 generic-all
+java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,windows-all
+java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,macosx-all,windows-all
 java/nio/channels/DatagramChannel/ConnectedSend.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/Disconnect.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/EmptyBuffer.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
@@ -339,6 +339,7 @@ java/nio/channels/SocketChannel/VectorIO.java https://github.ibm.com/runtimes/ba
 java/nio/channels/SocketChannel/VectorParams.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/SocketChannel/Write.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/spi/SelectorProvider/inheritedChannel/InheritedChannelTest.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
+java/nio/file/attribute/BasicFileAttributeView/SetTimesNanos.java https://github.com/eclipse-openj9/openj9/issues/21959 windows-all
 java/nio/file/Files/CopyAndMove.java https://github.com/adoptium/aqa-tests/issues/795 macosx-all
 java/nio/file/Files/probeContentType/Basic.java https://github.ibm.com/runtimes/backlog/issues/655 windows-all
 java/nio/MappedByteBuffer/MapSyncFail.java https://github.com/eclipse-openj9/openj9/issues/6831 generic-all
@@ -401,6 +402,8 @@ sun/security/mscapi/SmallPrimeExponentP.java	https://github.ibm.com/runtimes/bac
 sun/security/mscapi/VeryLongAlias.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 sun/security/pkcs11/Provider/MultipleLogins.sh	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
 sun/security/pkcs11/Secmod/AddTrustedCert.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#GenerateOpensslPKCS12	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
 sun/security/rsa/PrivateKeyEqualityTest.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTest2.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTestPSS.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all

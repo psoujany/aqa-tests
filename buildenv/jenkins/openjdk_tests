@@ -107,7 +107,7 @@ def PLATFORM_MAP = [
     'x86-64_linux' : [
         'SPEC' : 'linux_x86-64',
         'LABEL' : 'ci.role.test&&hw.arch.x86&&sw.os.linux',
-        'DynamicAgents' : ['azure', 'fyre']
+        'DynamicAgents' : ['azure', 'fyre', 'EBC']
     ],
     'x86-64_mac' : [
         'SPEC' : 'osx_x86-64',
@@ -125,6 +125,9 @@ if ( !params.TARGET ) {
 def PLATFORMS = params.PLATFORM.trim().split("\\s*,\\s*");
 def JDK_VERSIONS = params.JDK_VERSION.trim().split("\\s*,\\s*");
 def JDK_IMPLS = params.JDK_IMPL.trim().split("\\s*,\\s*");
+
+def CLOUD_PROVIDER = params.CLOUD_PROVIDER ?: ""
+
 // if multiple JDK_VERSION / JDK_IMPL / PLATFORM are provided, run test jobs in parallel
 timestamps{
     if (JDK_VERSIONS.size() > 1 || JDK_IMPLS.size() > 1 || PLATFORMS.size() >1 || PLATFORMS.any { it.contains("all") }) {
@@ -247,24 +250,27 @@ timestamps{
                 buildList="external/scc"
                 imageUploadMap = [
                     's390x_linux' : [
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.s390x.z14"],
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.s390x.next"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.s390x.z14"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.s390x.z17"],
                             ],
                     'ppc64le_linux' : [
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.ppc64le.p9"],
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.ppc64le.p11"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.ppc64le.p9"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.ppc64le.p11"],
                     ]
                 ]
                 imagePullMap = [
                     's390x_linux' : [
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.s390x.z14"],
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.s390x.next"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.s390x.z14"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.s390x.z17"],
                             ],
                     'ppc64le_linux' : [
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.ppc64le.p9"],
-                                ['LABEL_ADDITION' : "${commonLabel}&&hw.arch.ppc64le.p11"]
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.ppc64le.p9"],
+                                ['LABEL_ADDITION' : "${commonLabel}&&sw.os.rhel.9&&hw.arch.ppc64le.p11"]
                             ]
                 ]
+
+                target = "testList TESTLIST=disabled.portable_scc_CreateImageAndPushToRegistry_ubi9"
+
             }
             // trigger xxx_imageUpload test job, then xxx_imagePull test job
             if (params.PLATFORM && imageUploadMap[params.PLATFORM] != null && imagePullMap[params.PLATFORM] != null) {
@@ -374,48 +380,48 @@ timestamps{
                         }
                     }
                 } else {
-                    // IF no nodes are idle we will check if there is supported virtual agent
-                    // When Parallel the race condition could happen. Say the number of multiply jobs is larger than the available nodes the query's result may be delayed and wrong
-                    // In this case jobs will be fooled to fall back to wait local busy nodes.
+                    // If CLOUD_PROVIDER is set, use the supported virtual agent.
                     dynamicAgents = PLATFORM_MAP[params.PLATFORM]["DynamicAgents"] ? PLATFORM_MAP[params.PLATFORM]["DynamicAgents"] : []
                     println "dynamicAgents: ${dynamicAgents}"
-
-                    if ((params.CLOUD_PROVIDER != null && params.CLOUD_PROVIDER in dynamicAgents) || dockerAgents) {
-                        boolean isNodeIdle = false
-                        node {
-                            String[] onlineNodes = nodesByLabel(LABEL)
-                            for (String onlineNode : onlineNodes) {
-                                def currentNode = Jenkins.instance.getNode(onlineNode).getComputer()
-                                if (!currentNode.isOffline()) {
-                                    if (currentNode.countBusy() < currentNode.getNumExecutors()) {
-                                        println "Found an idle node: ${onlineNode}. The program will not start dynamic vm."
-                                        isNodeIdle = true
-                                        break
+                    if ((CLOUD_PROVIDER != null && CLOUD_PROVIDER in dynamicAgents) || dockerAgents) {
+                        // DynamicAgents and DockerAgents shouldn't contain the same label
+                        if (CLOUD_PROVIDER != null && CLOUD_PROVIDER in dynamicAgents) {
+                            if (CLOUD_PROVIDER == "EBC") {
+                                try {
+                                    timeout(time: 120, unit: 'MINUTES') {
+                                        def dynamicMachineLabel = getEBCNode()
+                                        node(dynamicMachineLabel) {
+                                            echo "EBC node ${dynamicMachineLabel} is ready"
+                                        }
+                                        LABEL = dynamicMachineLabel
+                                        echo "Using EBC node ${LABEL}..."
                                     }
+                                } catch (Exception e) {
+                                    echo 'Exception: ' + e.toString()
+                                    echo "Cannot launch EBC node ..."
+                                    echo "Use static node ${LABEL}..."
+                                    CLOUD_PROVIDER = ''
                                 }
-                            }
-                        }
-                        if (!isNodeIdle) {
-                            // DynamicAgents and DockerAgents shouldn't contain the same label
-                            if (params.CLOUD_PROVIDER != null && params.CLOUD_PROVIDER in dynamicAgents) {
+
+                            } else {
                                 LABEL = LABEL.minus("ci.role.test&&")
                                 LABEL += '&&ci.agent.dynamic'
-                                println "Cannot find any idle nodes. Starting dynamic vm, nodeLabel: '${LABEL}', dynamicLabel: '${params.CLOUD_PROVIDER}'"
-                            } else if (params.CLOUD_PROVIDER != null && params.CLOUD_PROVIDER in dockerAgents) {
-                                dockerAgentLabel = params.CLOUD_PROVIDER
-                            } else if (dockerAgents.size() >= 1) {
-                                dockerAgentLabel = dockerAgents[0]
+                                println "Starting dynamic vm, nodeLabel: '${LABEL}', dynamicLabel: '${CLOUD_PROVIDER}'"
                             }
-                            if (!dockerAgentLabel.equals('')) {
-                                if (dockerAgentLabel.equals('default') && SPEC.equals('linux_riscv64')) {
-                                    LABEL = LABEL.minus("&&hw.arch.riscv")
-                                    LABEL += '&&hw.arch.x86'
-                                    if (!LABEL.contains('&&sw.tool.docker')) {
-                                        LABEL += '&&sw.tool.docker'
-                                    }
+                        } else if (CLOUD_PROVIDER != null && CLOUD_PROVIDER in dockerAgents) {
+                            dockerAgentLabel = CLOUD_PROVIDER
+                        } else if (dockerAgents.size() >= 1) {
+                            dockerAgentLabel = dockerAgents[0]
+                        }
+                        if (!dockerAgentLabel.equals('')) {
+                            if (dockerAgentLabel.equals('default') && SPEC.equals('linux_riscv64')) {
+                                LABEL = LABEL.minus("&&hw.arch.riscv")
+                                LABEL += '&&hw.arch.x86'
+                                if (!LABEL.contains('&&sw.tool.docker')) {
+                                    LABEL += '&&sw.tool.docker'
                                 }
-                                println "Cannot find any idle nodes. Starting run test on docker node, nodeLabel: '${LABEL}', dockerAgentLabel: '${dockerAgentLabel}'"
                             }
+                            println "Starting run test on docker node, nodeLabel: '${LABEL}', dockerAgentLabel: '${dockerAgentLabel}'"
                         }
                     }
                 }
@@ -443,11 +449,22 @@ timestamps{
                     }
                 }
             }
-            if (currentBuild.result != 'FAILURE') {
-                env.SETUP_LABEL = params.SETUP_LABEL ?: "ci.role.test"
-                echo "SETUP_LABEL: ${env.SETUP_LABEL}"
-                def rerunTestJobParams = jenkinsfile.runParallelTests()
-                jenkinsfile.triggerRerunJob(rerunTestJobParams)
+            env.SETUP_LABEL = params.SETUP_LABEL ?: "ci.role.test"
+            if (env.PARALLEL == 'None' && env.jobStatus == 'UNSTABLE') {
+                jenkinsfile.triggerRerunJob(env.jobStatus)
+                echo " None paralle and after rerun job status is ${currentBuild.result}"
+            } else if ( env.PARALLEL != 'None' && currentBuild.result != 'FAILURE') {
+                def parallelResults = jenkinsfile.runParallelTests()
+                echo "after parallel parallelResults.jobStatus is ${parallelResults.jobStatus}"
+                if ( parallelResults.jobStatus != 'SUCCESS' ) {
+					jenkinsfile.triggerRerunJob(parallelResults.jobStatus, parallelResults.jobParams)
+                } else {
+                    currentBuild.result = 'SUCCESS'
+                }
+                echo " Paralle and after rerun job status is ${currentBuild.result}"
+            } else {
+                currentBuild.result = env.jobStatus
+                echo " None paralle non rerun or successjob status is ${currentBuild.result}"
             }
         } else {
             assert false : "Cannot find key PLATFORM: ${params.PLATFORM} in PLATFORM_MAP: ${PLATFORM_MAP}."
@@ -577,6 +594,9 @@ def runTest() {
                 }
             }
         }
+        if (CLOUD_PROVIDER == "EBC") {
+                freeEBCNode()
+        }
     }
 }
 
@@ -606,12 +626,12 @@ private String resolvePlatform(PLATFORM, JDK_VERSION) {
 }
 
 def areNodesWithLabelOnline(labelToCheck) {
-            String[] onlineNodes = nodesByLabel(labelToCheck)
-            if (onlineNodes.size() < 1) {
-                return false
-            }
-            return true
-        }
+    String[] onlineNodes = nodesByLabel(labelToCheck)
+    if (onlineNodes.size() < 1) {
+        return false
+    }
+    return true
+}
 
 
 def checkErrors(errorList) {
@@ -645,7 +665,10 @@ def forceCleanWS() {
         echo 'Exception: ' + e.toString()
         //cleanWs has issue to delete workspace that contains non-ASCII filename in TKG output https://issues.jenkins.io/browse/JENKINS-33478
         //cannot delete workspace directly. Otherwise, Jenkins job will abort due to missing workspace
-        sh "rm -rf ${env.WORKSPACE}/aqa-tests/TKG"
+        dir (env.WORKSPACE) {
+            echo "Force clean Workspace at $pwd"
+            sh "rm -rf aqa-tests/TKG"
+        }
         // call cleanWs() again
         cleanWs disableDeferredWipeout: true, deleteDirs: true
     }
@@ -707,4 +730,34 @@ def generateJobViaAutoGen(testJobName) {
 
         build job: 'Test_Job_Auto_Gen', parameters: jobParams, propagate: true
     }
+}
+
+def getEBCNode() {
+    def expectedNodeLifespan = params.TIME_LIMIT ?: 1
+    def wait = true
+    def result = build job: 'EBC/EBC_Create_Node',
+    propagate: false,
+    wait: true,
+    parameters: [
+        string(name: 'platform', value: params.PLATFORM),
+        string(name: 'nodeType', value: 'testmachine'),
+        string(name: 'TIME_LIMIT', value: expectedNodeLifespan.toString()), 
+        booleanParam(name: 'WAIT', value: wait),
+    ]
+    return result.buildVariables.group_label
+}
+
+def freeEBCNode() {
+        try {
+            println("Triggering EBC_Delete_Node for label: ${LABEL}")
+            build job: 'EBC/EBC_Complete',
+                propagate: false,
+                wait: true,
+                parameters: [
+                string(name: 'LABEL', value: LABEL),
+                ]
+        } catch (Exception e) {
+                println("Warning: Exception when triggering EBC_Delete_Node. This does not affect test build result.")
+                println(e.toString())
+        }
 }
