@@ -173,8 +173,6 @@ java/lang/Thread/virtual/StackFrames.java https://github.com/eclipse-openj9/open
 java/lang/Thread/virtual/stress/GetStackTraceALotWhenBlocking.java#id0 https://github.com/eclipse-openj9/openj9/issues/21182 aix-all,linux-aarch64,linux-ppc64le,linux-s390x,linux-x64,macosx-all,windows-x64
 java/lang/Thread/virtual/stress/GetStackTraceALotWhenPinned.java#id0 https://github.com/eclipse-openj9/openj9/issues/21182 aix-all,linux-aarch64,linux-ppc64le,linux-s390x,macosx-all,windows-x64
 java/lang/Thread/virtual/stress/GetStackTraceALotWithTimedWait.java#id0 https://github.com/eclipse-openj9/openj9/issues/21445 linux-ppc64le,aix-all
-java/lang/Thread/virtual/stress/LotsOfContendedMonitorEnter.java#default https://github.com/eclipse-openj9/openj9/issues/21824 aix-all,linux-aarch64,linux-ppc64le,linux-s390x,macosx-all,windows-all
-java/lang/Thread/virtual/stress/LotsOfContendedMonitorEnter.java#LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/21824 aix-all,linux-aarch64,linux-ppc64le,linux-s390x,macosx-all,windows-all
 java/lang/Thread/virtual/stress/Skynet.java#default https://github.com/eclipse-openj9/openj9/issues/21425 generic-all
 java/lang/Thread/virtual/stress/Skynet100kWithMonitors.java#id0 https://github.com/eclipse-openj9/openj9/issues/20705 aix-all,linux-aarch64,linux-ppc64le,linux-s390x,linux-x64,macosx-all,windows-all
 java/lang/Thread/virtual/stress/TimedGet.java https://github.com/eclipse-openj9/openj9/issues/15184 macosx-x64
@@ -459,6 +457,7 @@ sun/security/pkcs11/Provider/MultipleLogins.sh	https://github.ibm.com/runtimes/b
 sun/security/pkcs11/Secmod/AddTrustedCert.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
 sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
 sun/security/pkcs12/KeytoolOpensslInteropTest.java#GenerateOpensslPKCS12	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#UseExistingPKCS12	https://github.com/eclipse-openj9/openj9/issues/22262	z/OS-s390x
 sun/security/rsa/PrivateKeyEqualityTest.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTest2.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTestPSS.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
