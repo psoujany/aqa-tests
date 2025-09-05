@@ -237,12 +237,29 @@ endif
 FEATURE_PROBLEM_LIST_FILE:=
 ifneq (,$(findstring FIPS140_2, $(TEST_FLAG))) 
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_2.txt$(Q)
+else ifneq (,$(findstring FIPS140_3_OpenJCEPlusFIPS.FIPS140-3-Strongly-Enforced, $(TEST_FLAG)))
+	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_3_OpenJCEPlusFIPS.FIPS140-3-Strongly-Enforced.txt$(Q)
 else ifneq (,$(findstring FIPS140_3_OpenJCEPlusFIPS.FIPS140-3, $(TEST_FLAG)))
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_3_OpenJCEPlusFIPS.FIPS140-3.txt$(Q)
 else ifneq (,$(findstring FIPS140_3_OpenJCEPlus, $(TEST_FLAG)))
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-FIPS140_3_OpenJcePlus.txt$(Q)
 else ifneq (,$(findstring OpenJCEPlus, $(TEST_FLAG)))
 	FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(JTREG_JDK_TEST_DIR)$(D)ProblemList-OpenJCEPlus.txt$(Q)
+endif
+
+# If we are on alpine, also use the exclude file specific to alpine.
+ALPINE_PROBLEM_LIST_FILE:=$(TEST_ROOT)$(D)openjdk$(D)excludes$(D)alpine$(D)ProblemList_openjdk$(JDK_VERSION)_alpine.txt
+ifneq (,$(findstring alpine, $(SPEC)))
+	ifneq (,$(realpath $(ALPINE_PROBLEM_LIST_FILE)))
+		ifeq (,$(FEATURE_PROBLEM_LIST_FILE))
+			FEATURE_PROBLEM_LIST_FILE:=-exclude:$(Q)$(ALPINE_PROBLEM_LIST_FILE)$(Q)
+		else
+			FEATURE_PROBLEM_LIST_FILE+=-exclude:$(Q)$(ALPINE_PROBLEM_LIST_FILE)$(Q)
+		endif
+	else
+		# Using a dummy variable here so we can produce the message while avoiding this fatal error: "recipe commences before first target"
+		DUMMY_VAR:=$(warning Warning: An Alpine-specific ProblemList could not be found here: $(Q)$(ALPINE_PROBLEM_LIST_FILE)$(Q))
+	endif
 endif
 
 VENDOR_PROBLEM_LIST_FILE:=
