@@ -40,7 +40,7 @@
 	<condition property="j21OnZ">
 		<and>
 			<contains string="${SPEC}" substring="zos"/>
-			<matches pattern="^(21)$" string="${JDK_VERSION}"/>
+			<matches pattern="^(21|25)$" string="${JDK_VERSION}"/>
 		</and>
 	</condition>
 
