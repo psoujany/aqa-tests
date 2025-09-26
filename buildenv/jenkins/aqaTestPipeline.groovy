@@ -1,14 +1,17 @@
 #!groovy
 
+import groovy.transform.Field
+
 def JDK_VERSIONS = params.JDK_VERSIONS.trim().split("\\s*,\\s*")
-def PLATFORMS = params.PLATFORMS.trim().split("\\s*,\\s*")
+def PLATFORMS = params.PLATFORMS ? params.PLATFORMS.trim().split("\\s*,\\s*") : ""
 def TARGETS = params.TARGETS ?: "Grinder"
 TARGETS = TARGETS.trim().split("\\s*,\\s*")
 def TEST_FLAG = (params.TEST_FLAG) ?: ""
 
 def PARALLEL = params.PARALLEL ? params.PARALLEL : "Dynamic"
+def MODE = params.MODE ? params.MODE : "ENTRYPOINT"
 
-NUM_MACHINES = ""
+@Field String NUM_MACHINES = ""
 if (params.NUM_MACHINES) {
     NUM_MACHINES = params.NUM_MACHINES
 } else if (!params.TEST_TIME && PARALLEL == "Dynamic") {
@@ -16,10 +19,14 @@ if (params.NUM_MACHINES) {
     NUM_MACHINES = 3
 }
 
+@Field String SDK_RESOURCE
+@Field String TIME_LIMIT
+@Field Boolean AUTO_AQA_GEN
+@Field Boolean LIGHT_WEIGHT_CHECKOUT
+
 SDK_RESOURCE = params.SDK_RESOURCE ? params.SDK_RESOURCE : "releases"
 TIME_LIMIT = params.TIME_LIMIT ? params.TIME_LIMIT : 10
 AUTO_AQA_GEN = params.AUTO_AQA_GEN ? params.AUTO_AQA_GEN.toBoolean() : false
-TRSS_URL = params.TRSS_URL ? params.TRSS_URL : "https://trss.adoptium.net/"
 LIGHT_WEIGHT_CHECKOUT = params.LIGHT_WEIGHT_CHECKOUT ?: false
 
 // Use BUILD_USER_ID if set and jdk-JDK_VERSIONS
@@ -29,19 +36,19 @@ def PIPELINE_DISPLAY_NAME = (params.PIPELINE_DISPLAY_NAME) ? "#${currentBuild.nu
 // Set the AQA_TEST_PIPELINE Jenkins job displayName
 currentBuild.setDisplayName(PIPELINE_DISPLAY_NAME)
 
-defaultTestTargets = "sanity.functional,extended.functional,special.functional,sanity.openjdk,extended.openjdk,special.openjdk,sanity.system,extended.system,special.system,sanity.perf,extended.perf,sanity.jck,extended.jck,special.jck"
-defaultFipsTestTargets = "extended.functional,sanity.openjdk,extended.openjdk,sanity.jck,extended.jck,special.jck"
+@Field String defaultTestTargets = "sanity.functional,extended.functional,special.functional,sanity.openjdk,extended.openjdk,special.openjdk,sanity.system,extended.system,special.system,sanity.perf,extended.perf,sanity.jck,extended.jck,special.jck"
+@Field String defaultFipsTestTargets = "extended.functional,sanity.openjdk,extended.openjdk,sanity.jck,extended.jck,special.jck"
 // There is no applicable tests for FIPS140-2 extended.functional atm, so temporarily disable FIPS140-2 extended.functional
-defaultFips140_2TestTargets = defaultFipsTestTargets.replace("extended.functional,", "")
+@Field String defaultFips140_2TestTargets = defaultFipsTestTargets.replace("extended.functional,", "")
 
 if (params.BUILD_TYPE == "nightly") {
     defaultTestTargets = "sanity.functional,extended.functional,sanity.openjdk,extended.openjdk,sanity.perf,sanity.jck,sanity.system,special.system"
 }
 
-JOBS = [:]
-fail = false
+@Field Map JOBS = [:]
 
 timestamps {
+    currentBuild.description = (currentBuild.description) ? currentBuild.description + "<br>" : ""
     JDK_VERSIONS.each { JDK_VERSION ->
         if (params.BUILD_TYPE == "release" || params.BUILD_TYPE == "nightly" || params.BUILD_TYPE == "weekly") {
             def configJson = []
@@ -81,13 +88,15 @@ timestamps {
                 }
             }
         } else {
-            generateJobs(JDK_VERSION, TEST_FLAG, PLATFORMS, TARGETS, PARALLEL)
+            if ( MODE == 'RELAY' ) {
+                remoteTriggerTemurinJCK()
+
+            } else {
+                generateJobs(JDK_VERSION, TEST_FLAG, PLATFORMS, TARGETS, PARALLEL)
+            }
         }
     }
     parallel JOBS
-    if (fail) {
-        currentBuild.result = "FAILURE"
-    }
 }
 
 def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParallel) {
@@ -126,6 +135,9 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParall
         def jdk_impl = "hotspot"
         if (params.VARIANT == "openj9") {
             short_name = "j9"
+            jdk_impl = params.VARIANT
+        } else if (params.VARIANT == "ibm") {
+            short_name = "ibm"
             jdk_impl = params.VARIANT
         }
         def download_url = params.CUSTOMIZED_SDK_URL ? params.CUSTOMIZED_SDK_URL : ""
@@ -177,7 +189,7 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParall
             def VENDOR_TEST_DIRS = ''
             int rerunIterations = params.RERUN_ITERATIONS ? params.RERUN_ITERATIONS.toInteger() : 0
             def buildList = params.BUILD_LIST ?: ""
-            if (params.VARIANT == "openj9") {
+            if (params.VARIANT == "openj9" || params.VARIANT == "ibm") {
                 // default rerunIterations is 3 for openj9
                 rerunIterations = params.RERUN_ITERATIONS ? params.RERUN_ITERATIONS.toInteger() : 3
                 if (TARGET.contains('external')) {
@@ -211,7 +223,7 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParall
                     }
                 }
 
-                if (jobTestFlag.contains("FIPS") || (TARGET.contains("dev"))) {
+                if (jobTestFlag.contains("FIPS") || jobTestFlag.contains("OpenJCEPlus") || (TARGET.contains("dev"))) {
                     rerunIterations = 0
                 }
             } else if (params.VARIANT == "temurin") {
@@ -285,6 +297,16 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParall
                     def downstreamJob = build job: TEST_JOB_NAME, parameters: childParams, propagate: false, wait: true
                     def downstreamJobResult = downstreamJob.getResult()
                     echo "${TEST_JOB_NAME} result is ${downstreamJobResult}"
+                    def buildId = downstreamJob.getNumber()
+                    def childBuildUrl = "${env.JENKINS_URL}job/${TEST_JOB_NAME}/${buildId}"
+                    def badgeUrl = "${childBuildUrl}/badge/icon"
+                    currentBuild.description += """
+                        <p>${TEST_JOB_NAME}/${buildId}:
+                        <a href="${childBuildUrl}">
+                            <img src="${badgeUrl}" />
+                        </a>
+                        </p>
+                    """
                     if (downstreamJobResult == 'SUCCESS' || downstreamJobResult == 'UNSTABLE') {
                         echo "[NODE SHIFT] MOVING INTO CONTROLLER NODE..."
                         node("worker || (ci.role.test&&hw.arch.x86&&sw.os.linux)") {
@@ -313,14 +335,42 @@ def generateJobs(jobJdkVersion, jobTestFlag, jobPlatforms, jobTargets, jobParall
                             }
                         }
                     }
-                    if (downstreamJobResult != "SUCCESS") {
-                        fail = true
-                    }
+                    currentBuild.result = downstreamJobResult
                 }
             } else {
                 println "Requested test job that does not exist or is disabled: ${TEST_JOB_NAME}. \n To generate the job, pelase set AUTO_AQA_GEN = true"
-                fail = true
+                currentBuild.result = "FAILURE"
             }
         }
     }
 }
+
+def remoteTriggerTemurinJCK () {
+    def handle = triggerRemoteJob abortTriggeredJob: true,
+        blockBuildUntilComplete: true,
+        job: 'AQA_Test_Pipeline',
+        parameters: MapParameters(parameters: [MapParameter(name: 'SDK_RESOURCE', value: 'customized'),
+                                                MapParameter(name: 'TARGETS', value: TARGETS),
+                                                MapParameter(name: 'JCK_GIT_REPO', value: env.JCK_GIT_REPO),
+                                                MapParameter(name: 'CUSTOMIZED_SDK_URL', value: params.CUSTOMIZED_SDK_URL),
+                                                MapParameter(name: 'JDK_VERSIONS', value: params.JDK_VERSIONS),
+                                                MapParameter(name: 'PARALLEL', value: PARALLEL),
+                                                MapParameter(name: 'NUM_MACHINES', value: env.NUM_MACHINES),
+                                                MapParameter(name: 'PLATFORMS', value: params.PLATFORMS),
+                                                MapParameter(name: 'PIPELINE_DISPLAY_NAME', value: params.PIPELINE_DISPLAY_NAME),
+                                                MapParameter(name: 'APPLICATION_OPTIONS', value: env.APPLICATION_OPTIONS),
+                                                MapParameter(name: 'LABEL_ADDITION', value: env.LABEL_ADDITION),
+                                                MapParameter(name: 'AUTO_AQA_GEN', value: "${params.AUTO_AQA_GEN}"),
+                                                MapParameter(name: 'RERUN_ITERATIONS', value: "1"),
+                                                MapParameter(name: 'RERUN_FAILURE', value: "true"),
+                                                MapParameter(name: 'EXTRA_OPTIONS', value: env.EXTRA_OPTIONS),
+                                                MapParameter(name: 'SETUP_JCK_RUN', value: env.SETUP_JCK_RUN)]),
+        remoteJenkinsName: 'temurin-compliance',
+        shouldNotFailBuild: true,
+        token: 'RemoteTrigger',
+        useCrumbCache: true,
+        useJobInfoCache: true   
+    echo 'Remote job ' + params.PIPELINE_DISPLAY_NAME + ' Status: ' + handle.getBuildResult().toString()
+    currentBuild.result = handle.getBuildResult().toString()    
+}
+

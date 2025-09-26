@@ -140,8 +140,7 @@ java/beans/XMLEncoder/java_awt_ScrollPane.java https://github.com/adoptium/aqa-t
 # jdk_lang
 
 java/lang/Math/HypotTests.java https://github.com/adoptium/aqa-tests/issues/128 linux-all
-# java/lang/ProcessBuilder/Basic.java same issue with alpine linux, exclude by linux-all for now
-java/lang/ProcessBuilder/Basic.java https://bugs.openjdk.org/browse/JDK-8282219 aix-all,solaris-x64,linux-all
+java/lang/ProcessBuilder/Basic.java https://bugs.openjdk.org/browse/JDK-8282219 aix-all,solaris-x64
 java/lang/invoke/MethodHandles/CatchExceptionTest.java https://bugs.openjdk.java.net/browse/JDK-8146623 linux-s390x,linux-arm
 java/lang/instrument/BootClassPath/BootClassPathTest.sh https://bugs.openjdk.java.net/browse/JDK-8256405 macosx-all
 
@@ -157,8 +156,8 @@ sun/management/jmxremote/bootstrap/RmiBootstrapTest.sh https://github.com/adopti
 sun/management/jmxremote/bootstrap/RmiSslNoKeyStoreTest.sh https://github.com/adoptium/aqa-tests/issues/2294 windows-all
 sun/management/jmxremote/bootstrap/RmiSslBootstrapTest.sh https://bugs.openjdk.org/browse/JDK-8205653 generic-all
 sun/management/jmxremote/bootstrap/RmiRegistrySslTest.sh https://bugs.openjdk.org/browse/JDK-8205653 generic-all
-# alpine-linux https://github.com/adoptium/aqa-tests/issues/3238
 sun/management/jmxremote/bootstrap/CustomLauncherTest.java https://bugs.openjdk.java.net/browse/JDK-8031420 linux-all
+sun/management/jmxremote/bootstrap/SSLConfigFilePermissionTest.sh https://github.com/adoptium/aqa-tests/issues/5917 solaris-x64
 com/sun/management/OperatingSystemMXBean/TestTotalSwap.java https://bugs.openjdk.java.net/browse/JDK-8255263 linux-all
 sun/management/jmxremote/startstop/JMXStartStopTest.java https://bugs.openjdk.org/browse/JDK-8274337 generic-all
 ############################################################################
@@ -241,13 +240,17 @@ java/security/KeyPairGenerator/SolarisShortDSA.java https://github.com/adoptium/
 java/security/MessageDigest/TestDigestIOStream.java https://github.com/adoptium/aqa-tests/issues/1051 linux-s390x
 javax/xml/crypto/dsig/LineFeedOnlyTest.java https://github.com/adoptium/aqa-tests/issues/2356 windows-all
 sun/security/pkcs11/KeyStore/SecretKeysBasic.sh https://bugs.openjdk.java.net/browse/JDK-8189603 linux-all,macosx-all,windows-all
+sun/security/pkcs11/Provider/Login.sh https://github.com/adoptium/infrastructure/issues/3868#issuecomment-3224931443 linux-all
+sun/security/pkcs11/Secmod/AddPrivateKey.java https://github.com/adoptium/infrastructure/issues/3868#issuecomment-3224931443 linux-all
 sun/security/pkcs11/Signature/TestDSAKeyLength.java https://github.com/adoptium/aqa-tests/issues/70 linux-all
 sun/security/pkcs11/ec/TestECDH.java https://github.com/adoptium/aqa-tests/issues/70 linux-all
 sun/security/pkcs11/ec/TestECDSA.java https://github.com/adoptium/aqa-tests/issues/70 linux-all
 sun/security/pkcs11/ec/TestECGenSpec.java https://github.com/adoptium/aqa-tests/issues/70 linux-all
 sun/security/pkcs11/rsa/TestCACerts.java https://github.com/adoptium/aqa-tests/issues/68 linux-all
 sun/security/rsa/TestCACerts.java https://github.com/adoptium/aqa-tests/issues/68 generic-all
+sun/security/tools/keytool/autotest.sh https://github.com/adoptium/infrastructure/issues/3868#issuecomment-3224931443 linux-all
 com/sun/crypto/provider/Mac/MacClone.java https://bugs.openjdk.java.net/browse/JDK-7087021 solaris-all
+javax/net/ssl/ciphersuites/DisabledAlgorithms.java https://github.com/adoptium/aqa-tests/issues/5915 solaris-x64
 javax/net/ssl/ServerName/BestEffortOnLazyConnected.java https://bugs.openjdk.org/browse/JDK-8155049 solaris-x64
 javax/net/ssl/ServerName/SSLEngineExplorerMatchedSNI.java https://bugs.openjdk.org/browse/JDK-8212096 solaris-x64
 javax/net/ssl/Stapling/HttpsUrlConnClient.java https://github.com/adoptium/aqa-tests/issues/4150 solaris-sparcv9
@@ -269,8 +272,7 @@ sun/security/pkcs11/Secmod/TestNssDbSqlite.java https://github.com/adoptium/aqa-
 sun/security/ssl/X509TrustManagerImpl/Symantec/Distrust.java https://github.com/adoptium/aqa-tests/issues/2123 generic-all
 sun/security/tools/jarsigner/diffend.sh https://github.com/adoptium/infrastructure/issues/2623 linux-all
 sun/security/tools/jarsigner/emptymanifest.sh https://github.com/adoptium/infrastructure/issues/2623 linux-all
-tools/jar/ExtractFilesTest.java https://bugs.openjdk.org/browse/JDK-8346140 generic-all
-tools/jar/MultipleManifestTest.java https://bugs.openjdk.org/browse/JDK-8346140 generic-all
+sun/security/tools/jarsigner/TimestampCheck.java https://bugs.openjdk.org/browse/JDK-8352302 generic-all
 sun/security/rsa/SignatureTest.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
 sun/security/tools/keytool/WeakAlg.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
 sun/security/tools/keytool/standard.sh https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
@@ -278,8 +280,12 @@ sun/security/tools/keytool/PSS.java https://github.com/adoptium/infrastructure/i
 sun/security/util/math/TestIntegerModuloP.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
 javax/net/ssl/TLSCommon/TLSTest.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
 sun/security/rsa/pss/SignatureTestPSS.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
+sun/security/pkcs11/Secmod/TrustAnchors.java https://github.com/adoptium/infrastructure/issues/3981 solaris-all
 sun/security/provider/DSA/SupportedDSAParamGen.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
 sun/security/provider/DSA/TestAlgParameterGenerator.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
+sun/security/ssl/X509TrustManagerImpl/distrust/Camerfirma.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Entrust.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Symantec.java https://github.com/adoptium/aqa-tests/issues/6292 generic-all
 
 ############################################################################
 
@@ -332,7 +338,6 @@ sun/tools/jstatd/TestJstatdPort.java https://bugs.openjdk.java.net/browse/JDK-80
 sun/tools/jstatd/TestJstatdPortAndServer.java https://bugs.openjdk.java.net/browse/JDK-8081569 linux-all,solaris-x64
 sun/tools/jstatd/TestJstatdServer.java https://github.com/adoptium/aqa-tests/issues/115 linux-all,solaris-x64
 sun/tools/native2ascii/Native2AsciiTests.sh https://github.com/adoptium/aqa-tests/issues/2667 windows-all
-sun/misc/Version/Version.java https://bugs.openjdk.java.net/browse/JDK-8244548 generic-all
 com/sun/tools/attach/StartManagementAgent.java https://github.com/adoptium/aqa-tests/issues/115 generic-all
 # tools/pack200/CommandLineTests.java https://github.com/adoptium/infrastructure/issues/2893 solaris-sparcv9
 tools/pack200/CommandLineTests.java https://github.com/adoptium/aqa-tests/issues/1051 linux-s390x,solaris-sparcv9
@@ -364,6 +369,7 @@ com/sun/jdi/PrivateTransportTest.sh https://github.com/adoptium/aqa-tests/issues
 # jdk_util
 
 java/util/Arrays/TimSortStackSize2.java https://github.com/adoptium/aqa-tests/issues/1051 linux-s390x
+java/util/Currency/ValidateISO4217.java https://github.com/eclipse-openj9/openj9/issues/21539 generic-all
 java/util/Random/RandomTest.java https://github.com/adoptium/aqa-tests/issues/1051 linux-s390x
 java/util/ResourceBundle/Control/Bug6530694.java https://github.com/adoptium/aqa-tests/issues/137 macosx-all
 java/util/Spliterator/SpliteratorTraversingAndSplittingTest.java https://github.com/adoptium/aqa-tests/issues/1051 linux-s390x

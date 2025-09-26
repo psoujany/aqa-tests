@@ -22,16 +22,16 @@
 
 # jdk_beans
 
-java/beans/PropertyEditor/6380849/TestPropertyEditor.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClass.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClass.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
 java/beans/Beans/TypoInBeanDescription.java https://github.ibm.com/runtimes/backlog/issues/1589 aix-all
+java/beans/PropertyEditor/6380849/TestPropertyEditor.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/XMLDecoder/8028054/TestMethodFinder.java https://github.com/eclipse-openj9/openj9/issues/20531 windows-all
+java/beans/XMLEncoder/java_awt_ScrollPane.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
 
 ############################################################################
 
@@ -90,6 +90,9 @@ java/lang/reflect/exeCallerAccessTest/CallerAccessTest.java https://github.com/e
 java/lang/reflect/Nestmates/TestReflectionAPI.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 java/lang/reflect/Proxy/ProxyLayerTest.java https://github.com/eclipse-openj9/openj9/issues/7775 generic-all
 java/lang/reflect/PublicMethods/PublicMethodsTest.java https://github.com/eclipse-openj9/openj9/issues/7897 generic-all
+java/lang/ScopedValue/ManyBindings.java https://github.com/eclipse-openj9/openj9/issues/21445 generic-all
+java/lang/ScopedValue/ManyBindings.java.ManyBindings https://github.com/eclipse-openj9/openj9/issues/21445 generic-all
+java/lang/ScopedValue/ScopedValueAPI.java https://github.com/eclipse-openj9/openj9/issues/21445 linux-ppc64le
 java/lang/ScopedValue/StressStackOverflow.java#TieredStopAtLevel1 https://github.com/eclipse-openj9/openj9/issues/16965 generic-all
 java/lang/ScopedValue/StressStackOverflow.java#default https://github.com/eclipse-openj9/openj9/issues/16965 generic-all
 java/lang/ScopedValue/StressStackOverflow.java#no-TieredCompilation https://github.com/eclipse-openj9/openj9/issues/16965 generic-all
@@ -123,46 +126,19 @@ java/lang/System/LoggerFinder/jdk/DefaultLoggerBridgeTest/DefaultLoggerBridgeTes
 java/lang/Thread/SleepSanity.java https://github.com/eclipse-openj9/openj9/issues/17638 windows-all
 java/lang/Thread/ThreadSleepEvent.java https://github.com/eclipse-openj9/openj9/issues/20166 generic-all
 java/lang/Thread/UncaughtExceptions.sh https://github.com/eclipse-openj9/openj9/issues/6690 generic-all
-java/lang/Thread/virtual/CancelTimerWithContention.java https://github.com/eclipse-openj9/openj9/issues/21037 generic-all
+java/lang/Thread/jni/AttachCurrentThread/AttachTest.java#id1 https://github.com/eclipse-openj9/openj9/issues/17399 generic-all
+java/lang/Thread/virtual/Collectable.java https://github.com/eclipse-openj9/openj9/issues/18463 windows-all
 java/lang/Thread/virtual/JfrEvents.java https://github.com/eclipse-openj9/openj9/issues/20166 generic-all
-java/lang/Thread/virtual/MiscMonitorTests.java#default https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/MiscMonitorTests.java#Xcomp https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/MiscMonitorTests.java#Xcomp-noTieredCompilation https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/MiscMonitorTests.java#Xcomp-TieredStopAtLevel3 https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/MiscMonitorTests.java#Xint https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#default https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#LM_LEGACY https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xcomp-LM_LEGACY https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xcomp-LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xcomp-noTieredCompilation-LM_LEGACY https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xcomp-noTieredCompilation-LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xcomp-TieredStopAtLevel1-LM_LEGACY https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xcomp-TieredStopAtLevel1-LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xint-LM_LEGACY https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/MonitorWaitNotify.java#Xint-LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/20369 generic-all
-java/lang/Thread/virtual/RetryMonitorEnterWhenPinned.java https://github.com/eclipse-openj9/openj9/issues/20955 generic-all
-java/lang/Thread/virtual/StackTraces.java https://github.com/eclipse-openj9/openj9/issues/16045 generic-all
-java/lang/Thread/virtual/Starvation.java https://github.com/eclipse-openj9/openj9/issues/21036 generic-all
-java/lang/Thread/virtual/stress/GetStackTraceALotWhenPinned.java#id0 https://github.com/eclipse-openj9/openj9/issues/18908 linux-s390x
-java/lang/Thread/virtual/stress/LotsOfContendedMonitorEnter.java#default https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/stress/LotsOfContendedMonitorEnter.java#LM_LIGHTWEIGHT https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
-java/lang/Thread/virtual/stress/Skynet100kWithMonitors.java#id0 https://github.com/eclipse-openj9/openj9/issues/20705 generic-all
+java/lang/Thread/virtual/Starvation.java https://github.com/eclipse-openj9/openj9/issues/21957 aix-all,linux-ppc64le
+java/lang/Thread/virtual/ThreadAPI.java#default https://github.com/eclipse-openj9/openj9/issues/22029 windows-all
+java/lang/Thread/virtual/ThreadAPI.java#no-vmcontinuations https://github.com/eclipse-openj9/openj9/issues/22029 windows-all
+java/lang/Thread/virtual/stress/GetStackTraceALotWhenPinned.java#id0 https://github.com/eclipse-openj9/openj9/issues/18908 linux-s390x,windows-all
+java/lang/Thread/virtual/stress/Skynet.java#default https://github.com/eclipse-openj9/openj9/issues/21957 generic-all
+java/lang/Thread/virtual/stress/Skynet100kWithMonitors.java#id0 https://github.com/eclipse-openj9/openj9/issues/22388 aix-all
 java/lang/Thread/virtual/stress/TimedGet.java https://github.com/eclipse-openj9/openj9/issues/15184 macosx-x64
-java/lang/Thread/virtual/TracePinnedThreads.java https://github.com/eclipse-openj9/openj9/issues/15996 generic-all
 java/lang/ThreadGroup/SetMaxPriority.java https://github.com/eclipse-openj9/openj9/issues/6691 generic-all
 java/lang/Throwable/SuppressedExceptions.java https://github.com/eclipse-openj9/openj9/issues/6692 generic-all
-java/util/stream/test/org/openjdk/tests/java/util/stream/SpliteratorTest.java https://github.com/eclipse-openj9/openj9/issues/11135 generic-all
-jdk/internal/loader/NativeLibraries/Main.java https://github.com/adoptium/aqa-tests/issues/1920 generic-all
-jdk/internal/vm/Continuation/Basic.java#id0 https://github.com/eclipse-openj9/openj9/issues/15163 generic-all
-jdk/internal/vm/Continuation/Basic.java#id1 https://github.com/eclipse-openj9/openj9/issues/15163 generic-all
-jdk/internal/vm/Continuation/ClassUnloading.java https://github.com/eclipse-openj9/openj9/issues/15152 generic-all
-jdk/internal/vm/Continuation/Fuzz.java https://github.com/eclipse-openj9/openj9/issues/15247 generic-all
-jdk/internal/vm/Continuation/LiveFramesDriver.java https://github.com/eclipse-openj9/openj9/issues/15152 generic-all
-jdk/internal/vm/Continuation/OSRTest.java https://github.com/eclipse-openj9/openj9/issues/19357 generic-all
-jdk/internal/vm/Continuation/Scoped.java https://github.com/eclipse-openj9/openj9/issues/15163 generic-all
 jni/nullCaller/NullCallerTest.java https://github.com/eclipse-openj9/openj9/issues/15370 linux-ppc64le,macosx-all
-java/lang/Thread/jni/AttachCurrentThread/AttachTest.java#id1 https://github.com/eclipse-openj9/openj9/issues/17399 generic-all
 
 ############################################################################
 
@@ -171,6 +147,14 @@ jdk/internal/loader/NativeLibraries/Main.java  https://github.com/eclipse-openj9
 jdk/internal/reflect/Reflection/GetCallerClassTest.java#id2 https://github.com/eclipse-openj9/openj9/issues/14097 generic-all
 jdk/internal/reflect/Reflection/GetCallerClassTest.java#id3 https://github.com/eclipse-openj9/openj9/issues/14097 generic-all
 jdk/internal/vm/Continuation/MovingCompWindow.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
+jdk/internal/loader/NativeLibraries/Main.java https://github.com/adoptium/aqa-tests/issues/1920 generic-all
+jdk/internal/vm/Continuation/Basic.java#id0 https://github.com/eclipse-openj9/openj9/issues/15163 generic-all
+jdk/internal/vm/Continuation/Basic.java#id1 https://github.com/eclipse-openj9/openj9/issues/15163 generic-all
+jdk/internal/vm/Continuation/ClassUnloading.java https://github.com/eclipse-openj9/openj9/issues/15152 generic-all
+jdk/internal/vm/Continuation/Fuzz.java https://github.com/eclipse-openj9/openj9/issues/15247 generic-all
+jdk/internal/vm/Continuation/LiveFramesDriver.java https://github.com/eclipse-openj9/openj9/issues/15152 generic-all
+jdk/internal/vm/Continuation/OSRTest.java https://github.com/eclipse-openj9/openj9/issues/19357 generic-all
+jdk/internal/vm/Continuation/Scoped.java https://github.com/eclipse-openj9/openj9/issues/15163 generic-all
 
 ############################################################################
 
@@ -216,6 +200,8 @@ sun/management/jmxremote/startstop/JMXStatusTest.java     https://github.com/ado
 
 # jdk_jmx
 
+javax/management/security/HashedPasswordFileTest.java https://github.com/eclipse-openj9/openj9/issues/21138 generic-all
+
 ############################################################################
 
 # jdk_math
@@ -239,7 +225,7 @@ java/net/httpclient/websocket/PendingPingTextClose.java https://github.com/eclip
 java/net/httpclient/websocket/PendingPongTextClose.java https://github.com/eclipse-openj9/openj9/issues/4298 macosx-all
 java/net/httpclient/websocket/PendingTextPingClose.java https://github.com/eclipse-openj9/openj9/issues/4298 macosx-all
 java/net/httpclient/websocket/PendingTextPongClose.java https://github.com/eclipse-openj9/openj9/issues/4298 macosx-all
-java/net/Inet4Address/PingThis.java	https://github.ibm.com/runtimes/backlog/issues/1595	aix-all
+java/net/Inet4Address/PingThis.java https://github.ibm.com/runtimes/backlog/issues/1595 aix-all
 java/net/InetAddress/HostsFileOrderingTest.java https://github.com/adoptium/aqa-tests/issues/3637 linux-all
 java/net/InetAddress/InternalNameServiceTest.java https://github.com/adoptium/aqa-tests/issues/3637 linux-all
 java/net/InetAddress/InternalNameServiceWithHostsFileTest.java https://github.com/adoptium/aqa-tests/issues/3637 linux-all
@@ -267,7 +253,7 @@ javax/imageio/plugins/jpeg/JPEGsNotAcceleratedTest.java https://github.com/eclip
 # jdk_io
 
 java/io/CharArrayReader/OverflowInRead.java https://github.com/adoptium/aqa-tests/issues/1500 generic-all
-#java/io/File/GetXSpace.java https://bugs.openjdk.org/browse/JDK-8251017 linux-arm, aix-all
+#java/io/File/GetXSpace.java https://bugs.openjdk.org/browse/JDK-8251017 linux-arm,aix-all
 java/io/File/GetXSpace.java https://bugs.openjdk.java.net/browse/JDK-8251466 windows-all,linux-arm,aix-all
 java/io/FileInputStream/UnreferencedFISClosesFd.java  https://github.com/eclipse-openj9/openj9/issues/3543 generic-all
 java/io/FileOutputStream/UnreferencedFOSClosesFd.java https://github.com/eclipse-openj9/openj9/issues/3543 generic-all
@@ -283,7 +269,6 @@ java/io/FileOutputStream/UnreferencedFOSClosesFd.java https://github.com/eclipse
 java/nio/Buffer/DirectBufferAllocTest.java https://github.com/eclipse-openj9/openj9/issues/4473 generic-all
 java/nio/Buffer/LimitDirectMemory.java https://github.com/eclipse-openj9/openj9/issues/8063 generic-all
 java/nio/Buffer/LimitDirectMemoryNegativeTest.java https://github.com/eclipse-openj9/openj9/issues/8065 generic-all
-java/nio/channels/AsyncCloseAndInterrupt.java https://github.com/adoptium/infrastructure/issues/1173 linux-all,aix-all
 java/nio/channels/AsynchronousChannelGroup/Basic.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/AsynchronousChannelGroup/GroupOfOne.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/AsynchronousChannelGroup/Identity.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
@@ -300,8 +285,8 @@ java/nio/channels/Channels/Basic2.java https://github.ibm.com/runtimes/backlog/i
 java/nio/channels/Channels/TransferTo.java https://github.com/eclipse-openj9/openj9/issues/15040 linux-all
 java/nio/channels/DatagramChannel/AdaptorBasic.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/AdaptorMulticasting.java https://github.ibm.com/runtimes/backlog/issues/655 linux-s390x,windows-all,macosx-all
-java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1594 aix-all
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1053 macosx-all
+java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,windows-all
+java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,macosx-all,windows-all
 java/nio/channels/DatagramChannel/ChangingAddress.java https://github.com/adoptium/aqa-tests/issues/1650 aix-all
 java/nio/channels/DatagramChannel/ConnectedSend.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/Disconnect.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
@@ -360,6 +345,7 @@ java/nio/channels/SocketChannel/VectorIO.java https://github.ibm.com/runtimes/ba
 java/nio/channels/SocketChannel/VectorParams.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/SocketChannel/Write.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/spi/SelectorProvider/inheritedChannel/InheritedChannelTest.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
+java/nio/file/attribute/BasicFileAttributeView/SetTimesNanos.java https://github.com/eclipse-openj9/openj9/issues/21959 windows-all
 java/nio/file/Files/CopyAndMove.java https://github.com/adoptium/aqa-tests/issues/795 macosx-all
 java/nio/file/Files/probeContentType/Basic.java https://github.ibm.com/runtimes/backlog/issues/655 windows-all
 java/nio/MappedByteBuffer/MapSyncFail.java https://github.com/eclipse-openj9/openj9/issues/6831 generic-all
@@ -389,7 +375,6 @@ java/rmi/server/Unreferenced/leaseCheckInterval/LeaseCheckInterval.java https://
 java/security/KeyPairGenerator/FinalizeHalf.java    https://github.com/eclipse-openj9/openj9/issues/12807   windows-all
 java/security/SecureRandom/ApiTest.java https://github.com/eclipse-openj9/openj9/issues/16734 windows-all
 java/security/SecureRandom/EnoughSeedTest.java https://github.com/eclipse-openj9/openj9/issues/16734 windows-all
-java/security/Security/ConfigFileTest.java https://github.com/eclipse-openj9/openj9/issues/20357 generic-all
 java/security/Signature/ResetAfterException.java    https://github.com/eclipse-openj9/openj9/issues/12807   windows-all
 java/security/Signature/SignatureLength.java    https://github.com/eclipse-openj9/openj9/issues/12807   windows-all
 
@@ -422,12 +407,17 @@ sun/security/mscapi/SmallPrimeExponentP.java	https://github.ibm.com/runtimes/bac
 sun/security/mscapi/VeryLongAlias.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 sun/security/pkcs11/Provider/MultipleLogins.sh	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
 sun/security/pkcs11/Secmod/AddTrustedCert.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#GenerateOpensslPKCS12	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#UseExistingPKCS12	https://github.com/eclipse-openj9/openj9/issues/22262	z/OS-s390x
 sun/security/rsa/PrivateKeyEqualityTest.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTest2.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTestPSS.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/ssl/CipherSuite/DisabledCurve.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
 sun/security/ssl/CipherSuite/NamedGroupsWithCipherSuite.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
 sun/security/ssl/CipherSuite/SupportedGroups.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Camerfirma.java https://github.com/eclipse-openj9/openj9/issues/21235 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Entrust.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
 sun/security/ssl/X509TrustManagerImpl/distrust/Symantec.java	https://github.com/eclipse-openj9/openj9/issues/16312	generic-all
 sun/security/ssl/X509TrustManagerImpl/Symantec/Distrust.java	https://github.com/adoptium/aqa-tests/issues/2123	generic-all
 sun/security/tools/jarsigner/PreserveRawManifestEntryAndDigest.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all
@@ -458,6 +448,7 @@ sun/security/krb5/auto/Cleaners.java https://github.com/eclipse-openj9/openj9/is
 ############################################################################
 
 # jdk_time
+java/time/test/java/time/TestClock_System.java https://github.com/eclipse-openj9/openj9/issues/20610 generic-all
 
 ############################################################################
 
@@ -477,6 +468,7 @@ java/util/BitSet/stream/BitSetStreamTest.java https://github.com/eclipse-openj9/
 java/util/concurrent/forkjoin/FJExceptionTableLeak.java https://github.com/eclipse-openj9/openj9/issues/3209 generic-all
 java/util/concurrent/locks/Lock/TimedAcquireLeak.java https://github.com/eclipse-openj9/openj9/issues/7125 macosx-all,linux-all,aix-all
 java/util/concurrent/locks/Lock/OOMEInAQS.java https://github.com/eclipse-openj9/openj9/issues/16659 generic-all
+java/util/concurrent/StructuredTaskScope/StructuredTaskScopeTest.java#virtual https://github.com/eclipse-openj9/openj9/issues/21824 aix-all,linux-ppc64le
 java/util/concurrent/SynchronousQueue/Fairness.java https://github.com/eclipse-openj9/openj9/issues/18771 generic-all
 java/util/concurrent/TimeUnit/Basic.java https://github.com/adoptium/aqa-tests/issues/1665 windows-all
 java/util/logging/CheckZombieLockTest.java https://bugs.openjdk.java.net/browse/JDK-8148972 macosx-all,linux-all
@@ -490,8 +482,13 @@ java/util/stream/test/org/openjdk/tests/java/util/SplittableRandomTest.java http
 java/util/stream/test/org/openjdk/tests/java/util/stream/ToArrayOpTest.java https://github.com/eclipse-openj9/openj9/issues/3447 generic-all
 java/util/WeakHashMap/GCDuringIteration.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 java/util/zip/CloseInflaterDeflaterTest.java	https://github.com/eclipse-openj9/openj9/issues/14948	linux-s390x
+java/util/zip/DeflateIn_InflateOut.java https://github.com/eclipse-openj9/openj9/issues/21054 linux-s390x
 java/util/zip/ZipFile/TestCleaner.java https://github.com/eclipse-openj9/openj9/issues/8872  generic-all
 java/util/zip/ZipFile/ZipSourceCache.java https://github.com/eclipse-openj9/openj9/issues/18987 linux-s390x
+java/util/stream/test/org/openjdk/tests/java/util/stream/SpliteratorTest.java https://github.com/eclipse-openj9/openj9/issues/11135 generic-all
+java/util/concurrent/ExecutorService/SubmitTest.java https://github.com/eclipse-openj9/openj9/issues/21445 linux-ppc64le
+java/util/concurrent/ThreadPerTaskExecutor/ThreadPerTaskExecutorTest.java#virtual https://github.com/eclipse-openj9/openj9/issues/21445 generic-all
+java/util/stream/GatherersMapConcurrentTest.java https://github.com/eclipse-openj9/openj9/issues/21445 generic-all
 
 ############################################################################
 
@@ -529,8 +526,6 @@ vm/verifier/VerifyProtectedConstructor.java https://github.com/eclipse-openj9/op
 
 # jdk_foreign
 
-java/foreign/critical/TestCritical.java https://github.com/eclipse-openj9/openj9/issues/21018 generic-all
-java/foreign/passheapsegment/TestPassHeapSegment.java https://github.com/eclipse-openj9/openj9/issues/21019 generic-all
 java/foreign/stackwalk/TestAsyncStackWalk.java#default_gc https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
 java/foreign/stackwalk/TestAsyncStackWalk.java#shenandoah https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
 java/foreign/stackwalk/TestAsyncStackWalk.java#zgc https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
@@ -540,18 +535,20 @@ java/foreign/stackwalk/TestStackWalk.java#shenandoah https://github.com/eclipse-
 java/foreign/stackwalk/TestStackWalk.java#zgc https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
 java/foreign/upcalldeopt/TestUpcallDeopt.java https://github.com/eclipse-openj9/openj9/issues/13157 generic-all
 java/foreign/TestIllegalLink.java https://github.com/eclipse-openj9/openj9/issues/14002 generic-all
-java/foreign/TestLinker.java https://github.com/eclipse-openj9/openj9/issues/21017 generic-all
 java/foreign/TestUnsupportedPlatform.java https://github.com/eclipse-openj9/openj9/issues/14828 generic-all
 java/foreign/valist/VaListTest.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 
 java/foreign/TestStubAllocFailure.java https://github.com/eclipse-openj9/openj9/issues/18938 generic-all
 java/foreign/TestHFA.java https://github.com/eclipse-openj9/openj9/issues/18944 linux-ppc64le
 
+java/foreign/TestMappedHandshake.java https://github.com/eclipse-openj9/openj9/issues/20527 generic-all
+
 ############################################################################
 
 # serviceability
 
 serviceability/jvmti/GetLocalVariable/GetLocalVars.java https://github.com/eclipse-openj9/openj9/issues/15920 generic-all
+serviceability/jvmti/GetMethodDeclaringClass/TestUnloadedClass.java https://github.com/eclipse-openj9/openj9/issues/20676 generic-all
 serviceability/jvmti/HeapMonitor/MyPackage/HeapMonitorEventOnOffTest.java https://github.com/eclipse-openj9/openj9/issues/16184 generic-all
 serviceability/jvmti/HeapMonitor/MyPackage/HeapMonitorGCParallelTest.java https://github.com/eclipse-openj9/openj9/issues/16184 generic-all
 serviceability/jvmti/HeapMonitor/MyPackage/HeapMonitorArrayAllSampledTest.java https://github.com/eclipse-openj9/openj9/issues/16184 generic-all
@@ -600,6 +597,7 @@ serviceability/jvmti/thread/GetStackTrace/getstacktr03/getstacktr03.java https:/
 serviceability/jvmti/thread/GetStackTrace/getstacktr05/getstacktr05.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 serviceability/jvmti/vthread/VThreadNotifyFramePopTest/VThreadNotifyFramePopTest.java https://github.com/adoptium/aqa-tests/issues/1297 aix-all
 serviceability/jvmti/RedefineClasses/RedefinePreviousVersions.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
+serviceability/jvmti/RedefineClasses/RedefineVerifyError.java https://github.com/eclipse-openj9/openj9/issues/20708 generic-all
 serviceability/jvmti/vthread/ToggleNotifyJvmtiTest/ToggleNotifyJvmtiTest.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 serviceability/jvmti/vthread/HeapDump/VThreadInHeapDump.java#default https://github.com/eclipse-openj9/openj9/issues/18811 generic-all
 serviceability/jvmti/vthread/HeapDump/VThreadInHeapDump.java#no-vmcontinuations https://github.com/eclipse-openj9/openj9/issues/18811 generic-all

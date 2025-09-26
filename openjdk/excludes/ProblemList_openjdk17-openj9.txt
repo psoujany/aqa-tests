@@ -24,16 +24,16 @@
 
 # jdk_beans
 
-java/beans/XMLEncoder/java_awt_ScrollPane.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/6380849/TestPropertyEditor.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClass.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestColorClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClass.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
-java/beans/PropertyEditor/TestFontClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all
+java/beans/XMLEncoder/java_awt_ScrollPane.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/6380849/TestPropertyEditor.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClass.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestColorClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClass.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClassJava.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClassNull.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
+java/beans/PropertyEditor/TestFontClassValue.java https://github.com/eclipse-openj9/openj9/issues/20531 macosx-all,windows-all
 java/beans/Beans/TypoInBeanDescription.java https://github.ibm.com/runtimes/backlog/issues/1589 aix-all
 
 ############################################################################
@@ -241,14 +241,12 @@ java/io/FileOutputStream/UnreferencedFOSClosesFd.java https://github.com/eclipse
 java/nio/Buffer/DirectBufferAllocTest.java https://github.com/eclipse-openj9/openj9/issues/4473 generic-all
 java/nio/Buffer/LimitDirectMemory.java	https://github.com/eclipse-openj9/openj9/issues/8063	generic-all
 java/nio/Buffer/LimitDirectMemoryNegativeTest.java	https://github.com/eclipse-openj9/openj9/issues/8065	generic-all
-java/nio/channels/DatagramChannel/AdaptorMulticasting.java https://github.ibm.com/runtimes/backlog/issues/655 windows-all,linux-s390x,macosx-all
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1053 macosx-all
-#java/nio/channels/AsyncCloseAndInterrupt.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
-java/nio/channels/AsyncCloseAndInterrupt.java	https://github.com/adoptium/infrastructure/issues/1173 z/OS-s390x
+java/nio/channels/AsyncCloseAndInterrupt.java https://github.com/adoptium/aqa-tests/issues/6092 z/OS-s390x
 java/nio/channels/AsynchronousFileChannel/Basic.java https://bugs.openjdk.java.net/browse/JDK-7052549 windows-all
 java/nio/channels/AsynchronousSocketChannel/Basic.java	https://bugs.openjdk.java.net/browse/JDK-7052549	windows-all
-java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1594 aix-all
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/966 macosx-all
+java/nio/channels/DatagramChannel/AdaptorMulticasting.java https://github.ibm.com/runtimes/backlog/issues/655 windows-all,linux-s390x,macosx-all
+java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,windows-all
+java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,macosx-all,windows-all
 java/nio/channels/DatagramChannel/Disconnect.java https://github.com/eclipse-openj9/openj9/issues/20115 generic-all
 java/nio/channels/DatagramChannel/Loopback.java https://github.ibm.com/runtimes/backlog/issues/655 windows-all,linux-s390x
 #java/nio/channels/DatagramChannel/MulticastSendReceiveTests.java is excluded for two different reasons on different platforms https://github.com/adoptium/aqa-tests/issues/1016
@@ -267,7 +265,9 @@ java/nio/channels/FileChannel/TempDirectBuffersReclamation.java https://github.c
 java/nio/channels/FileChannel/directio/WriteDirect.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/nio/channels/Pipe/PipeInterrupt.java https://github.com/eclipse-openj9/openj9/issues/18479 windows-all
 java/nio/channels/Selector/OutOfBand.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
+java/nio/channels/Selector/OutOfBand.java#id0 https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/nio/channels/SocketChannel/AdaptSocket.java https://github.com/eclipse-openj9/openj9/issues/4317 macosx-all
+java/nio/file/attribute/BasicFileAttributeView/SetTimesNanos.java https://github.com/eclipse-openj9/openj9/issues/21959 windows-all
 java/nio/file/Files/CopyAndMove.java https://github.com/adoptium/aqa-tests/issues/795 macosx-all
 java/nio/MappedByteBuffer/MapSyncFail.java https://github.com/eclipse-openj9/openj9/issues/6831 generic-all
 jdk/nio/zipfs/ZipFSTester.java https://github.com/eclipse-openj9/openj9/issues/4679 linux-x64,macosx-all
@@ -338,8 +338,9 @@ sun/security/mscapi/SmallPrimeExponentP.java	https://github.ibm.com/runtimes/bac
 sun/security/mscapi/VeryLongAlias.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 sun/security/pkcs11/Provider/MultipleLogins.sh	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
 sun/security/pkcs11/Secmod/AddTrustedCert.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
-#sun/security/pkcs12/KeytoolOpensslInteropTest.java is not supported on z/OS
-sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/adoptium/aqa-tests/issues/1297	z/OS-s390x
+sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#GenerateOpensslPKCS12	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#UseExistingPKCS12	https://github.com/eclipse-openj9/openj9/issues/22262	z/OS-s390x
 sun/security/provider/SecureRandom/AbstractDrbg/SpecTest.java	https://github.ibm.com/runtimes/backlog/issues/809	linux-aarch64
 sun/security/provider/SecureRandom/StrongSecureRandom.java	https://github.ibm.com/runtimes/backlog/issues/809	linux-aarch64
 sun/security/rsa/PrivateKeyEqualityTest.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
@@ -349,6 +350,8 @@ sun/security/rsa/pss/SignatureTestPSS.java	https://github.ibm.com/runtimes/backl
 sun/security/ssl/CipherSuite/DisabledCurve.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all,z/OS-s390x
 sun/security/ssl/CipherSuite/NamedGroupsWithCipherSuite.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
 sun/security/ssl/CipherSuite/SupportedGroups.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Camerfirma.java https://github.com/eclipse-openj9/openj9/issues/21235 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Entrust.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
 sun/security/ssl/X509TrustManagerImpl/distrust/Symantec.java	https://github.com/eclipse-openj9/openj9/issues/16312	generic-all
 sun/security/ssl/X509TrustManagerImpl/Symantec/Distrust.java	https://github.com/adoptium/aqa-tests/issues/2123	generic-all
 sun/security/tools/jarsigner/PreserveRawManifestEntryAndDigest.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all
@@ -378,6 +381,7 @@ sun/security/krb5/auto/NoAddresses.java https://github.com/adoptium/aqa-tests/is
 ############################################################################
 
 # jdk_time
+java/time/test/java/time/TestClock_System.java https://github.com/eclipse-openj9/openj9/issues/20610 generic-all
 
 ############################################################################
 
@@ -479,7 +483,8 @@ java/foreign/TestNative.java https://github.com/adoptium/aqa-tests/issues/1297 z
 java/foreign/TestNULLAddress.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/foreign/TestNulls.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/foreign/TestUnsupportedPlatform.java https://github.com/eclipse-openj9/openj9/issues/14828 generic-all
-java/foreign/TestUpcall.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
+# On AIX, exclude java/foreign/TestUpcall.java via https://github.com/eclipse-openj9/openj9/pull/22208
+java/foreign/TestUpcall.java https://github.com/adoptium/aqa-tests/issues/1297 aix-all,z/OS-s390x
 java/foreign/TestUpcallException.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/foreign/TestUpcallHighArity.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/foreign/TestUpcallStructScope.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x

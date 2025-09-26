@@ -219,10 +219,13 @@ java/io/FileOutputStream/UnreferencedFOSClosesFd.java https://github.com/eclipse
 java/nio/Buffer/DirectBufferAllocTest.java https://github.com/eclipse-openj9/openj9/issues/4473 generic-all
 java/nio/Buffer/LimitDirectMemory.java	https://github.com/eclipse-openj9/openj9/issues/8063	generic-all
 java/nio/Buffer/LimitDirectMemoryNegativeTest.java	https://github.com/eclipse-openj9/openj9/issues/8065	generic-all
+#java/nio/channels/AsyncCloseAndInterrupt.java is excluded for aix-all because of https://github.com/eclipse-openj9/openj9/issues/21777
+java/nio/channels/AsyncCloseAndInterrupt.java https://github.com/adoptium/aqa-tests/issues/6092 aix-all,z/OS-s390x
 java/nio/channels/AsynchronousFileChannel/Basic.java https://bugs.openjdk.java.net/browse/JDK-7052549 windows-all
-java/nio/channels/AsynchronousSocketChannel/Basic.java	https://bugs.openjdk.java.net/browse/JDK-7052549	windows-all
+java/nio/channels/AsynchronousSocketChannel/Basic.java https://bugs.openjdk.java.net/browse/JDK-7052549 windows-all
+java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1622 windows-all
 #java/nio/channels/DatagramChannel/BasicMulticastTests.java  on macosx-all under https://github.ibm.com/runtimes/backlog/issues/1053
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.com/eclipse-openj9/openj9/issues/12795 aix-all,macosx-all
+java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,macosx-all,windows-all
 #java/nio/channels/DatagramChannel/MulticastSendReceiveTests.java is excluded for two different reasons on different platforms https://github.com/adoptium/aqa-tests/issues/1016
 #java/nio/channels/DatagramChannel/MulticastSendReceiveTests.java https://github.com/adoptium/infrastructure/issues/699 linux-s390x
 #java/nio/channels/DatagramChannel/MulticastSendReceiveTests.java is excluded for all platforms and java levels due to issue https://github.ibm.com/runtimes/backlog/issues/783
@@ -294,6 +297,9 @@ sun/security/mscapi/SmallPrimeExponentP.java	https://github.ibm.com/runtimes/bac
 sun/security/mscapi/VeryLongAlias.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 sun/security/pkcs11/Provider/MultipleLogins.sh	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
 sun/security/pkcs11/Secmod/AddTrustedCert.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#GenerateOpensslPKCS12	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#UseExistingPKCS12	https://github.com/eclipse-openj9/openj9/issues/22262	z/OS-s390x
 sun/security/provider/SecureRandom/AbstractDrbg/SpecTest.java	https://github.ibm.com/runtimes/backlog/issues/809 linux-aarch64
 sun/security/provider/SecureRandom/SHA1PRNGReseed.java	https://github.ibm.com/runtimes/backlog/issues/809 linux-aarch64
 sun/security/provider/SecureRandom/StrongSecureRandom.java	https://github.ibm.com/runtimes/backlog/issues/809 linux-aarch64
@@ -304,8 +310,17 @@ sun/security/rsa/pss/SignatureTestPSS.java	https://github.ibm.com/runtimes/backl
 sun/security/ssl/CipherSuite/DisabledCurve.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all,z/OS-s390x
 sun/security/ssl/CipherSuite/NamedGroupsWithCipherSuite.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
 sun/security/ssl/CipherSuite/SupportedGroups.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Camerfirma.java https://github.com/eclipse-openj9/openj9/issues/21235 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Entrust.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Symantec.java https://github.com/eclipse-openj9/openj9/issues/21380 generic-all
 sun/security/ssl/X509TrustManagerImpl/Symantec/Distrust.java	https://github.com/adoptium/aqa-tests/issues/2123	generic-all
 sun/security/tools/jarsigner/PreserveRawManifestEntryAndDigest.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all
+
+############################################################################
+
+# jdk_security4
+
+sun/security/krb5/auto/ReplayCacheTestProc.java https://github.com/eclipse-openj9/openj9/issues/21635 linux-all
 
 ############################################################################
 
@@ -326,6 +341,7 @@ sun/security/tools/jarsigner/PreserveRawManifestEntryAndDigest.java	https://gith
 ############################################################################
 
 # jdk_time
+java/time/test/java/time/TestClock_System.java https://github.com/eclipse-openj9/openj9/issues/20610 generic-all
 
 ############################################################################
 

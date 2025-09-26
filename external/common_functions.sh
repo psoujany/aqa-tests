@@ -29,7 +29,7 @@ supported_packages="jdk jre"
 supported_builds="full"
 
 # Supported tests
-supported_tests="external_custom camel criu-functional criu-portable-checkpoint criu-portable-restore criu-ubi-portable-checkpoint criu-ubi-portable-restore derby elasticsearch jacoco jenkins functional-test kafka lucene-solr openliberty-mp-tck payara-mp-tck quarkus quarkus_quickstarts scala system-test tck-ubi-test tomcat tomee wildfly wycheproof netty spring zookeeper"
+supported_tests="external_custom camel criu-functional criu-portable-checkpoint criu-portable-restore criu-ubi-portable-checkpoint criu-ubi-portable-restore portable_scc_CreateImageAndPushToRegistry_ubi9 portable_scc_pullImageTest_ubi9 derby elasticsearch jacoco jenkins functional-test kafka lucene-solr openliberty-mp-tck payara-mp-tck quarkus quarkus_quickstarts scala system-test tck-ubi-test tomcat tomee wildfly wycheproof netty spring zookeeper"
 
 # Set a valid version
 function set_version() {
@@ -200,11 +200,11 @@ function getMatchingPackagesKeys() {
 # Used for external_custom tests
 function set_external_custom_test_info(){
     test=$1
-    check_external_custom_test=$2
+    check_external_custom=$2
     github_url="${EXTERNAL_CUSTOM_REPO}"
     test_command="${EXTERNAL_TEST_CMD}"
     test_results="testResults"
-    tag_version="${EXTERNAL_REPO_BRANCH}"
+    tag_version="${EXTERNAL_CUSTOM_BRANCH}"
     environment_variable="MODE=java"
     maven_version="3.8.5"
     packages="git"
@@ -213,7 +213,7 @@ function set_external_custom_test_info(){
 # Set the valid OSes for the current architectures.
 function set_test_info() {
     local test=$1
-    check_external_custom_test=$2
+    check_external_custom=$2
     local  path_to_file=$(cd $(dirname "$0") && pwd)
     echo ${path_to_file}
     # global settings will be amend to local ones

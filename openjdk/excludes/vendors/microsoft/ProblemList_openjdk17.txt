@@ -13,6 +13,28 @@
 #############################################################################
 
 # hotspot_all
+runtime/ReservedStack/ReservedStackTest.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+runtime/ReservedStack/ReservedStackTestCompiler.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+
+## Apr 2025: problemlisting tests that have failed across multiple releases
+runtime/memory/ReadFromNoaccessArea.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+runtime/memory/ReserveMemory.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbDumpheap.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbCDSJstackPrintAll.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbFindPC.java#id0 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbFindPC.java#id1 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbFindPC.java#id2 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbFindPC.java#id3 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbJdis.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbJstack.java#id0 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbJstack.java#id1 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbJstackXcompStress.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbPmap.java#id1 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbPrintAs.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbPstack.java#id1 https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbSource.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+serviceability/sa/ClhsdbWhere.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
+runtime/os/windows/TestAvailableProcessors.java https://github.com/adoptium/aqa-tests/issues/4714 windows-aarch64
 
 ############################################################################
 
@@ -39,7 +61,6 @@
 
 # jdk_lang
 java/lang/ProcessBuilder/PipelineTest.java https://github.com/adoptium/aqa-tests/issues/4155 windows-aarch64
-java/lang/module/ModuleDescriptorHashCodeTest.java https://bugs.openjdk.org/browse/JDK-8290041 windows-aarch64,macosx-aarch64
 
 ############################################################################
 

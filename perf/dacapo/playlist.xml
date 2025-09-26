@@ -18,7 +18,7 @@
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) eclipse; \
 		$(TEST_STATUS)</command>
 		<versions>
-			<version>8</version>
+			<version>11+</version>
 		</versions>
 		<levels>
 			<level>sanity</level>
@@ -29,12 +29,12 @@
 	</test>
 	<test>
 		<testCaseName>dacapo-avrora</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/4745#issuecomment-1710101571</comment>
-				<version>21+</version>
-			</disable>
-		</disables>
+                <disables>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/4745#issuecomment-1710101571</comment>
+                                <version>21+</version>
+                        </disable>
+                </disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) avrora; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -46,6 +46,13 @@
 	</test>
 	<test>
 		<testCaseName>dacapo-fop</testCaseName>
+                <disables>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/4858#issuecomment-2968494739</comment>
+                                <version>8</version>
+                                <platform>s390x_linux</platform>
+                        </disable>
+                </disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) fop; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -57,6 +64,12 @@
 	</test>
 	<test>
 		<testCaseName>dacapo-h2</testCaseName>
+                <disables>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/4858#issuecomment-2968494739</comment>
+                                <version>8</version>
+                        </disable>
+                </disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) h2; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -68,18 +81,23 @@
 	</test>
 	<test>
 		<testCaseName>dacapo-jython</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/11942</comment>
-				<version>16+</version>
-				<impl>openj9</impl>
-			</disable>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/4711#issuecomment-1683178303</comment>
-				<version>11</version>
-				<platform>aarch64_windows</platform>
-			</disable>
-		</disables>
+                <disables>
+                        <disable>
+                                <comment>https://github.com/eclipse-openj9/openj9/issues/11942</comment>
+                                <version>16+</version>
+                                <impl>openj9</impl>
+                        </disable>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/4711#issuecomment-1683178303</comment>
+                                <version>11</version>
+                                <platform>aarch64_windows</platform>
+                        </disable>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/4858#issuecomment-2968494739</comment>
+                                <version>8</version>
+                                <platform>x86-64_windows|x86-32_windows</platform>
+                        </disable>
+                </disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) jython; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -99,14 +117,17 @@
 		<groups>
 			<group>perf</group>
 		</groups>
+		<versions>
+			<version>11+</version>
+		</versions>
 	</test>
 	<test>
 		<testCaseName>dacapo-lusearch-fix</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://github.com/adoptium/aqa-tests/issues/1888#issuecomment-755015959</comment>
-			</disable>
-		</disables>
+                <disables>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/1888#issuecomment-755015959</comment>
+                        </disable>
+                </disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) lusearch-fix; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -118,6 +139,16 @@
 	</test>
 	<test>
 		<testCaseName>dacapo-pmd</testCaseName>
+                <disables>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/4858#issuecomment-2968494739</comment>
+                                <platform>x86-64_windows|x86-32_windows</platform>
+                        </disable>
+                        <disable>
+                                <comment>https://github.com/adoptium/aqa-tests/issues/6563</comment>
+                                <platform>aarch64_windows</platform>
+                        </disable>
+                </disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) pmd; \
 		$(TEST_STATUS)</command>
 		<levels>
@@ -140,13 +171,11 @@
 	</test>
 	<test>
 		<testCaseName>dacapo-tomcat</testCaseName>
-		<disables>
-			<disable>
-				<comment>https://bugs.openjdk.java.net/browse/JDK-8155588</comment>
-			</disable>
-		</disables>
 		<command>$(JAVA_COMMAND) $(JVM_OPTIONS) -jar $(Q)$(TEST_RESROOT)$(D)dacapo.jar$(Q) tomcat; \
 		$(TEST_STATUS)</command>
+		<versions>
+    			<version>11+</version>
+		</versions>
 		<levels>
 			<level>extended</level>
 		</levels>

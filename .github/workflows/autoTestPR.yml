@@ -11,7 +11,7 @@ jobs:
     if: startsWith(github.event.comment.body, 'auto exclude test')
     steps:
       - name: Set up Python 3.8
-        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
+        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
         with:
           python-version: 3.8
       - name: check python version
@@ -21,11 +21,11 @@ jobs:
         run: |
           pip install lxml
       - name: checkout current repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           path: 'tests'
       - name: checkout TKG repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           repository: 'adoptium/TKG.git'
           ref: 'master'
@@ -41,7 +41,7 @@ jobs:
         run: |
           curl -u github-actions:${{ secrets.GITHUB_TOKEN }} -d '{ "body":  "The specified test cannot be excluded. Action run: https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}" }' -X POST ${{ github.event.issue.comments_url }}
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
         with:
           path: 'tests'
           title: '${{ github.event.comment.body }}'

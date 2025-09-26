@@ -1,22 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <playlist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../TKG/resources/playlist.xsd">
 	<include>../system.mk</include>
-	<!-- 
-	Special target to get machine information. This target is in each subfolder playlist.xml.
-	To avoid test target duplication, this belongs to sanity, extended and special. Regular test should only belong to one level -->
-	<test>
-		<testCaseName>MachineInfo</testCaseName>
-		<command>$(JAVA_COMMAND) -cp $(JVM_TEST_ROOT)$(D)TKG$(D)bin$(D)TestKitGen.jar org.openj9.envInfo.EnvDetector MachineInfo; \
-	$(TEST_STATUS)</command>
-		<levels>
-			<level>sanity</level>
-			<level>extended</level>
-			<level>special</level>
-		</levels>
-		<groups>
-			<group>system</group>
-		</groups>
-	</test>
+
 	<test>
 		<testCaseName>system_custom</testCaseName>
 		<variations>
@@ -35,6 +20,12 @@
 		<testCaseName>MiniMix_5m</testCaseName>
 		<disables>
 			<disable>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6072</comment>
+				<version>24+</version>
+				<impl>hotspot</impl>
+				<platform>x86-64_.*</platform>
+			</disable>
+			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/3819</comment>
 				<version>11+</version>
 				<impl>hotspot</impl>
@@ -50,6 +41,11 @@
 				<version>8</version>
 				<impl>hotspot</impl>
 				<platform>.*windows.*</platform>
+			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
@@ -70,6 +66,12 @@
 		<testCaseName>MiniMix_10m</testCaseName>
 		<disables>
 			<disable>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6072</comment>
+				<version>24+</version>
+				<impl>hotspot</impl>
+				<platform>x86-64_.*</platform>
+			</disable>
+			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/3819</comment>
 				<version>11+</version>
 				<impl>hotspot</impl>
@@ -85,6 +87,11 @@
 				<version>8</version>
 				<impl>hotspot</impl>
 				<platform>.*windows.*</platform>
+			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
@@ -104,6 +111,12 @@
 	<test>
 		<testCaseName>MiniMix_aot_5m</testCaseName>
 		<disables>
+			<disable>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6072</comment>
+				<version>24+</version>
+				<impl>hotspot</impl>
+				<platform>x86-64_.*</platform>
+			</disable>
 			<disable>
 				<comment>eclipse-openj9/openj9/issues/14165，https://github.com/adoptium/aqa-tests/issues/3230</comment>
 				<platform>x86-32_windows</platform>
@@ -125,6 +138,11 @@
 				<impl>hotspot</impl>
 				<platform>.*windows.*</platform>
 			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
 		</disables>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=MixedLoadTest -debug-generation -java-debug-args=$(Q)-Xmx3g -Xms3g$(Q) -test-args=$(Q)timeLimit=5m$(Q) -java-args-execute-initial=$(Q)$(ADD_OPENS_CMD) -Xmx3g -Xms3g$(Q); \
 	$(SYSTEMTEST_CMD_TEMPLATE) -test=MixedLoadTest -test-args=$(Q)timeLimit=5m$(Q) -java-args-execute-initial=$(Q)$(ADD_OPENS_CMD) -Xmx2g -Xms2g$(Q); \
@@ -138,6 +156,13 @@
 	</test>
 	<test>
 		<testCaseName>MiniMix_3h</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode551</variation>
 			<variation>Mode110-CS</variation>
@@ -156,7 +181,41 @@
 		</impls>
 	</test>
 	<test>
+		<testCaseName>MiniMix_extended_3h</testCaseName>
+		<disables>
+			<disable>
+				<comment>https://github.ibm.com/runtimes/backlog/issues/597</comment>
+				<variation>Mode150-CS</variation>
+				<platform>^(?!x86-64_linux$).*</platform>
+			</disable>
+		 </disables>
+		<variations>
+			<variation>Mode501</variation>
+			<variation>Mode150-CS</variation>
+		</variations>
+		<command>
+			$(SYSTEMTEST_CMD_TEMPLATE) -test=MixedLoadTest -test-args=$(Q)timeLimit=3h$(Q) -java-args-execute-initial=$(Q)$(ADD_OPENS_CMD)$(Q); $(TEST_STATUS)
+		</command>
+		<levels>
+			<level>extended</level>
+		</levels>
+		<groups>
+			<group>system</group>
+		</groups>
+		<impls>
+			<impl>openj9</impl>
+			<impl>ibm</impl>
+		</impls>
+	</test>
+	<test>
 		<testCaseName>ClassLoadingTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -173,6 +232,13 @@
 	</test>
 	<test>
 		<testCaseName>ClassLoadingTest_special_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode101</variation>
 			<variation>Mode103</variation>
@@ -233,6 +299,11 @@
 				<impl>hotspot</impl>
 				<platform>riscv64_linux</platform>
 			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
 		</disables>
 		<variations>
 			<variation>Mode150</variation>
@@ -251,6 +322,13 @@
 	<!-- Temporarily excluded from z/Os due to : jdk11-zos/issues/571-->
 	<test>
 		<testCaseName>DBBLoadTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -268,6 +346,13 @@
 	</test>
 	<test>
 		<testCaseName>LangLoadTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -284,6 +369,13 @@
 	</test>
 	<test>
 		<testCaseName>LockingLoadTest</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -302,6 +394,13 @@
 	<!-- Temporarily excluded from z/Os due to : jdk11-zos/issues/342-->
 	<test>
 		<testCaseName>NioLoadTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -319,6 +418,13 @@
 	</test>
 	<test>
 		<testCaseName>UtilLoadTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -335,6 +441,13 @@
 	</test>
 	<test>
 		<testCaseName>HCRLateAttachWorkload</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode150</variation>
 			<variation>Mode650</variation>
@@ -370,6 +483,11 @@
 				<impl>hotspot</impl>
 				<version>19+</version>
 			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
 		</disables>
 		<variations>
 			<variation>Mode150</variation>
@@ -394,6 +512,11 @@
 			<disable>
 				<comment>adoptium/aqa-systemtest/issues/63</comment>
 			</disable>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
 		</disables>
 		<variations>
 			<variation>Mode150</variation>
@@ -411,6 +534,13 @@
 	</test>
 	<test>
 		<testCaseName>HeapHogLoadTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode110</variation>
 			<variation>Mode610</variation>
@@ -430,6 +560,13 @@
 	</test>
 	<test>
 		<testCaseName>ObjectTreeLoadTest_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>Mode110</variation>
 			<variation>Mode610</variation>
@@ -450,6 +587,13 @@
 	<!-- The tests below are added to test concurrent scavenge on z/OS, z/Linux, x/Linux and x/Windows using 64-bit OpenJ9 SDK -->
 	<test>
 		<testCaseName>ClassLoadingTest_CS_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
 		<variations>
 			<variation>-Xgcpolicy:gencon -Xgc:concurrentScavenge</variation>
 		</variations>

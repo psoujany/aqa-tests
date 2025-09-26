@@ -124,6 +124,7 @@ java/lang/System/LoggerFinder/jdk/DefaultLoggerBridgeTest/DefaultLoggerBridgeTes
 java/lang/Thread/SleepSanity.java https://github.com/eclipse-openj9/openj9/issues/17638 windows-all
 java/lang/Thread/ThreadSleepEvent.java https://github.com/eclipse-openj9/openj9/issues/20166 generic-all
 java/lang/Thread/UncaughtExceptions.sh https://github.com/eclipse-openj9/openj9/issues/6690 generic-all
+java/lang/Thread/virtual/Collectable.java https://github.com/eclipse-openj9/openj9/issues/18463 linux-x64,windows-all
 java/lang/Thread/virtual/JfrEvents.java https://github.com/eclipse-openj9/openj9/issues/20166 generic-all
 java/lang/Thread/virtual/StackTraces.java https://github.com/eclipse-openj9/openj9/issues/16045 generic-all
 java/lang/Thread/virtual/stress/GetStackTraceALotWhenPinned.java#id0 https://github.com/eclipse-openj9/openj9/issues/18908 linux-s390x
@@ -263,6 +264,7 @@ java/io/FileOutputStream/UnreferencedFOSClosesFd.java https://github.com/eclipse
 java/nio/Buffer/DirectBufferAllocTest.java https://github.com/eclipse-openj9/openj9/issues/4473 generic-all
 java/nio/Buffer/LimitDirectMemory.java https://github.com/eclipse-openj9/openj9/issues/8063 generic-all
 java/nio/Buffer/LimitDirectMemoryNegativeTest.java https://github.com/eclipse-openj9/openj9/issues/8065 generic-all
+java/nio/channels/AsyncCloseAndInterrupt.java https://github.com/eclipse-openj9/openj9/issues/21777 aix-all
 java/nio/channels/AsynchronousChannelGroup/Basic.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/AsynchronousChannelGroup/GroupOfOne.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/AsynchronousChannelGroup/Identity.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
@@ -279,8 +281,8 @@ java/nio/channels/Channels/Basic2.java https://github.ibm.com/runtimes/backlog/i
 java/nio/channels/Channels/TransferTo.java https://github.com/eclipse-openj9/openj9/issues/15040 linux-all
 java/nio/channels/DatagramChannel/AdaptorBasic.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/AdaptorMulticasting.java https://github.ibm.com/runtimes/backlog/issues/655 linux-s390x,windows-all,macosx-all
-java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1594 aix-all
-java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1053 macosx-all
+java/nio/channels/DatagramChannel/AfterDisconnect.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,windows-all
+java/nio/channels/DatagramChannel/BasicMulticastTests.java https://github.ibm.com/runtimes/backlog/issues/1622 aix-all,macosx-all,windows-all
 java/nio/channels/DatagramChannel/ConnectedSend.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/Disconnect.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/DatagramChannel/EmptyBuffer.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
@@ -303,6 +305,10 @@ java/nio/channels/etc/NetworkChannelTests.java https://github.ibm.com/runtimes/b
 java/nio/channels/FileChannel/LargeGatheringWrite.java https://github.ibm.com/runtimes/backlog/issues/684 generic-all
 java/nio/channels/FileChannel/Transfer.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/FileChannel/TransferTo6GBFile.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
+java/nio/channels/FileChannel/directio/PreadDirect.java https://github.com/adoptium/aqa-tests/issues/6447 z/OS-s390x
+java/nio/channels/FileChannel/directio/PwriteDirect.java https://github.com/adoptium/aqa-tests/issues/6447 z/OS-s390x
+java/nio/channels/FileChannel/directio/ReadDirect.java https://github.com/adoptium/aqa-tests/issues/6447 z/OS-s390x
+java/nio/channels/FileChannel/directio/WriteDirect.java https://github.com/adoptium/aqa-tests/issues/6447 z/OS-s390x
 java/nio/channels/Pipe/PipeInterrupt.java https://github.com/eclipse-openj9/openj9/issues/18479 windows-all
 java/nio/channels/Selector/Alias.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/Selector/BasicAccept.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
@@ -338,6 +344,7 @@ java/nio/channels/SocketChannel/VectorIO.java https://github.ibm.com/runtimes/ba
 java/nio/channels/SocketChannel/VectorParams.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/SocketChannel/Write.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
 java/nio/channels/spi/SelectorProvider/inheritedChannel/InheritedChannelTest.java https://github.ibm.com/runtimes/backlog/issues/741 generic-all
+java/nio/file/attribute/BasicFileAttributeView/SetTimesNanos.java https://github.com/eclipse-openj9/openj9/issues/21959 windows-all
 java/nio/file/Files/CopyAndMove.java https://github.com/adoptium/aqa-tests/issues/795 macosx-all
 java/nio/file/Files/probeContentType/Basic.java https://github.ibm.com/runtimes/backlog/issues/655 windows-all
 java/nio/MappedByteBuffer/MapSyncFail.java https://github.com/eclipse-openj9/openj9/issues/6831 generic-all
@@ -374,13 +381,21 @@ java/security/Signature/SignatureLength.java    https://github.com/eclipse-openj
 
 ############################################################################
 
+# jdk_security2
+
+javax/crypto/CryptoPermissions/InconsistentEntries.java https://github.com/eclipse-openj9/openj9/issues/22394 windows-all
+
+############################################################################
+
 # jdk_security3
 
 javax/net/ssl/ServerName/SSLEngineExplorerWithCli.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all,aix-all
 javax/net/ssl/SSLEngine/LargePacket.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all,aix-all,windows-all
 javax/net/ssl/SSLSocket/Tls13PacketSize.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 javax/net/ssl/TLSv11/TLSEnginesClosureTest.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all
+sun/security/ec/SignatureParameters.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 sun/security/ec/TestEC.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
+sun/security/ec/ed/TestEdDSA.java https://github.com/adoptium/aqa-tests/issues/6447 z/OS-s390x
 sun/security/lib/cacerts/VerifyCACerts.java	https://github.com/adoptium/aqa-tests/issues/2123	generic-all
 sun/security/mscapi/CastError.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 sun/security/mscapi/CngCipher.java 	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
@@ -400,12 +415,17 @@ sun/security/mscapi/SmallPrimeExponentP.java	https://github.ibm.com/runtimes/bac
 sun/security/mscapi/VeryLongAlias.java	https://github.ibm.com/runtimes/backlog/issues/795	windows-all
 sun/security/pkcs11/Provider/MultipleLogins.sh	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
 sun/security/pkcs11/Secmod/AddTrustedCert.java	https://github.ibm.com/runtimes/backlog/issues/795	linux-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#GenerateOpensslPKCS12	https://github.com/eclipse-openj9/openj9/issues/21964	generic-all
+sun/security/pkcs12/KeytoolOpensslInteropTest.java#UseExistingPKCS12	https://github.com/eclipse-openj9/openj9/issues/22262	z/OS-s390x
 sun/security/rsa/PrivateKeyEqualityTest.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTest2.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/rsa/pss/SignatureTestPSS.java	https://github.ibm.com/runtimes/backlog/issues/795	macosx-all
 sun/security/ssl/CipherSuite/DisabledCurve.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
 sun/security/ssl/CipherSuite/NamedGroupsWithCipherSuite.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
 sun/security/ssl/CipherSuite/SupportedGroups.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all,windows-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Camerfirma.java https://github.com/eclipse-openj9/openj9/issues/21235 generic-all
+sun/security/ssl/X509TrustManagerImpl/distrust/Entrust.java https://github.com/adoptium/aqa-tests/issues/3976 generic-all
 sun/security/ssl/X509TrustManagerImpl/distrust/Symantec.java	https://github.com/eclipse-openj9/openj9/issues/16312	generic-all
 sun/security/ssl/X509TrustManagerImpl/Symantec/Distrust.java	https://github.com/adoptium/aqa-tests/issues/2123	generic-all
 sun/security/tools/jarsigner/PreserveRawManifestEntryAndDigest.java	https://github.ibm.com/runtimes/backlog/issues/795	aix-all
@@ -437,6 +457,7 @@ sun/security/krb5/auto/NoAddresses.java https://github.com/adoptium/aqa-tests/is
 ############################################################################
 
 # jdk_time
+java/time/test/java/time/TestClock_System.java https://github.com/eclipse-openj9/openj9/issues/20610 generic-all
 
 ############################################################################
 
@@ -453,6 +474,7 @@ sun/security/krb5/auto/NoAddresses.java https://github.com/adoptium/aqa-tests/is
 java/util/Arrays/largeMemory/ParallelPrefix.java https://github.com/eclipse-openj9/openj9/issues/4100 linux-ppc64le
 java/util/Arrays/TimSortStackSize2.java https://github.com/eclipse-openj9/openj9/issues/7086 generic-all
 java/util/BitSet/stream/BitSetStreamTest.java https://github.com/eclipse-openj9/openj9/issues/4720 linux-all
+java/util/concurrent/Executors/UnreferencedExecutor.java https://github.com/eclipse-openj9/openj9/issues/22665 aix-all
 java/util/concurrent/forkjoin/FJExceptionTableLeak.java https://github.com/eclipse-openj9/openj9/issues/3209 generic-all
 java/util/concurrent/locks/Lock/TimedAcquireLeak.java https://github.com/eclipse-openj9/openj9/issues/7125 macosx-all,linux-all,aix-all
 java/util/concurrent/locks/Lock/OOMEInAQS.java https://github.com/eclipse-openj9/openj9/issues/16659 generic-all
@@ -469,6 +491,7 @@ java/util/stream/test/org/openjdk/tests/java/util/SplittableRandomTest.java http
 java/util/stream/test/org/openjdk/tests/java/util/stream/ToArrayOpTest.java https://github.com/eclipse-openj9/openj9/issues/3447 generic-all
 java/util/WeakHashMap/GCDuringIteration.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 java/util/zip/CloseInflaterDeflaterTest.java	https://github.com/eclipse-openj9/openj9/issues/14948	linux-s390x
+java/util/zip/DeflateIn_InflateOut.java https://github.com/eclipse-openj9/openj9/issues/21054 linux-s390x
 java/util/zip/ZipFile/TestCleaner.java https://github.com/eclipse-openj9/openj9/issues/8872  generic-all
 
 ############################################################################
@@ -514,11 +537,15 @@ java/foreign/stackwalk/TestReentrantUpcalls.java https://github.com/eclipse-open
 java/foreign/stackwalk/TestStackWalk.java#default_gc https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
 java/foreign/stackwalk/TestStackWalk.java#shenandoah https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
 java/foreign/stackwalk/TestStackWalk.java#zgc https://github.com/eclipse-openj9/openj9/issues/13993 generic-all
-java/foreign/upcalldeopt/TestUpcallDeopt.java https://github.com/eclipse-openj9/openj9/issues/13157 generic-all
-java/foreign/TestIllegalLink.java https://github.com/eclipse-openj9/openj9/issues/14002 generic-all
-java/foreign/TestUnsupportedPlatform.java https://github.com/eclipse-openj9/openj9/issues/14828 generic-all
+java/foreign/TestFallbackLookup.java https://github.com/adoptium/aqa-tests/issues/1297 z/OS-s390x
 java/foreign/TestHandshake.java https://github.com/eclipse-openj9/openj9/issues/13211 generic-all
 java/foreign/TestHFA.java https://github.com/eclipse-openj9/openj9/issues/17953 linux-ppc64le
+java/foreign/TestIllegalLink.java https://github.com/eclipse-openj9/openj9/issues/14002 generic-all
+java/foreign/TestUnsupportedPlatform.java https://github.com/eclipse-openj9/openj9/issues/14828 generic-all
+java/foreign/TestUpcallAsync.java https://github.com/eclipse-openj9/openj9/issues/22403 aix-all
+java/foreign/TestUpcallScope.java https://github.com/eclipse-openj9/openj9/issues/22403 aix-all
+java/foreign/TestUpcallStack.java https://github.com/eclipse-openj9/openj9/issues/22403 aix-all
+java/foreign/upcalldeopt/TestUpcallDeopt.java https://github.com/eclipse-openj9/openj9/issues/13157 generic-all
 java/foreign/valist/VaListTest.java https://github.com/adoptium/aqa-tests/issues/1297 generic-all
 
 ############################################################################
@@ -530,6 +557,7 @@ java/foreign/valist/VaListTest.java https://github.com/adoptium/aqa-tests/issues
 # serviceability
 
 serviceability/jvmti/GetLocalVariable/GetLocalVars.java https://github.com/eclipse-openj9/openj9/issues/15920 generic-all
+serviceability/jvmti/GetMethodDeclaringClass/TestUnloadedClass.java https://github.com/eclipse-openj9/openj9/issues/20676 generic-all
 serviceability/jvmti/HeapMonitor/MyPackage/HeapMonitorEventOnOffTest.java https://github.com/eclipse-openj9/openj9/issues/16184 generic-all
 serviceability/jvmti/HeapMonitor/MyPackage/HeapMonitorGCParallelTest.java https://github.com/eclipse-openj9/openj9/issues/16184 generic-all
 serviceability/jvmti/HeapMonitor/MyPackage/HeapMonitorArrayAllSampledTest.java https://github.com/eclipse-openj9/openj9/issues/16184 generic-all
