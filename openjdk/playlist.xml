@@ -3982,4 +3982,18 @@
 			<feature>OpenJCEPlus:nonapplicable</feature>
 		</features>
 	</test>
+	<test>
+		<testCaseName>run_tests_with_openjceplus</testCaseName>
+		<command>sh  run_tests_with_openjceplus.sh -t tests_to_run_with_openjceplus.txt -j $(Q)$(TEST_RESROOT)$(D)jtreg$(D)lib$(D)jtreg.jar$(Q) \
+	-d $(Q)$(TEST_JDK_HOME)$(Q) \
+	-o $(Q)$(JTREG_JDK_TEST_DIR)$(Q) \
+	-r $(Q)$(REPORTDIR)$(D)report$(Q); \
+	$(TEST_STATUS)</command>
+		<levels>
+			<level>special</level>
+		</levels>
+		<groups>
+			<group>openjdk</group>
+		</groups>
+	</test>
 </playlist>
