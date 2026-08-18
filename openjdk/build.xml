@@ -321,7 +321,12 @@
 			<fileset dir="${src}" includes="*.xml,**/ProblemList_openjdk28-openj9.txt,**/ProblemList_openjdkvalhalla-openj9.txt,*.mk"/>
 		</copy>
 		<copy todir="${DEST}" unless:set="is_openj9_valhalla">
-			<fileset dir="${src}" includes="*.xml,**/ProblemList_openjdk${env.JDK_VERSION}*.txt,*.mk,run_tests_with_openjceplus.sh,tests_to_run_with_openjceplus.txt"/>
+			<fileset dir="${src}" includes="*.xml,**/ProblemList_openjdk${env.JDK_VERSION}*.txt,*.mk"/>
+		</copy>
+		<!-- Copy .sh and .txt files with matching encoding/outputencoding to prevent
+		     z/OS from transcoding the file content (EBCDIC <-> ASCII conversion). -->
+		<copy todir="${DEST}" encoding="ISO-8859-1" outputencoding="ISO-8859-1" unless:set="is_openj9_valhalla">
+			<fileset dir="${src}" includes="run_tests_with_openjceplus.sh,tests_to_run_with_openjceplus.txt"/>
 		</copy>
 	</target>
 
