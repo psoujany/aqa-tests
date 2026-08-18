@@ -140,14 +140,6 @@ if [ -z "${JDK_HOME}" ] || [ ! -x "${JDK_HOME}/bin/java" ]; then
     exit 2
 fi
 
-# ── resolve test directory ────────────────────────────────────────────────────
-JDK_VERSION=$("${JDK_HOME}/bin/java" -version 2>&1 | awk -F '"' '/version/{print $2}' | cut -d. -f1)
-if [ "${JDK_VERSION}" = "1" ]; then
-    TEST_BASE="${OPENJDK_DIR}/jdk/test"
-else
-    TEST_BASE="${OPENJDK_DIR}/test/jdk"
-fi
-
 mkdir -p "${RESULTS_DIR}"
 
 # ── portable in-place sed via temp file ───────────────────────────────────────
@@ -214,7 +206,7 @@ total=$(echo "${FILES_INPUT}" | tr ',' '\n' | wc -l | tr -d ' ')
 section "Starting sequential test run  (${total} file(s))"
 info "jtreg   : ${JTREG_JAR}"
 info "JDK     : ${JDK_HOME}"
-info "TestBase: ${TEST_BASE}"
+info "TestBase: ${OPENJDK_DIR}"
 info "Results : ${RESULTS_DIR}"
 
 # Iterate over comma-separated list
@@ -225,7 +217,7 @@ for rel_path in ${FILES_INPUT}; do
 
     # Trim whitespace
     rel_path=$(echo "${rel_path}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-    full_path="${TEST_BASE}/${rel_path}"
+    full_path="${OPENJDK_DIR}/${rel_path}"
 
     section "Processing: ${rel_path}"
 
