@@ -325,7 +325,7 @@
 		</copy>
 		<!-- Copy .sh and .txt files with matching encoding/outputencoding to prevent
 		     z/OS from transcoding the file content (EBCDIC <-> ASCII conversion). -->
-		<copy todir="${DEST}" encoding="ISO-8859-1" outputencoding="ISO-8859-1" unless:set="is_openj9_valhalla">
+		<copy todir="${DEST}" encoding="ISO-8859-1" outputencoding="IBM-1047" unless:set="is_openj9_valhalla">
 			<fileset dir="${src}" includes="run_tests_with_openjceplus.sh,tests_to_run_with_openjceplus.txt"/>
 		</copy>
 	</target>
