@@ -20,6 +20,8 @@
 	<import file="./common.xml"/>
 	<!-- set properties for this build -->
 	<property name="SYSTEMTEST_DEST" value="${BUILD_ROOT}/system" />
+	<!-- expose environment so ${env.INTEROP} etc. are resolvable -->
+	<property environment="env" />
 
 	<target name="init">
 		<mkdir dir="${SYSTEMTEST_DEST}" />
@@ -27,6 +29,10 @@
 
 	<target name="build" depends="dist,common_build">
 		<property name="common_build.executed" value="true" />
+		<!-- If INTEROP env var is set (testList contains 'interop'), propagate interop=true to sub-builds -->
+		<condition property="interop" value="true">
+			<equals arg1="${env.INTEROP}" arg2="true" />
+		</condition>
 		<subant target="" inheritall="true">
 			<fileset dir="." includes="*/build.xml" />
 		</subant>

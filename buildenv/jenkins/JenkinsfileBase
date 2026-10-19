@@ -762,6 +762,14 @@ def buildTest() {
 			env.NATIVE_TEST_LIBS = "$WORKSPACE/jdkbinary/openjdk-test-image/openj9"
 		}
 
+		// If TARGET (testList) contains 'interop', set interop=true so it is passed
+		// as an Ant property (via the environment) to the build.xml of the matching
+		// build_list (e.g. system/build.xml reads ${env.INTEROP} via inheritall="true").
+		if (params.TARGET && params.TARGET.contains('interop')) {
+			env.INTEROP = 'true'
+			echo "testList contains 'interop': setting INTEROP=true for ${env.BUILD_LIST}/build.xml"
+		}
+
 		if (!params.DYNAMIC_COMPILE) {
 			if(params.CUSTOMIZED_SDK_URL_CREDENTIAL_ID) {
 				withCredentials([usernamePassword(credentialsId: "${params.CUSTOMIZED_SDK_URL_CREDENTIAL_ID}",
