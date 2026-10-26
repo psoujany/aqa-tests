@@ -17,9 +17,14 @@
 		<testCaseName>CryptoTests</testCaseName>
 		<disables>
 			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/16712</comment>
-				<version>19+</version>
+				<comment>https://github.com/eclipse-openj9/openj9/issues/16712, https://github.ibm.com/runtimes/backlog/issues/1739, https://github.com/eclipse-openj9/openj9/issues/23342</comment>
+				<version>8+</version>
 				<impl>openj9</impl>
+			</disable>
+			<disable>
+				<comment>https://github.com/eclipse-openj9/openj9/issues/16712</comment>
+				<version>8+</version>
+				<impl>ibm</impl>
 			</disable>
 			<disable>
 				<comment>https://github.com/eclipse-openj9/openj9/issues/16710</comment>
@@ -36,8 +41,7 @@
 				<platform>.*solaris</platform>
 			</disable>
 			<disable>
-				<comment>This target is for those using GH actions or the Jenkins jtreg-plugin. The run.sh script provides extra functionality, tarring of results, downloading of bespoke jtreg.jar from a particular untagged commit SHA that is not yet upstreamed to a release version of jtreg that is used to see complete output in jtr.xml files. In addition, it simplifies enable/disable of kerberos-based tests which needs remote, pre-set KDC.
-				</comment>
+				<comment># This target is for those using GH actions or the Jenkins jtreg-plugin. The run.sh script provides extra functionality, tarring of results, downloading of bespoke jtreg.jar from a particular untagged commit SHA that is not yet upstreamed to a release version of jtreg that is used to see complete output in jtr.xml files. In addition, it simplifies enable/disable of kerberos-based tests which needs remote, pre-set KDC.</comment>
 			</disable>
 		</disables>
 		<command>
@@ -63,13 +67,13 @@
 		<testCaseName>CryptoTests_jtreg</testCaseName>
 		<disables>
 			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/16712</comment>
-				<version>19+</version>
+				<comment>https://github.com/eclipse-openj9/openj9/issues/16712, https://github.ibm.com/runtimes/backlog/issues/1739, https://github.com/eclipse-openj9/openj9/issues/23342</comment>
+				<version>8+</version>
 				<impl>openj9</impl>
 			</disable>
 			<disable>
 				<comment>https://github.com/eclipse-openj9/openj9/issues/16712</comment>
-				<version>21+</version>
+				<version>8+</version>
 				<impl>ibm</impl>
 			</disable>
 			<disable>

@@ -4,6 +4,7 @@
 # misc auto generated folders
 bin
 !perf/liberty/scripts/bin
+/output
 
 # misc auto generated files
 autoGen.mk
@@ -28,3 +29,8 @@ openjdk/*.gz
 /.project
 /job.properties
 .vscode/
+
+# Python cache
+__pycache__/
+*.pyc
+*.egg-info/

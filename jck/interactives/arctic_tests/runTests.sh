@@ -27,9 +27,9 @@ setupLinuxEnv() {
     export ARCTIC_JDK=/usr/bin/java
 
     echo "Fonts:"
-	echo "==========================================="
+	echo "-------------------------------------------"
 	find /usr/share/fonts -name "*" -type d
-	echo "==========================================="
+	echo "-------------------------------------------"
 
 	cp /etc/X11/twm/system.twmrc $HOME/.twmrc
 	echo 'RightTitleButton "xlogo11" = f.delete' >> $HOME/.twmrc
@@ -45,19 +45,19 @@ setupLinuxEnv() {
 
 	# Ensure consistent colors
 	sed -i 's/BorderColor.*$/BorderColor "slategrey"/g' $HOME/.twmrc
-	sed -i 's/DefaultBackground.*$/DefaultBackground "rgb:2\\/a\\/9"/g' $HOME/.twmrc
+	sed -i 's/DefaultBackground.*$/DefaultBackground "rgb:2\/a\/9"/g' $HOME/.twmrc
 	sed -i 's/DefaultForeground.*$/DefaultForeground "gray85"/g' $HOME/.twmrc
-	sed -i 's/TitleBackground.*$/TitleBackground "rgb:2\\/a\\/9"/g' $HOME/.twmrc
+	sed -i 's/TitleBackground.*$/TitleBackground "rgb:2\/a\/9"/g' $HOME/.twmrc
 	sed -i 's/TitleForeground.*$/TitleForeground "gray85"/g' $HOME/.twmrc
-	sed -i 's/MenuBackground.*$/MenuBackground "rgb:2\\/a\\/9"/g' $HOME/.twmrc
+	sed -i 's/MenuBackground.*$/MenuBackground "rgb:2\/a\/9"/g' $HOME/.twmrc
 	sed -i 's/MenuForeground.*$/MenuForeground "gray85"/g' $HOME/.twmrc
 	sed -i 's/MenuBorderColor.*$/MenuBorderColor "slategrey"/g' $HOME/.twmrc
 	sed -i 's/MenuTitleBackground.*$/MenuTitleBackground "gray70"/g' $HOME/.twmrc
-	sed -i 's/MenuTitleForeground.*$/MenuTitleForeground "rgb:2\\/a\\/9"/g' $HOME/.twmrc
-	sed -i 's/IconBackground.*$/IconBackground "rgb:2\\/a\\/9"/g' $HOME/.twmrc
+	sed -i 's/MenuTitleForeground.*$/MenuTitleForeground "rgb:2\/a\/9"/g' $HOME/.twmrc
+	sed -i 's/IconBackground.*$/IconBackground "rgb:2\/a\/9"/g' $HOME/.twmrc
 	sed -i 's/IconForeground.*$/IconForeground "gray85"/g' $HOME/.twmrc
 	sed -i 's/IconBorderColor.*$/IconBorderColor "gray85"/g' $HOME/.twmrc
-	sed -i 's/IconManagerBackground.*$/IconManagerBackground "rgb:2\\/a\\/9"/g' $HOME/.twmrc
+	sed -i 's/IconManagerBackground.*$/IconManagerBackground "rgb:2\/a\/9"/g' $HOME/.twmrc
 	sed -i 's/IconManagerForeground.*$/IconManagerForeground "gray85"/g' $HOME/.twmrc
 
 	# Start twm
@@ -129,9 +129,9 @@ cat <<EOF > ListJavaFonts.java
 EOF
 
         javac ListJavaFonts.java
-        echo "================================================"
+        echo "------------------------------------------------"
         java ListJavaFonts
-        echo "================================================"
+        echo "------------------------------------------------"
 
 }
 
@@ -149,13 +149,15 @@ TEST_GROUP=$1
 SPEC=$2
 VERSION=$3
 JCK_VERSION_NUMBER=$4
-TEST_SUB_DIR=$5
+TEST_DIR_OR_CASES="${*:5}"
 STARTING_SCOPE=$VERSION
-if [ $VERSION -eq 8 ]; then
+if [ "$VERSION" -eq 8 ]; then
     STARTING_SCOPE="default"
 fi
 
 OSNAME="Unknown"
+ARCTIC_BACKEND_OPTIONS=""
+ARCTIC_TESTCASE_OPTIONS=""
 if [[ $SPEC =~ osx.* ]]; then
     OSNAME="mac"
     JENKINS_HOME_DIR="/Users/jenkins"
@@ -168,30 +170,31 @@ elif [[ $SPEC =~ linux.* ]]; then
     setupLinuxEnv
 elif [[ $SPEC =~ win.* ]]; then
     OSNAME="windows"
+    ARCTIC_BACKEND_OPTIONS="-Djava.awt.headless=false"
+    ARCTIC_TESTCASE_OPTIONS="-Djava.awt.headless=false"
     JENKINS_HOME_DIR="c:/Users/jenkins"
     PPROP_LINE='s#arctic.common.repository.json.path.*$#arctic.common.repository.json.path = c:/Users/jenkins/jck_run/arctic/windows/arctic_tests#g'
     setupWindowsEnv
 fi
 
-ARCTIC_GROUP="${TEST_SUB_DIR}"
-if [ $TEST_GROUP = "custom" ]; then
-    if [[ -z $TEST_SUB_DIR ]]; then
+# Echo ARCTIC_JDK version
+echo "Using ARCTIC_JDK=${ARCTIC_JDK}"
+echo "##############################"
+$ARCTIC_JDK -version &> arctic_jdk.info
+cat arctic_jdk.info
+echo "##############################"
+
+if [[ $TEST_GROUP =~ "custom" ]]; then
+    if [ -z "$TEST_DIR_OR_CASES" ]; then
         echo "Custom: No custom Arctic groups specified, skipping."
         exit 0
     fi
 
-    if [[ $TEST_SUB_DIR == api/java_awt/* ]]; then
-        ARCTIC_GROUP="api/java_awt"
-    elif [[ $TEST_SUB_DIR == api/javax_swing/* ]]; then    
-        ARCTIC_GROUP="api/javax_swing"
-    else
-        echo "ERROR: custom Arctic target $TEST_SUB_DIR, is not a known group (api/java_awt, api/javax_swing)"
-        exit 1
-    fi
-    # Strip ARCTIC_GROUP/ from front
-    CUSTOM_ARCTIC_TESTCASE=${TEST_SUB_DIR/$ARCTIC_GROUP/}
-    CUSTOM_ARCTIC_TESTCASE=${CUSTOM_ARCTIC_TESTCASE:1}
-    echo "Running custom target: $ARCTIC_GROUP $CUSTOM_ARCTIC_TESTCASE"
+    ARCTIC_GROUPS="api/java_awt api/javax_swing"
+    echo "Running custom target: '$ARCTIC_GROUPS' $TEST_DIR_OR_CASES"
+else
+    # Not custom, so TEST_DIR_OR_CASES will be just the group name
+    ARCTIC_GROUPS="${TEST_DIR_OR_CASES}"
 fi
 
 JCK_MATERIAL="$JENKINS_HOME_DIR/jck_root/JCK${VERSION}-unzipped/JCK-runtime-${JCK_VERSION_NUMBER}"
@@ -200,6 +203,8 @@ if [ $SPEC = "linux_ppc-64_le" ]; then
     wget -q https://ci.adoptium.net/job/Build_Arctic_ppc64le_linux/lastSuccessfulBuild/artifact/upload/arctic-0.8.1.jar
 elif [ $SPEC = "linux_390-64" ]; then
     wget -q https://ci.adoptium.net/job/Build_Arctic_s390x_linux/lastSuccessfulBuild/artifact/upload/arctic-0.8.1.jar
+elif [ $SPEC = "win_aarch64" ]; then
+	wget -q https://ci.adoptium.net/job/Build_Arctic_aarch64_windows/lastSuccessfulBuild/artifact/upload/arctic-0.8.1.jar
 else
     wget -q https://ci.adoptium.net/job/Build_Arctic/lastSuccessfulBuild/artifact/upload/arctic-0.8.1.jar
 fi
@@ -219,12 +224,16 @@ if [ ! -f ${LIB_DIR}/arctic.jar ]; then
     ls -al ${LIB_DIR}
 fi
 
-echo "==========================================================================="
+echo "--------------------------------------------------------------------------"
 cat player.properties
-echo "==========================================================================="
+echo "---------------------------------------------------------------------------"
 
 echo "Starting player in background with RMI..."
-$ARCTIC_JDK -Darctic.scope=$VERSION -Darctic.logLevel=TRACE -jar ${LIB_DIR}/arctic.jar -p &
+ARCTIC_CMD="$ARCTIC_JDK $ARCTIC_BACKEND_OPTIONS -Darctic.scope=$VERSION -Darctic.logLevel=TRACE -jar ${LIB_DIR}/arctic.jar -p"
+
+echo $ARCTIC_CMD
+$ARCTIC_CMD &
+
 rc=$?
 if [ $rc -ne 0 ]; then
    echo "Unable to start Arctic player, rc=$rc"
@@ -248,7 +257,10 @@ overallSuccess=true
 FOUND_TESTS=()
 PASSED_TESTS=()
 FAILED_TESTS=()
-for i in "${active_versions[@]}"; do
+
+# Iterate over the selected ARCTIC_GROUPS
+for ARCTIC_GROUP in $ARCTIC_GROUPS; do
+ for i in "${active_versions[@]}"; do
   if [[ "$i" == "default" ]] || [[ "$i" -le "${VERSION}" ]]; then
     START_DIR="${TOP_DIR}/${i}/${ARCTIC_GROUP}"
     # Remove any double slashes
@@ -295,13 +307,13 @@ for i in "${active_versions[@]}"; do
           FOUND=false
           for test in "${FOUND_TESTS[@]}"
           do
-            if [[ "$test" == "$ARCTIC_TESTCASE" ]]; then
+            if [[ "$test" == "${ARCTIC_GROUP}/${ARCTIC_TESTCASE}" ]]; then
               FOUND=true
             fi
           done
 
           if [[ $FOUND == false ]]; then
-            FOUND_TESTS+=("${ARCTIC_TESTCASE}")
+            FOUND_TESTS+=("${ARCTIC_GROUP}/${ARCTIC_TESTCASE}")
 
             # Get class name from JCK .html
             TEST_CLASS=$(grep "javasoft.sqe.tests" ${HTML_FILE} | head -1 | sed -e 's/ //g' -e 's/<[^>]*>//g')
@@ -312,16 +324,18 @@ for i in "${active_versions[@]}"; do
             echo "         JCK class: ${TEST_CLASS}"
 
             if [ $OSNAME = "windows" ]; then
-                TEST_CMDLINE="${TEST_JDK_HOME}/bin/java -Dmultitest.testcaseOrder=sorted -classpath '\";${JCK_MATERIAL}/classes;\"' ${TEST_CLASS} -TestDirURL file:${JCK_MATERIAL}/tests/${ARCTIC_GROUP}/${JCK_TESTCASE} -TestCaseID ${JCK_TEST}"
+                TEST_CMDLINE="${TEST_JDK_HOME}/bin/java ${ARCTIC_TESTCASE_OPTIONS} -Dmultitest.testcaseOrder=sorted -classpath '\";${JCK_MATERIAL}/classes;\"' ${TEST_CLASS} -TestDirURL file:${JCK_MATERIAL}/tests/${ARCTIC_GROUP}/${JCK_TESTCASE} -TestCaseID ${JCK_TEST}"
             elif [ $OSNAME = "mac" ]; then
-                TEST_CMDLINE="${TEST_JDK_HOME}/bin/java -Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel -Dmultitest.testcaseOrder=sorted -classpath :${JCK_MATERIAL}/classes: ${TEST_CLASS} -TestDirURL file:${JCK_MATERIAL}/tests/${ARCTIC_GROUP}/${JCK_TESTCASE} -TestCaseID ${JCK_TEST}"
+                TEST_CMDLINE="${TEST_JDK_HOME}/bin/java ${ARCTIC_TESTCASE_OPTIONS} -Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel -Dmultitest.testcaseOrder=sorted -classpath :${JCK_MATERIAL}/classes: ${TEST_CLASS} -TestDirURL file:${JCK_MATERIAL}/tests/${ARCTIC_GROUP}/${JCK_TESTCASE} -TestCaseID ${JCK_TEST}"
             else
-                TEST_CMDLINE="${TEST_JDK_HOME}/bin/java -Dmultitest.testcaseOrder=sorted -classpath :${JCK_MATERIAL}/classes: ${TEST_CLASS} -TestDirURL file:${JCK_MATERIAL}/tests/${ARCTIC_GROUP}/${JCK_TESTCASE} -TestCaseID ${JCK_TEST}"
+                TEST_CMDLINE="${TEST_JDK_HOME}/bin/java ${ARCTIC_TESTCASE_OPTIONS} -Dmultitest.testcaseOrder=sorted -classpath :${JCK_MATERIAL}/classes: ${TEST_CLASS} -TestDirURL file:${JCK_MATERIAL}/tests/${ARCTIC_GROUP}/${JCK_TESTCASE} -TestCaseID ${JCK_TEST}"
             fi
 
             # Certain tests require extra options
-            if [[ "${ARCTIC_TESTCASE}" =~ .*PageDialog.* ]] || [[ "${ARCTIC_TESTCASE}" =~ .*Print.* ]]; then
-              TEST_CMDLINE="${TEST_CMDLINE} -platform.hasPrinter true"
+            if ! [[ "${ARCTIC_TESTCASE}" =~ .*PrintFileHandler.* ]]; then
+              if [[ "${ARCTIC_TESTCASE}" =~ .*PageDialog.* ]] || [[ "${ARCTIC_TESTCASE}" =~ .*Print.* ]]; then
+                TEST_CMDLINE="${TEST_CMDLINE} -platform.hasPrinter true"
+              fi
             fi
             if [[ "${ARCTIC_TESTCASE}" =~ .*Robot.* ]]; then
               TEST_CMDLINE="${TEST_CMDLINE} -platform.robotAvailable true"
@@ -329,7 +343,7 @@ for i in "${active_versions[@]}"; do
             echo "EXECUTING: ${TEST_CMDLINE}"
 
             # Custom check
-            if [[ "${TEST_GROUP}" == "custom" ]] && [[ "${ARCTIC_TESTCASE}" != "${CUSTOM_ARCTIC_TESTCASE}" ]]; then
+            if [[ $TEST_GROUP =~ 'custom' ]] && [[ "${TEST_DIR_OR_CASES}" != *"${ARCTIC_GROUP}/${ARCTIC_TESTCASE}"* ]]; then
               test_pid=-1
               skipped=true
               echo "Skipping: $ARCTIC_GROUP $ARCTIC_TESTCASE"
@@ -345,17 +359,23 @@ for i in "${active_versions[@]}"; do
               sleep $SLEEP_TIME
             fi
 
-            # Check testcase started successfully.
-            ps -p $test_pid
-            rc=$?
+            # Check testcase started successfully if not Skipped.
+            if [[ $skipped == false ]]; then
+              ps -p $test_pid
+              rc=$?
+            fi
             if [[ $skipped == true ]] || [[ $rc != 0 ]]; then
               if [[ $skipped == false ]]; then
                 echo "ERROR: Test class failed prior to playback."
+                FAILED_TESTS+=("${ARCTIC_GROUP}/${ARCTIC_TESTCASE}")
                 overallSuccess=false
               fi
             else
               # Testcase started, start Arctic playback...
               sleep $SLEEP_TIME
+
+              echo "Clearing Arctic session info prior to testcase playback..."
+              $ARCTIC_JDK -jar ${LIB_DIR}/arctic.jar -c session clear
 
               echo "Starting Arctic: testcase $ARCTIC_GROUP $ARCTIC_TESTCASE"
               $ARCTIC_JDK -jar ${LIB_DIR}/arctic.jar -c test start "$ARCTIC_GROUP" "$ARCTIC_TESTCASE"
@@ -376,7 +396,7 @@ for i in "${active_versions[@]}"; do
                 status=$(echo $result | sed 's#'${ARCTIC_GROUP}/${ARCTIC_TESTCASE}'#TEST #' | tr -s ' '| cut -d' ' -f2) 
                 echo "==>" $status
                 loop_counter=360 # 30 mins
-                while [[ $rc -eq 0 ]] && { [[ "$status" == "RUNNING" ]] || [[ "$status" == "STARTING" ]]; };
+                while [[ $rc -eq 0 ]] && { [[ "$status" == *RUNNING* ]] || [[ "$status" == *STARTING* ]]; };
                 do
                   sleep $SLEEP_TIME
                   loop_counter=$((loop_counter - 1))
@@ -407,7 +427,7 @@ for i in "${active_versions[@]}"; do
                 # Finish Arctic TESTCASE session
                 # NOTE: PASSED == 95 for jtharness test status, javatest CLI will be "0" !
                 success=false
-                if [[ $status == "UNCONFIRMED" ]] && [[ $test_exit_status == 95 ]]; then
+                if [[ $status == *UNCONFIRMED* ]] && [[ $test_exit_status == 95 ]]; then
                   ${ARCTIC_JDK} -jar ${LIB_DIR}/arctic.jar -c test finish "${ARCTIC_GROUP}" "${ARCTIC_TESTCASE}" true
                   success=true
                 else
@@ -447,6 +467,7 @@ for i in "${active_versions[@]}"; do
       fi
     done
   fi
+ done
 done
 
 echo "Terminating Arctic CLI..."
@@ -456,13 +477,13 @@ if [[ -n $twm_pid ]]; then
   kill $twm_pid 2>/dev/null
 fi
 
-echo "======================================================================================="
+echo "-------------------------------------------------------------------------------------"
 echo "PASSED Testcases:"
 for test in "${PASSED_TESTS[@]}"
 do
   echo "$test : PASSED"
 done
-echo "======================================================================================="
+echo "---------------------------------------------------------------------------------------"
 
 if [[ $overallSuccess != true ]]; then
   echo "FAILED Testcases:"
@@ -470,7 +491,10 @@ if [[ $overallSuccess != true ]]; then
   do
     echo "$test : FAILED"
   done
-  echo "======================================================================================="
+  echo "---------------------------------------------------------------------------------------"
+  echo "Test results: passed: ${#PASSED_TESTS[@]}; failed: ${#FAILED_TESTS[@]}"
+else
+  echo "Test results: passed: ${#PASSED_TESTS[@]}"
 fi
 
 echo "Finished running testcases, overallSuccess = $overallSuccess"

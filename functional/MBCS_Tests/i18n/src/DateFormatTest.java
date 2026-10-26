@@ -23,6 +23,9 @@ public class DateFormatTest {
     private Calendar calendar;
     private String version;
 
+    // ResourceBundleTest_NN fix versions to try and load in order..
+    private static final long[] resourceBundleFixVersionsToTry = {27L, 26L, 22L, 19L, 16L};
+
     public DateFormatTest(Locale locale) {
         this.locale = locale;
 	calendar = Calendar.getInstance();
@@ -34,19 +37,9 @@ public class DateFormatTest {
 			version = version.substring(index1+1, index2);
 		}
 	}
-        long feature = JavaVersion.getFeature();
-        if (feature == 16L) {
-		try {
-			resource = ResourceBundle.getBundle("ResourceBundleTest_16", locale);
-		} catch (MissingResourceException e) {} // Do nothing
-	} else if (feature >= 19L) {
-		try {
-			resource = ResourceBundle.getBundle("ResourceBundleTest_19", locale);
-		} catch (MissingResourceException e) {} // Do nothing
-        }
-	if (resource == null){
-		resource = ResourceBundle.getBundle("ResourceBundleTest", locale);
-	}
+
+	long feature = JavaVersion.getFeature();
+	resource = tryGetBundle("ResourceBundleTest", locale, feature);
 	if (resource == null) {
 		System.err.println("Cannot get resource for "+locale);
 		System.exit(-1);
@@ -54,6 +47,30 @@ public class DateFormatTest {
 	if (resource.getLocale().getLanguage().length() == 0){
 		System.out.println("Warning: Default resource file was selected. You may need to create a resource file for "+locale);
 	}
+    }
+    
+    private ResourceBundle tryGetBundle(String baseName, Locale locale, long version) {
+        // Try loading version specific bundles first..
+        for(long i : resourceBundleFixVersionsToTry) {
+            if (i <= version) {
+                if (i == 16L && version != i) {
+                    // in case of 16, only match exact jdk version
+                    continue;
+                }
+                try {
+                    return ResourceBundle.getBundle(baseName+"_"+i, locale);
+                } catch (MissingResourceException e) {
+                    continue;
+                }
+            }
+        }
+
+        // Try baseName bundle
+        try {
+            return ResourceBundle.getBundle(baseName, locale);
+        } catch (MissingResourceException e) {
+            return null;
+        }
     }
     
     public DateFormatTest() {

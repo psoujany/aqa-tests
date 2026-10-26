@@ -43,7 +43,7 @@
 				<platform>.*windows.*</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -61,6 +61,32 @@
 		<groups>
 			<group>system</group>
 		</groups>
+	</test>
+	<test>
+		<testCaseName>MiniMix_J9_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
+		<variations>
+			<variation>Mode501</variation>
+			<variation>Mode551</variation>
+		</variations>
+		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=MixedLoadTest -test-args=$(Q)timeLimit=5m$(Q) -java-args-execute-initial=$(Q)$(ADD_OPENS_CMD)$(Q);\
+	$(TEST_STATUS)</command>
+		<levels>
+			<level>special</level>
+		</levels>
+		<groups>
+			<group>system</group>
+		</groups>
+		<impls>
+			<impl>openj9</impl>
+			<impl>ibm</impl>
+		</impls>
 	</test>
 	<test>
 		<testCaseName>MiniMix_10m</testCaseName>
@@ -89,7 +115,7 @@
 				<platform>.*windows.*</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -118,7 +144,7 @@
 				<platform>x86-64_.*</platform>
 			</disable>
 			<disable>
-				<comment>eclipse-openj9/openj9/issues/14165，https://github.com/adoptium/aqa-tests/issues/3230</comment>
+				<comment>https://github.com/eclipse-openj9/openj9/issues/14165,https://github.com/adoptium/aqa-tests/issues/3230</comment>
 				<platform>x86-32_windows</platform>
 			</disable>
 			<disable>
@@ -139,7 +165,7 @@
 				<platform>.*windows.*</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -158,7 +184,7 @@
 		<testCaseName>MiniMix_3h</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -186,7 +212,7 @@
 			<disable>
 				<comment>https://github.ibm.com/runtimes/backlog/issues/597</comment>
 				<variation>Mode150-CS</variation>
-				<platform>^(?!x86-64_linux$).*</platform>
+				<platform>^(?!(x86-64_linux|ppc64le_linux|s390x_linux)$).*</platform>
 			</disable>
 		 </disables>
 		<variations>
@@ -211,7 +237,7 @@
 		<testCaseName>ClassLoadingTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -234,7 +260,7 @@
 		<testCaseName>ClassLoadingTest_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -300,7 +326,7 @@
 				<platform>riscv64_linux</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -324,7 +350,7 @@
 		<testCaseName>DBBLoadTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -345,10 +371,37 @@
 		<platformRequirements>^os.zos</platformRequirements>
 	</test>
 	<test>
+		<testCaseName>DBBLoadTest_J9_5m</testCaseName>
+		<disables>
+			<disable>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
+				<impl>ibm</impl>
+				<version>8</version>
+			</disable>
+		</disables>
+		<variations>
+			<variation>Mode501</variation>
+			<variation>Mode551</variation>
+		</variations>
+		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=DirectByteBufferLoadTest -test-args=$(Q)timeLimit=5m$(Q); \
+	$(TEST_STATUS)</command>
+		<levels>
+			<level>special</level>
+		</levels>
+		<groups>
+			<group>system</group>
+		</groups>
+		 <impls>
+			<impl>openj9</impl>
+			<impl>ibm</impl>
+		</impls>
+		<platformRequirements>^os.zos</platformRequirements>
+	</test>
+	<test>
 		<testCaseName>LangLoadTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -371,7 +424,7 @@
 		<testCaseName>LockingLoadTest</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -396,7 +449,7 @@
 		<testCaseName>NioLoadTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -420,7 +473,7 @@
 		<testCaseName>UtilLoadTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -443,7 +496,7 @@
 		<testCaseName>HCRLateAttachWorkload</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -484,7 +537,7 @@
 				<version>19+</version>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -510,10 +563,10 @@
 		<testCaseName>JdiTest</testCaseName>
 		<disables>
 			<disable>
-				<comment>adoptium/aqa-systemtest/issues/63</comment>
+				<comment>https://github.com/adoptium/aqa-systemtest/issues/63</comment>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -536,7 +589,7 @@
 		<testCaseName>HeapHogLoadTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -544,6 +597,8 @@
 		<variations>
 			<variation>Mode110</variation>
 			<variation>Mode610</variation>
+			<variation>Mode501</variation>
+			<variation>Mode551</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -java-args-execute-initial=$(Q)-Xdisableexcessivegc$(Q) -test=HeapHogLoadTest -test-args=$(Q)timeLimit=5m$(Q); \
 	$(TEST_STATUS)</command>
@@ -562,7 +617,7 @@
 		<testCaseName>ObjectTreeLoadTest_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -570,6 +625,8 @@
 		<variations>
 			<variation>Mode110</variation>
 			<variation>Mode610</variation>
+			<variation>Mode501</variation>
+			<variation>Mode551</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -java-args-execute-initial=$(Q)-Xnoclassgc$(Q) -test=ObjectTreeLoadTest -test-args=$(Q)timeLimit=5m$(Q); \
 	$(TEST_STATUS)</command>
@@ -589,7 +646,7 @@
 		<testCaseName>ClassLoadingTest_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>

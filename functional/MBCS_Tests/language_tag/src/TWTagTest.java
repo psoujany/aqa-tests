@@ -122,12 +122,14 @@ public class TWTagTest{
     }
 
     // TIMEZONE
+    private static final String tzPart = (JavaVersion.getFeature() >= 24L) ? "Time Zone: Taiwan Time" : "Time Zone: Taipei Time";
+
     @Test
     public void timezoneTest(){
         String tag = "zh-TW-u-tz-twtpe"; //Defined in common/bcp47/teimezone.xml
         Locale l = Locale.forLanguageTag(tag);
         assertEquals("中文 (台灣，時區：台北時間)", l.getDisplayName(l));
-        assertEquals("Chinese (Taiwan, Time Zone: Taiwan Time)", l.getDisplayName(Locale.ENGLISH));
+        assertEquals("Chinese (Taiwan, " + tzPart + ")", l.getDisplayName(Locale.ENGLISH));
         assertEquals(tag, l.toLanguageTag());
         assertEquals("tz-twtpe", l.getExtension('u'));
         assertEquals("twtpe", l.getUnicodeLocaleType("tz"));
@@ -149,7 +151,7 @@ public class TWTagTest{
         } else {
             assertEquals("中文 (台灣，民國曆，時區：台北時間)", l.getDisplayName(l));
         }
-        assertEquals("Chinese (Taiwan, Minguo Calendar, Time Zone: Taiwan Time)",
+        assertEquals("Chinese (Taiwan, Minguo Calendar, " + tzPart + ")",
                      l.getDisplayName(Locale.ENGLISH));
         assertEquals(tag, l.toLanguageTag());
         assertEquals("ca-roc-tz-twtpe", l.getExtension('u'));
@@ -175,7 +177,7 @@ public class TWTagTest{
             assertEquals("中文 (台灣，民國曆，全形數字，時區：台北時間)",
                          l.getDisplayName(l));
         }
-        assertEquals("Chinese (Taiwan, Minguo Calendar, Full-Width Digits, Time Zone: Taiwan Time)",
+        assertEquals("Chinese (Taiwan, Minguo Calendar, Full-Width Digits, " + tzPart + ")",
                      l.getDisplayName(Locale.ENGLISH));
         assertEquals(tag, l.toLanguageTag());
         assertEquals("ca-roc-nu-fullwide-tz-twtpe", l.getExtension('u'));
@@ -196,7 +198,11 @@ public class TWTagTest{
         String tag = "zh-TW-u-fw-mon";
         Locale l = Locale.forLanguageTag(tag);
         assertEquals("中文 (台灣，fw：mon)", l.getDisplayName(l));
-        assertEquals("Chinese (Taiwan, First Day of Week Is Monday)", l.getDisplayName(Locale.ENGLISH));
+        // CLDR 48.0 (JDK 26+) changed format from "First Day of Week Is Monday" to "First day of week: Monday"
+        String expectedDisplay = (JavaVersion.getFeature() >= 26)
+            ? "Chinese (Taiwan, First day of week: Monday)"
+            : "Chinese (Taiwan, First Day of Week Is Monday)";
+        assertEquals(expectedDisplay, l.getDisplayName(Locale.ENGLISH));
         assertEquals(tag, l.toLanguageTag());
         assertEquals("fw-mon", l.getExtension('u'));
         assertEquals("mon", l.getUnicodeLocaleType("fw"));

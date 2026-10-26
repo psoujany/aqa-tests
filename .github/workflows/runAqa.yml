@@ -22,12 +22,12 @@ jobs:
       id: workflow_run_info
     # Checkout current repo to access the repo-specific config file `.github/workflows/runAqaConfig.json`
     - name: Checkout current repo
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         path: 'main'
     # Checkout the main TKG repo to access the shared script `scripts/testRepo/runAqaArgParse.py`
     - name: Checkout main TKG repo
-      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: 'adoptium/TKG.git'
         ref: 'master'
@@ -35,7 +35,7 @@ jobs:
     - name: Parse parameters
       env:
         args: ${{ github.event.comment.body }}
-      run: python3 TKG/scripts/testBot/runAqaArgParse.py $args 2> log.txt
+      run: python3 TKG/scripts/testBot/runAqaArgParse.py "$args" 2> log.txt
       id: argparse
     - name: Output log
       if: failure()
@@ -45,22 +45,25 @@ jobs:
         log="${log//'%'/'%25'}"
         log="${log//$'\n'/'%0A'}"
         log="${log//$'\r'/'%0D'}"
-        log="${log/$'`'/'\`'}"
+        log="${log//'`'/'\`'}"
         echo ::set-output name=log::$log
       id: output_log
     - name: Create error comment
       if: failure()
-      uses: actions/github-script@v8
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      env:
+        LOG_OUTPUT: ${{ steps.output_log.outputs.log }}
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
-          comment_body = `
-          @${{ github.actor }}
-          \`\`\`
-          ${{ steps.output_log.outputs.log }}
-          \`\`\`
-          No builds were started.
-          `;
+          const log_content = process.env.LOG_OUTPUT;
+          const comment_body = [
+            `@${{ github.actor }}`,
+            '```',
+            log_content,
+            '```',
+            'No builds were started.'
+          ].join('\n');
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
@@ -72,7 +75,7 @@ jobs:
       run: echo ::set-output name=failed::true
       id: failure_report
     - name: Create success comment
-      uses: actions/github-script@v8
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -132,7 +135,7 @@ jobs:
         sourceType: 'url'
         impl: ${{ matrix.jdk_impl }}
     # get-pr step by @Simran-B https://github.com/actions/checkout/issues/331#issuecomment-707103442
-    - uses: actions/github-script@v8
+    - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       id: get-pr
       with:
         script: |
@@ -157,7 +160,7 @@ jobs:
          version: ${{ matrix.jdk_version }}
          openjdk_testRepo: '${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}:${{ fromJSON(steps.get-pr.outputs.result).head.ref }}'
          tkg_Repo: ${{ matrix.tkg_repo }}
-    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: failure()
       with:
         name: test_output
@@ -169,7 +172,7 @@ jobs:
     if: failure() && !needs.parseComment.outputs.failed
     steps:
     - name: Create comment
-      uses: actions/github-script@v8
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -190,7 +193,7 @@ jobs:
     if: cancelled()
     steps:
     - name: Create comment
-      uses: actions/github-script@v8
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -211,7 +214,7 @@ jobs:
     if: success()
     steps:
     - name: Create comment
-      uses: actions/github-script@v8
+      uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |

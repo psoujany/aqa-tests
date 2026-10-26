@@ -12,10 +12,9 @@
 # limitations under the License.
 ##############################################################################
 JCKRUNTIME_CUSTOM_TARGET ?= api/java_math/BigInteger
-JCKCOMPILER_CUSTOM_TARGET ?= api/javax_lang/model/element/Element/index.html
+JCKCOMPILER_CUSTOM_TARGET ?= api/javax_lang/model/element/Element
 JCKDEVTOOLS_CUSTOM_TARGET ?= java2schema/CustomizedMapping/classes/XmlRootElement/name/Name001.html
 JCKINTERACTIVES_CUSTOM_TARGET ?= api/java_awt/interactive/ButtonTests.html
-
 # Environment variable OSTYPE is set to cygwin if running under cygwin.
 # Set our own macro to indicate we're running under cygwin.
 ifndef CYGWIN

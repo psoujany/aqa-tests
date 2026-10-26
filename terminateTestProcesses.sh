@@ -12,11 +12,14 @@ if [ "$OS" = "Windows_NT" ]; then
              CommandLine like '%java%javatest%' or \
              CommandLine like '%java%-Xfuture%' or \
              CommandLine like '%java%-Xverify:all%' or \
+             CommandLine like '%jhsdb.exe%' or \
+             CommandLine like '%jshell.exe%' or \
              CommandLine like '%rmid%' or \
              CommandLine like '%rmiregistry%' or \
              CommandLine like '%tnameserv%' or \
              CommandLine like '%notepad.exe%' or \
-             CommandLine like '%make.exe%')"
+             CommandLine like '%make.exe%' or \
+             CommandLine like '%8261518ModularAppTest.exe%')"
 
   # Ignore Jenkins agent and grep cmd
   ignore_str="not CommandLine like '%remoting.jar%' and \
@@ -24,18 +27,41 @@ if [ "$OS" = "Windows_NT" ]; then
               not CommandLine like '%grep%'"
 
   count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
-  
+
   if [ $count -gt 0 ]; then
       echo Windows rogue processes detected, attempting to stop them..
-      powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
-      powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}).Terminate()"
-      echo Sleeping for 10 seconds...
-      sleep 10
-      count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
+      
+      # First pass: Terminate matching processes (newest first) to reduce respawn races
+      echo "Pass 1: Terminating matching processes (newest first)..."
+      powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | Sort-Object -Property CreationDate -Descending | ForEach-Object { \$procId = \$_.ProcessId; try { \$_.Terminate() } catch { Write-Host ('Terminate failed for PID {0}: {1}' -f \$procId, \$_.Exception.Message) } } | Out-Null"
+      sleep 1
+      
+      # Retry up to 3 times to catch newly spawned processes
+      for attempt in 1 2 3; do
+        echo "Attempt $attempt: Checking for remaining processes..."
+        powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}}"
+        powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | ForEach-Object { \$procId = \$_.ProcessId; try { \$_.Terminate() } catch { Write-Host ('Terminate failed for PID {0}: {1}' -f \$procId, \$_.Exception.Message) } } | Out-Null"
+        sleep 2
+        count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
+        if [ $count -eq 0 ]; then
+          break
+        fi
+      done
+      
+      # Final attempt: Force kill with taskkill for stubborn processes
+      if [ $count -gt 0 ]; then
+        echo "Standard termination failed, attempting force kill with taskkill..."
+        powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | ForEach-Object { taskkill /PID \$_.ProcessId /T /F 2>&1 | Out-Null }"
+        sleep 2
+        count=`powershell -c "(Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | measure).count" | tr -d "\\\\r"`
+      fi
+      
       if [ $count -gt 0 ]; then
         echo "Cleanup failed, ${count} processes still remain..."
+        # List remaining processes for debugging
+        powershell -c "Get-WmiObject Win32_Process -Filter {${ignore_str} and ${match_str}} | Select-Object ProcessId,ProcessName,CommandLine"
         exit 127
-      fi 
+      fi
       echo "Processes stopped successfully"
   else
       echo Woohoo - no rogue processes detected!
@@ -59,13 +85,13 @@ else
 
   LINUX_DOCKER_FILTER=""
   if [ `uname` = "Linux" ]; then
-      if egrep "\/docker\/" /proc/1/cgroup >nul; then
+      if egrep "/docker/" /proc/1/cgroup >nul; then
           echo Running in a Linux docker container
       else
           echo Running on a Linux host
           # Filter any possible docker container processes by cgroup containing "/docker"
           PSCOMMAND="ps -o cgroup,pid,state,tname,time,command -u $1"
-          LINUX_DOCKER_FILTER="| egrep -v '^[^[:space:]]+\/docker'"
+          LINUX_DOCKER_FILTER="| egrep -v '^[^[:space:]]+/docker'"
       fi
   fi
 
@@ -91,4 +117,3 @@ else
 fi
 
 exit 0
-

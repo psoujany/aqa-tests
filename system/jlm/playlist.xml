@@ -19,7 +19,7 @@
 				<platform>arm_linux|aarch64_linux</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -44,15 +44,15 @@
 		<testCaseName>TestJlmRemoteClassAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode150</variation>
-			<variation>Mode650</variation>
-			<variation>Mode1000</variation>
+			<variation>Mode150 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode650 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode1000 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestJlmRemoteClassAuth; \
 	$(TEST_STATUS)</command>
@@ -74,7 +74,7 @@
 				<platform>arm_linux</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -110,15 +110,15 @@
 				<platform>arm_linux|ppc64le_linux</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode150</variation>
-			<variation>Mode650</variation>
-			<variation>Mode1000</variation>
+			<variation>Mode150 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode650 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode1000 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestJlmRemoteMemoryAuth; \
 	$(TEST_STATUS)</command>
@@ -148,7 +148,7 @@
 				<platform>arm_linux</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -173,15 +173,15 @@
 		<testCaseName>TestJlmRemoteNotifierProxyAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode150</variation>
-			<variation>Mode650</variation>
-			<variation>Mode1000</variation>
+			<variation>Mode150 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode650 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode1000 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestJlmRemoteNotifierProxyAuth; \
 	$(TEST_STATUS)</command>
@@ -199,15 +199,15 @@
 		<testCaseName>TestJlmRemoteThreadAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode150</variation>
-			<variation>Mode650</variation>
-			<variation>Mode1000</variation>
+			<variation>Mode150 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode650 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode1000 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestJlmRemoteThreadAuth; \
 	$(TEST_STATUS)</command>
@@ -223,7 +223,7 @@
 		<testCaseName>TestJlmRemoteThreadNoAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -247,7 +247,7 @@
 		<testCaseName>TestIBMJlmLocal</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -276,14 +276,14 @@
 		<testCaseName>TestIBMJlmRemoteClassAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode110</variation>
-			<variation>Mode610</variation>
+			<variation>Mode110 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode610 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestIBMJlmRemoteClassAuth; \
 	$(TEST_STATUS)</command>
@@ -308,14 +308,14 @@
 		<testCaseName>TestIBMJlmRemoteClassAuth_SE80</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode110</variation>
-			<variation>Mode610</variation>
+			<variation>Mode110 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode610 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestIBMJlmRemoteClassAuth; \
 	$(TEST_STATUS)</command>
@@ -338,14 +338,14 @@
 		<testCaseName>TestIBMJlmRemoteClassAuth_SE80_Linux</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode110</variation>
-			<variation>Mode610</variation>
+			<variation>Mode110 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode610 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestIBMJlmRemoteClassAuth; \
 	$(TEST_STATUS)</command>
@@ -369,7 +369,7 @@
 		<testCaseName>TestIBMJlmRemoteClassNoAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -398,7 +398,7 @@
 		<testCaseName>TestIBMJlmRemoteClassNoAuth_SE80</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -428,7 +428,7 @@
 		<testCaseName>TestIBMJlmRemoteClassNoAuth_SE80_Linux</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -454,21 +454,21 @@
 		</impls>
 		<platformRequirements>os.linux,^arch.ppc</platformRequirements>
 	</test>
-	<!--Exclude TestIBMJlmRemoteMemoryAuth from running on openjdk8-openj9 on ppc64le Linux. Reason: adoptium/aqa-systemtest/issues/145-->
+	<!--Exclude from running on openjdk8-openj9 on ppc64le Linux. Reason: adoptium/aqa-systemtest/issues/145-->
 	<!-- Excluded from Windows due to https://github.com/adoptium/aqa-systemtest/issues/198 -->
 	<!-- Temporarily excluding from z/OS due to : jdk11-zos/issues/567 -->
 	<test>
 		<testCaseName>TestIBMJlmRemoteMemoryAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode110</variation>
-			<variation>Mode610</variation>
+			<variation>Mode110 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode610 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestIBMJlmRemoteMemoryAuth; \
 	$(TEST_STATUS)</command>
@@ -493,14 +493,14 @@
 		<testCaseName>TestIBMJlmRemoteMemoryAuth_SE80</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode110</variation>
-			<variation>Mode610</variation>
+			<variation>Mode110 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode610 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestIBMJlmRemoteMemoryAuth; \
 	$(TEST_STATUS)</command>
@@ -523,14 +523,14 @@
 		<testCaseName>TestIBMJlmRemoteMemoryAuth_SE80_Linux</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
 		</disables>
 		<variations>
-			<variation>Mode110</variation>
-			<variation>Mode610</variation>
+			<variation>Mode110 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
+			<variation>Mode610 -Djdk.rmi.ssl.client.enableEndpointIdentification=false</variation>
 		</variations>
 		<command>$(SYSTEMTEST_CMD_TEMPLATE) -test=TestIBMJlmRemoteMemoryAuth; \
 	$(TEST_STATUS)</command>
@@ -554,7 +554,7 @@
 		<testCaseName>TestIBMJlmRemoteMemoryNoAuth</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -583,7 +583,7 @@
 		<testCaseName>TestIBMJlmRemoteMemoryNoAuth_SE80</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -613,7 +613,7 @@
 		<testCaseName>TestIBMJlmRemoteMemoryNoAuth_SE80_Linux</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>

@@ -7,7 +7,7 @@
 		<testCaseName>MauveSingleThrdLoad_J9_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -38,6 +38,11 @@
 				<version>24+</version>
 				<impl>hotspot</impl>
 				<platform>x86-64_.*</platform>
+			</disable>
+			<disable>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6721</comment>
+				<version>17+</version>
+				<impl>hotspot</impl>
 			</disable>
 			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/4976</comment>
@@ -73,7 +78,7 @@
 		<testCaseName>MauveSingleInvocLoad_J9_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -104,6 +109,11 @@
 				<version>24+</version>
 				<impl>hotspot</impl>
 				<platform>x86-64_.*</platform>
+			</disable>
+			<disable>
+				<comment>https://github.com/adoptium/aqa-tests/issues/6721</comment>
+				<version>17+</version>
+				<impl>hotspot</impl>
 			</disable>
 			<disable>
 				<comment>https://github.com/adoptium/aqa-tests/issues/4976</comment>
@@ -155,7 +165,7 @@
 				<platform>.*windows.*</platform>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -181,10 +191,10 @@
 		<testCaseName>MauveSingleThrdLoad_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>adoptium/aqa-systemtest/issues/75</comment>
+				<comment>https://github.com/adoptium/aqa-systemtest/issues/75</comment>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -210,10 +220,10 @@
 		<testCaseName>MauveSingleInvocLoad_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>adoptium/aqa-systemtest/issues/78</comment>
+				<comment>https://github.com/adoptium/aqa-systemtest/issues/78</comment>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -239,10 +249,10 @@
 		<testCaseName>MauveMultiThrdLoad_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>adoptium/aqa-systemtest/issues/64</comment>
+				<comment>https://github.com/adoptium/aqa-systemtest/issues/64</comment>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -269,7 +279,7 @@
 		<testCaseName>MauveMultiThrdLoad_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -329,7 +339,7 @@
 				<comment>https://github.com/eclipse-openj9/openj9/issues/3771</comment>
 			</disable>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -386,7 +396,7 @@
 		<testCaseName>MauveSingleInvocLoad_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>

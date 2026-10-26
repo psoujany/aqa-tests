@@ -7,7 +7,7 @@
 		<testCaseName>DaaLoadTest_daa1_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -33,7 +33,7 @@
 		<testCaseName>DaaLoadTest_daa2_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -59,7 +59,7 @@
 		<testCaseName>DaaLoadTest_daa3_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -85,7 +85,7 @@
 		<testCaseName>DaaLoadTest_all_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -111,7 +111,7 @@
 		<testCaseName>DaaLoadTest_daa1_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -137,7 +137,7 @@
 		<testCaseName>DaaLoadTest_daa2_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -163,7 +163,7 @@
 		<testCaseName>DaaLoadTest_daa3_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -189,7 +189,7 @@
 		<testCaseName>DaaLoadTest_all_CS_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -215,44 +215,9 @@
 		<testCaseName>DaaLoadTest_daa1_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode501</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode551</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode553</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode554</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode555</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode556</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode557</variation>
-				<platform>aarch64_linux.*</platform>
 			</disable>
 		</disables>
 		<variations>
@@ -305,44 +270,9 @@
 		<testCaseName>DaaLoadTest_daa2_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode501</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode551</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode553</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode554</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode555</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode556</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode557</variation>
-				<platform>aarch64_linux.*</platform>
 			</disable>
 		</disables>
 		<variations>
@@ -395,7 +325,7 @@
 		<testCaseName>DaaLoadTest_daa3_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
 			</disable>
@@ -450,44 +380,9 @@
 		<testCaseName>DaaLoadTest_all_special_5m</testCaseName>
 		<disables>
 			<disable>
-				<comment>automation/issues/474</comment>
+				<comment>https://github.ibm.com/runtimes/automation/issues/474</comment>
 				<impl>ibm</impl>
 				<version>8</version>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode501</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode551</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode553</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode554</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode555</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode556</variation>
-				<platform>aarch64_linux.*</platform>
-			</disable>
-			<disable>
-				<comment>https://github.com/eclipse-openj9/openj9/issues/21178</comment>
-				<variation>Mode557</variation>
-				<platform>aarch64_linux.*</platform>
 			</disable>
 		</disables>
 		<variations>
