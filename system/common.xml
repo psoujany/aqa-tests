@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <project name="systemtest_common" default="common_build" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
+	<taskdef resource="net/sf/antcontrib/antlib.xml" />
 	<description>Build STF based System Tests </description>
 
 	<!-- set global properties for this build -->
